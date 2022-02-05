@@ -1,0 +1,274 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+            <!--breadcrumbs-->
+            <section id="breadcrumb" class="breadMargin">
+                <div class="row">
+                    <div class="large-12 columns">
+                        <nav aria-label="You are here:" role="navigation">
+                            <ul class="breadcrumbs">
+                                <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+                                <li>
+                                    <span class="show-for-sr">Current: </span> Blog
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </section><!--end breadcrumbs-->
+
+
+
+
+            <style>
+                .imhsize{
+            
+                    width: 770px !important;
+                    height: 370px !important;
+            
+                }
+            </style>
+
+
+
+            <section class="category-content">
+                <div class="row">
+                    <!-- left side content area -->
+                    <div class="large-8 columns">
+
+                      {% for i in blog_data %}
+                        <div class="blog-post">
+                            <div class="row secBg">
+                                <div class="large-12 columns">
+                                    <div class="blog-post-heading">
+                                        <h3><a href="blog-single-post.html"> {{i.title | safe}}</a></h3><br>
+                                        <!-- <img class="" src="https://s3.us-east-2.amazonaws.com/test2.tickle.life/{{i.blog_image}}" alt="blog image"><br> -->
+                                        <!-- <h3><a href="blog-single-post.html"> {{i.title | safe}}</a></h3> -->
+                                        <p>
+                                            <span><i class="fa fa-user"></i><a href="#">admin</a></span>
+                                            <span><i class="fa fa-clock-o"></i>5 January 16</span>
+                                            <span><i class="fa fa-eye"></i>{{i.hit_count}}K</span>
+                                            <span><i class="fa fa-commenting"></i>8</span>
+                                        </p>
+                                    </div>
+                                    <div class="blog-post-content">
+                                        <div class="blog-post-img imhsize">
+                                            <img class="imhsize" src="https://s3.us-east-1.amazonaws.com/new-ssf/{{i.blog_image}}" alt="blog image">
+                                        </div>
+                                        {{i.description | safe |truncatewords:50 }} ..
+                                        <a class="blog-post-btn" href="/blog/{{i.slug}}">read more</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       {% endfor %}
+
+                     
+
+
+
+
+
+                       {% for i in blog_data %}
+
+
+                       {% include "blog_box.html" %}
+
+                       {% endfor %}
+
+
+
+
+                       
+
+
+                       
+                        <!-- ad Section -->
+
+                        <!-- <div class="googleAdv">
+                            <a href="#"><img src="images/goodleadv.png" alt="googel ads"></a>
+                        </div> -->
+                        
+                        
+                        <!-- End ad Section -->
+                    </div><!-- end left side content area -->
+                    <!-- sidebar -->
+
+
+
+
+                    <div class="large-4 columns">
+                        <aside class="secBg sidebar">
+                            <div class="row">
+
+
+
+                                
+                                <!-- social Fans Widget -->
+
+
+                                <div class="large-12 medium-7 medium-centered columns">
+                                    <div class="widgetBox">
+                                        <div class="widgetTitle">
+                                            <h5>social fans</h5>
+                                        </div>
+                                        <div class="widgetContent">
+                                            <div class="social-links">
+                                                <a class="socialButton" href="#">
+                                                    <i class="fa fa-facebook"></i>
+                                                    <span>698K</span>
+                                                    <span>fans</span>
+                                                </a>
+                                                <a class="socialButton" href="#">
+                                                    <i class="fa fa-twitter"></i>
+                                                    <span>598</span>
+                                                    <span>followers</span>
+                                                </a>
+                                                <a class="socialButton" href="#">
+                                                    <i class="fa fa-google-plus"></i>
+                                                    <span>98k</span>
+                                                    <span>followers</span>
+                                                </a>
+                                                <a class="socialButton" href="#">
+                                                    <i class="fa fa-youtube"></i>
+                                                    <span>168k</span>
+                                                    <span>followers</span>
+                                                </a>
+                                                <a class="socialButton" href="#">
+                                                    <i class="fa fa-vimeo"></i>
+                                                    <span>498</span>
+                                                    <span>followers</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+                              
+
+
+
+                             
+                                
+                                <!-- end ad banner widget -->
+                               
+                                <!-- Recent post videos -->
+                                <div class="large-12 medium-7 medium-centered columns">
+                                    <div class="widgetBox">
+                                        <div class="widgetTitle">
+                                            <h5>Popular videos</h5>
+                                        </div>
+                                        <div class="widgetContent">
+                                
+                                            {% for video in  top_videos %}
+
+                                            <div class="media-object stack-for-small">
+                                                <div class="media-object-section">
+                                                    <div class="recent-img">
+                                                        <img src= "{{video.poster_url}}" alt="{{video.title | safe}}" onerror="this.src='{{ base_details.default_poster_url }}';">
+                                                        <a href="/{{video.slug}}" class="hover-posts">
+                                                            <span><i class="fa fa-play"></i></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="media-object-section">
+                                                    <div class="media-content">
+                                                        <h6><a href="/{{video.slug}}">{{video.title | safe}}</a></h6>
+                                                        <p><i class="fa fa-user"></i><span>admin</span><i class="fa fa-clock-o"></i><span>{{video.modified_at}}</span></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                             {% endfor %}
+
+                                         
+
+
+
+                                     
+
+                                       
+
+                                        </div>
+                                    </div>
+                                </div><!-- End Recent post videos -->
+
+                           
+
+                                <!-- tags -->
+                                <div class="large-12 medium-7 medium-centered columns">
+                                    <div class="widgetBox">
+                                        <div class="widgetTitle">
+                                            <h5>Tags</h5>
+                                        </div>
+                                        <div class="tagcloud">
+                                            
+                                            {% for i in cat %}
+                                            <a href="{% url 'all_view' i.slug %}">{{i.category_name}}</a>
+                                            {% endfor %}
+
+                                           
+                                        </div>
+                                    </div>
+                                </div><!-- End tags -->
+
+
+
+                                   <!-- categories -->
+                                   <div class="large-12 medium-7 medium-centered columns">
+                                    <div class="widgetBox clearfix">
+                                        <div class="widgetTitle">
+                                            <h5>All Categories</h5>
+                                        </div>
+                                        <div class="tagcloud ">
+                                            <ul>
+                                                <!-- {% for i in cat %}
+                                                <a href="{% url 'all_view' i.slug %}">{{i.category_name}}</a>
+                                                {% endfor %} -->
+
+                                                {% for i in subcat %}
+                                                <a href="{% url 'all_view' 'category' i.slug %}">{{i.subcategory_name}}</a>
+                                                {% endfor %}
+                                               
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- ad banner widget -->
+
+
+
+
+                            </div>
+                        </aside>
+                    </div><!-- end sidebar -->
+
+
+
+
+
+                </div>
+            </section><!-- End Category Content-->
+
+
+            <!-- footer -->
+           
+        
+   
+
+        <!-- script files -->
+
+        {% endblock %}
+<!-- script files -->
+
+
+
+
+
+

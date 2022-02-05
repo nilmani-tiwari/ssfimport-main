@@ -1,0 +1,295 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+<!--breadcrumbs-->
+<section id="breadcrumb">
+    <div class="row">
+        <div class="large-12 columns">
+            <nav aria-label="You are here:" role="navigation">
+                <ul class="breadcrumbs">
+                    <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+                    <li>
+                        <span class="show-for-sr">Current: </span> Subscribe Plan
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+<!--end breadcrumbs-->
+
+
+
+
+<!-- registration -->
+<section class="registration">
+    <div class="row secBg">
+        <div class="large-12 columns">
+            <div class="login-register-content">
+                <div class="row collapse borderBottom">
+                    <div class="medium-6 large-centered medium-centered">
+                        <div class="page-heading text-center">
+                            <h3 style="font-size: 28px;">1. Subscription Plans</h3>
+                            <h3 style="text-align: left; font-size: 15px;">To renew a subscription, first sign in with your existing login and password here.
+                                Your receipts and statements will show a charge from Mark Schoen Productions.
+                                Note that we zealously protect the privacy of our users. We will never share your personal information or viewing history with outside parties.</h3>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row" data-equalizer data-equalize-on="medium" id="test-eq">
+
+                    <!-- <div class="large-4 large-offset-1 medium-6 columns">
+                                    <div class="social-login" data-equalizer-watch>
+                                        <h5 class="text-center">Login via Social Profile</h5>
+                                        <div class="social-login-btn facebook">
+                                            <a href="#"><i class="fa fa-facebook"></i>login via facebook</a>
+                                        </div>
+                                        <div class="social-login-btn twitter">
+                                            <a href="#"><i class="fa fa-twitter"></i>login via twitter</a>
+                                        </div>
+                                        <div class="social-login-btn g-plus">
+                                            <a href="#"><i class="fa fa-google-plus"></i>login via google plus</a>
+                                        </div>
+                                        <div class="social-login-btn linkedin">
+                                            <a href="#"><i class="fa fa-linkedin"></i>login via linkedin</a>
+                                        </div>
+                                    </div>
+                                </div> -->
+
+
+
+
+                    <div class="large-4 medium-6 columns end large-12 columns">
+                        <div class="register-form">
+                            <!-- <h5 class="text-center">Create your Account</h5> -->
+
+                            <!-- <h1 style="text-align: center;">Pay with PayPal</h1> -->
+
+                            <main>
+
+
+                                <head>
+                                    <meta charset="utf-8">
+                                    <title> CSS Radio Button Example </title>
+                                    <style>
+                                        .contenholder {
+                                            text-align: center;
+                                        }
+
+                                        .bodycls {
+                                            background: #8f8383 !important;
+                                            /* width: 400px !important; */
+                                            top: 200px !important;
+                                            text-align: center;
+                                        }
+
+                                        .containerrr {
+                                            display: block;
+                                            position: relative;
+                                            margin: 20px auto;
+                                            height: auto;
+                                            width: 900px;
+                                            padding: 25px;
+                                        }
+
+                                        h2 {
+                                            color: #ffffff;
+                                        }
+
+                                        ul li {
+                                            color: #00FA9A;
+                                            display: block;
+                                            position: relative;
+                                            border-bottom: 1px dotted #DAA520;
+                                        }
+
+                                        ul li input[type=radio] {
+                                            position: absolute;
+                                            visibility: hidden;
+                                        }
+
+                                        ul li label {
+                                            display: block;
+                                            position: relative;
+                                            font-weight: 400;
+                                            font-size: 1.19em;
+                                            padding: 25px 25px 25px 100px;
+                                            margin: 8px auto;
+                                            height: 20px;
+                                            color: white;
+
+
+                                            z-index: 9;
+                                            cursor: pointer;
+                                            text-align: left !important;
+                                            text-justify: inter-word !important;
+                                        }
+
+                                        ul li:hover label {
+                                            color: #4207a0;
+                                        }
+
+                                        ul li .radio_demo {
+                                            display: block;
+                                            position: absolute;
+                                            border: 3px solid #AAAAAA;
+                                            border-radius: 100%;
+                                            height: 30px;
+                                            width: 30px;
+                                            top: 25px;
+                                            left: 30px;
+                                            z-index: 5;
+                                        }
+
+                                        ul li .radio_demo::before {
+                                            position: absolute;
+                                            content: '';
+                                            border-radius: 80%;
+                                            height: 21px;
+                                            width: 20px;
+                                            top: 2px;
+                                            left: 3px;
+                                            margin: auto;
+                                            transition: background 0.25s linear;
+                                        }
+
+                                        input[type=radio]:checked~.radio_demo {
+                                            border: 3px solid #0DFF92;
+                                        }
+
+                                        input[type=radio]:checked~.radio_demo::before {
+                                            background: #0DFF92;
+                                        }
+
+                                        .lbltext {
+                                            /* color: #ffffff; */
+                                            text-align: left !important;
+                                            text-align: left !important;
+                                        }
+
+                                        .btnclr{
+                                            color:#ffffff;
+                                            background-color:#e0de58;
+                                        }
+                                    </style>
+                                </head>
+
+                                <form  data-abide novalidate  method="POST">
+                                            
+
+   
+                                    {% csrf_token %}
+                                    <div class="contenholder">
+                                        <div class="bodycls">
+                                            <div class="containerrr">
+                                                <!-- {{plan}} -->
+
+
+
+                                                <!-- <h2> Indian Cricket Team Members: </h2> -->
+                                                <ul>
+                                                    {% for i in plan %}
+                                                    <li>
+                                                        <input type="radio" id="option_{{i.plan_id}}" name="selector"
+                                                            value="{{i.plan_id}}">
+                                                        <label class="lbltext"
+                                                            for="option_{{i.plan_id}}">{{i.title}}</label>
+                                                        <div class="radio_demo"></div>
+                                                    </li>
+
+                                                    {% endfor %}
+
+                                                    <!-- <li>
+                                                    <input type="radio" id="optiotwo" name="selector">
+                                                    <label class="lbltext" for="optiotwo"> Virat Kohli</label>
+                                                    <div class="radio_demo">
+                                                        <div class="inside"></div>
+                                                    </div>
+                                                </li> -->
+
+                                                </ul>
+
+                                                <div style="text-align: center; size: 600px !important;">
+                                                    <!-- {{ form.render }} -->
+                                                    <!-- <button class="button expanded" type="submit" name="submit">publish now</button> -->
+                                                    <button class="button expanded btnclr" type="submit" name="submit">Buy Now</button>
+                                                    <!-- <button style="width: 400; color:blue">Buy Now</button> -->
+                                                </div>
+
+                                      
+                                                <hr>
+                                                <h2 style="color: #ffffff;">2. Pay Per View</h2>
+                                                <h3 style="color: #ffffff; text-align: left;">For Pay-Per-View viewing, click on individual video titles. Prices range from $0.99 to $1.99 per title.
+                                                </h3>
+
+
+
+                                              
+                                                <!-- <div class="row collapse borderBottom">
+                                                    <div class="medium-6 large-centered medium-centered">
+                                                        <div class="page-heading text-center">
+                                                            <hr>
+                                                            <h3 style="color: #ffffff;">2. Pay Per View</h3>
+                                                            <h3 style="color: #ffffff;">For Pay-Per-View viewing, click on individual video titles. Prices range from $0.99 to $1.99 per title.
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+
+                                            </div>
+
+
+                                        </div>
+
+                                       
+                                    </div>
+
+ 
+                               </form>
+
+
+
+
+
+
+
+
+
+
+
+                            </main>
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            
+
+
+
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- footer -->
+
+</div>
+<!--end off canvas content-->
+
+
+
+{% endblock %}

@@ -1,0 +1,5 @@
+.progress-info {font:13px Arial; font-weight: bold;}
+.progress-data {background-color:#b3b3b3; border:1px solid #898989; width:40%;}
+.progress-data tr td {background-color:#474646; font:12px Arial; width:35%;}
+.progress-bar1 {background-color:#cccccc; background-image: url('../images/uploadbar_1.gif'); background-repeat: repeat-x; position:relative; text-align:left; height:20px; width: 400px; border:none;}
+.progress-bar2 {background-color:#666666; background-image: url('../images/uploadbar_2.gif'); background-repeat: repeat-x; position:relative; text-align:left; height:20px; width:0%;}

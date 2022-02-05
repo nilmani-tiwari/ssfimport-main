@@ -1,0 +1,7 @@
+id,username,email,first_name,last_name,nickname,display_name,joined,biographical_info,website,user_pass<br />
+{% for row in data %}
+    {% for val in row %}
+        {{val}}
+        {% if not forloop.last %},{% endif %}
+    {% endfor %} <br />
+{% endfor %}

@@ -1,0 +1,6 @@
+<div  class="row list-group">
+    {% for i in subcat %}
+                <a class="button radius btnnn" href="/videos/{{i.sub_cat.slug}}/{{i.slug}}">{{i.subcategory_name}}</a>
+    {% endfor %}
+
+    </div>

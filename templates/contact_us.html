@@ -1,0 +1,130 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+            <!--breadcrumbs-->
+            <section id="breadcrumb">
+                <div class="row">
+                    <div class="large-12 columns">
+                        <nav aria-label="You are here:" role="navigation">
+                            <ul class="breadcrumbs">
+                                <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+                                <li>
+                                    <span class="show-for-sr">Current: </span> contact us
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </section><!--end breadcrumbs-->
+
+            <!-- registration -->
+            <section class="registration">
+                <div class="row secBg">
+                    <div class="large-12 columns">
+                        <div class="login-register-content">
+                            <div class="row collapse borderBottom">
+                                <div class="medium-6 large-centered medium-centered">
+                                    <div class="page-heading text-center">
+                                        <h3>Contact Us</h3>
+                                        PHONE: 626-660-5823
+
+                                         EMAIL: INFO@SEXSMARTFILMS.COM
+                                        <p style="font-size: 25px;"><i>Give me your tired, your poor,
+                                            Your huddled masses, yearning to breath free,
+                                            The wretched refuse of your teeming shore,
+                                            Send these, the homeless, tempest tost to me,
+                                            I lift my lamp beside the golden door.</i></p>
+
+                                            <h1>That certainly sounds like a promise of sexual freedom.</h1>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" data-equalizer data-equalize-on="medium" id="test-eq">
+                                <div class="large-6 columns">
+                                    <h4>Contact Details:</h4>
+                                    <div class="map">
+                                        <iframe class="map" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Statue+of+Liberty,+New+York,+NY&amp;aq=0&amp;oq=statue+of+liberty+national&amp;sll=37.0625,-95.677068&amp;sspn=55.192325,114.169922&amp;ie=UTF8&amp;hq=Statue+of+Liberty,+New+York,+NY&amp;t=m&amp;cid=4667599994556318251&amp;hnear=&amp;ll=40.689229,-74.044504&amp;spn=0.031239,0.054932&amp;z=14&amp;iwloc=A&amp;output=embed"></iframe>
+                                        <!-- <img src="http://placehold.it/570x300" alt="map"> -->
+                                    </div>
+                                    <div class="user-contacts">
+                                        <div class="row">
+                                            <div class="large-6 medium-6 columns">
+                                                <div class="contact-stats">
+                                                    <i class="fa fa-map-marker"></i>
+                                                    <h6>Office Adrress</h6>
+                                                    <p>4088 Station Street Oakland, CA 94612 California, US</p>
+                                                </div>
+                                            </div>
+                                            <div class="large-6 medium-6 columns">
+                                                <div class="contact-stats">
+                                                    <i class="fa fa-envelope"></i>
+                                                    <h6>Email Adrress</h6>
+                                                    <p>INFO@SEXSMARTFILMS.COM <br/> .</p>
+                                                </div>
+                                            </div>
+                                            <div class="large-6 medium-6 columns">
+                                                <div class="contact-stats">
+                                                    <i class="fa fa-phone"></i>
+                                                    <h6>Phone Numers</h6>
+                                                    <p><strong>Office No :</strong> 626-660-5823
+                                                        <br/> <strong>Fax No : </strong> </p>
+                                                </div>
+                                            </div>
+                                            <div class="large-6 medium-6 columns">
+                                                <div class="contact-stats">
+                                                    <i class="fa fa-phone"></i>
+                                                    <h6>Social Media</h6>
+                                                    <p>
+                                                        <a href="https://www.facebook.com/SexSmartFilmscom-111457222213166/" class="secondary-button"><i class="fa fa-facebook"></i></a>
+                                                        <a href="https://twitter.com/SexSmartFilms" class="secondary-button"><i class="fa fa-twitter"></i></a>
+                                                        <a href="#" class="secondary-button"><i class="fa fa-google-plus"></i></a>
+                                                        <a href="#" class="secondary-button"><i class="fa fa-instagram"></i></a>
+                                                        <a href="#" class="secondary-button"><i class="fa fa-vimeo"></i></a>
+                                                        <a href="#" class="secondary-button"><i class="fa fa-youtube"></i></a>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="large-6 columns">
+                                    <h4>We'd Love to hear from you!</h4>
+                                    <div class="register-form">
+                                    <form method="post" data-abide novalidate>
+                                        <div data-abide-error class="alert callout" style="display: none;">
+                                            <p><i class="fa fa-exclamation-triangle"></i> There are some errors in your form.</p>
+                                        </div>
+                                        <div class="input-group">
+                                            <span class="input-group-label"><i class="fa fa-user"></i></span>
+                                            <input class="input-group-field" type="text" placeholder="Enter your name" required>
+                                        </div>
+                                        <div class="input-group">
+                                            <span class="input-group-label"><i class="fa fa-envelope"></i></span>
+                                            <input class="input-group-field" type="email" placeholder="Enter your email" required>
+                                        </div>
+                                        <div class="input-group">
+                                            <span class="input-group-label"><i class="fa fa-book"></i></span>
+                                            <input class="input-group-field" type="text" placeholder="Enter your subject" required>
+                                        </div>
+                                        <textarea required placeholder="Your message"></textarea>
+                                        <button class="button expanded" type="submit" name="submit">register Now</button>
+                                    </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- footer -->
+           
+
+            
+        </div><!--end off canvas content-->
+
+   {% endblock %}

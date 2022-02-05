@@ -1,0 +1,62 @@
+@charset "utf-8";
+/* SSF Playlist */
+.flowplayer {
+   background: url(/graphics/graphics_main/vidscreen_default.png) no-repeat;
+   /* allow room for playlist buttons 
+   margin-bottom: 200px;*/
+}
+ 
+.fp-playlist {
+   position: absolute;
+   bottom: -200px;
+   width: 100%;
+   text-align: center;
+}
+ 
+.fp-playlist a {
+   display: inline-block;
+   width: 13%;
+   height: 13%;
+   border-radius: 50%;
+   background-color: #666;
+   margin: 15px;
+}
+.fp-playlist a img { width:100%; height:auto; border-radius:50%; }
+ 
+a.is-active {
+   background-color: #eee;
+}
+ 
+.is-paused a.is-active {
+   background-color: #ccc;
+}
+ 
+.fp-next, .fp-prev {
+   position: absolute;
+   bottom: -60px;
+   font-size: 20px;
+   display: none;
+}
+ 
+.fp-next {
+   right: 0;
+}
+ 
+.is-ready .fp-next, .is-ready .fp-prev {
+   display: inline;
+}
+ 
+/* only needed for event info box */
+#info {
+   background-color: #333;
+   font-family: monaco, monospace;
+   max-width: 300px;
+   min-height: 100px;
+   margin: 0 auto;
+   color: #eee;
+   padding: 10px;
+}
+ 
+#info p {
+   margin: 0;
+}

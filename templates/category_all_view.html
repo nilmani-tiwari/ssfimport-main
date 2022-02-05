@@ -1,0 +1,809 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+
+  <!-- view_all.html -->
+
+
+
+<style>
+    .bnbg {
+        background: #404140;
+        color: #fcf5c0;
+}
+.promoLine {
+    background: #404140;
+    color: #fcf5c0;
+    text-align: center;
+    letter-spacing: 0.2em;
+    font: italic 700 6.2em/1.5 Georgia, "Times New Roman", Times, serif;
+    text-shadow: 3px 3px 0 #161716;
+    border-top: 21px solid #2c2d2b;
+    font-size: 36px;
+    
+}
+.btnnn{
+    margin-top: 10px;
+}
+
+</style>
+
+
+ <!-- ad Section -->
+
+ <!-- <section  class="content">
+    <div class="googleAdv promoLine">
+        <span>{{base_details.about_logo}}</span><br>
+        <span style="font-size: 15px; color: coral;">— Douglas Braun-Harvey, MFT CGP —</span>
+    
+        
+    
+    </div>
+
+ </section> -->
+
+
+<!-- End ad Section -->
+
+
+
+
+            <!-- Category -->
+
+
+
+
+        
+
+
+            <!-- main content -->
+            <section class="content">
+                <!-- newest video -->
+
+
+
+                <!-- <div class="main-heading">
+                    <div class="row secBg padding-14">
+                        <div class="medium-8 small-8 columns">
+                            <div class="head-title">
+                                <i class="fa fa-film"></i>
+                                <h4>Newest Videos</h4> 
+                            </div>
+                        </div>
+                        <div class="medium-4 small-4 columns">
+                            <ul class="tabs text-right pull-right" data-tabs id="newVideos">
+                                <li class="tabs-title is-active"><a href="#new-all">all</a></li>
+                                <li class="tabs-title"><a href="#new-hd">HD</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div> -->
+
+
+
+                <div class="row secBg">
+                    <div class="large-12 columns">
+                        <div class="row column head-text clearfix">
+                            <p class="pull-left">All Videos : <span>1,862 Videos posted</span></p>
+                            <div class="grid-system pull-right show-for-large">
+                                <a class="secondary-button current grid-default" href="#"><i class="fa fa-th"></i></a>
+                                <a class="secondary-button grid-medium" href="#"><i class="fa fa-th-large"></i></a>
+                                <a class="secondary-button list" href="#"><i class="fa fa-th-list"></i></a>
+                            </div>
+                        </div>
+                        <div class="tabs-content" data-tabs-content="newVideos">
+                            <div class="tabs-panel is-active" id="new-all">
+                                <div class="row list-group">
+                        {% for i in subcat %}
+                                    <a class="button radius btnnn" href="/videos/{{i.sub_cat.slug}}/{{i.slug}}">{{i.subcategory_name}}</a>
+                        {% endfor %}
+
+                        </div>
+                                    <!-- <a class="button radius btnnn" href="all-video.html">View All Video</a>
+                                    <a class="button radius btnnn" href="all-video.html">View All Video</a>
+                                    <a class="button radius btnnn" href="all-video.html">View All Video Video Video</a>
+                                    <a class="button radius btnnn" href="all-video.html">View All Video</a>
+                                    <a class="button radius btnnn" href="all-video.html">View All Video</a>
+                                    <a class="button radius btnnn" href="all-video.html">View All Video</a>
+                                    <a class="button radius btnnn" href="all-video.html">View All Video</a>
+                                    <a class="button radius btnnn" href="all-video.html">View All Video</a>
+                                    <a class="button radius btnnn" href="all-video.html">View All Video</a>
+                                    <a class="button radius btnnn" href="all-video.html">View All Video</a>
+                                    <a class="button radius btnnn" href="all-video.html">View All Video</a>
+                                    <a class="button radius btnnn" href="all-video.html">View All Video</a>
+                                    <a class="button radius btnnn" href="all-video.html">View All Video</a>
+                                    <a class="button radius btnnn" href="all-video.html">View All Video</a>
+                                    <a class="button radius btnnn" href="all-video.html">View All Video</a> -->
+
+
+
+                                    {% load hitcount_tags %}
+                                    {% for i in latest_upload %}
+                                    <div class="item large-3 medium-6 columns group-item-grid-default">
+                                        <div class="post thumb-border">
+                                            <div class="post-thumb">
+                                                <img loading="lazy" src="{{i.poster_url}}" alt="new video" onerror="this.src='{{ base_details.default_poster_url }}';">
+                                                <a href="{% url 'single_video' i.slug %}" class="hover-posts">
+                                                    <span><i class="fa fa-play"></i>Watch Video</span>
+                                                </a>
+                                                <div class="video-stats clearfix">
+                                                    <div class="thumb-stats pull-left">
+                                                        <h6>{{i.title}}</h6>
+                                                    </div>
+                                                    <div class="thumb-stats pull-left">
+                                                        <i class="fa fa-heart"></i>
+                                                        <span>506</span>
+                                                    </div>
+                                                    <div class="thumb-stats pull-right">
+                                                        <span>05:56</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="post-des" style="width: 370 ;height: 30;">
+                                                <h6><a href="{% url 'single_video' i.slug %}"></a></h6>
+                                                <div class="post-stats clearfix">
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-user"></i>
+                                                        <span><a href="#">admin</a></span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-clock-o"></i>
+                                                        <span>{{i.modified_at.date}}</span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-eye"></i>
+                                                        <span>{% get_hit_count for i %}K</span>
+                                                    </p>
+                                                </div>
+                                                <div class="post-summary">
+                                                    <p>{{i.desc}}</p>
+                                                </div>
+                                                <div class="post-button">
+                                                    <a href="{% url 'single_video' i.slug %}" class="secondary-button"><i class="fa fa-play-circle"></i>watch video</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    {% endfor %}
+
+
+
+
+
+                                </div>
+                            </div>
+                            <div class="tabs-panel" id="new-hd">
+                                <div class="row list-group">
+
+
+
+
+                                    <div class="item large-3 medium-6 columns group-item-grid-default">
+                                        <div class="post thumb-border">
+                                            <div class="post-thumb">
+                                                <img src="http://placehold.it/370x220" alt="new video">
+                                                <a href="single-video-v2.html" class="hover-posts">
+                                                    <span><i class="fa fa-play"></i>Watch Video</span>
+                                                </a>
+                                                <div class="video-stats clearfix">
+                                                    <div class="thumb-stats pull-left">
+                                                        <h6>HD</h6>
+                                                    </div>
+                                                    <div class="thumb-stats pull-left">
+                                                        <i class="fa fa-heart"></i>
+                                                        <span>506</span>
+                                                    </div>
+                                                    <div class="thumb-stats pull-right">
+                                                        <span>05:56</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="post-des">
+                                                <h6><a href="single-video-v2.html">There are many variations of passage.</a></h6>
+                                                <div class="post-stats clearfix">
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-user"></i>
+                                                        <span><a href="#">admin</a></span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-clock-o"></i>
+                                                        <span>5 January 16</span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-eye"></i>
+                                                        <span>1,862K</span>
+                                                    </p>
+                                                </div>
+                                                <div class="post-summary">
+                                                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+                                                </div>
+                                                <div class="post-button">
+                                                    <a href="single-video-v2.html" class="secondary-button"><i class="fa fa-play-circle"></i>watch video</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="item large-3 medium-6 columns group-item-grid-default">
+                                        <div class="post thumb-border">
+                                            <div class="post-thumb">
+                                                <img src="http://placehold.it/370x220" alt="new video">
+                                                <a href="single-video-v2.html" class="hover-posts">
+                                                    <span><i class="fa fa-play"></i>Watch Video</span>
+                                                </a>
+                                                <div class="video-stats clearfix">
+                                                    <div class="thumb-stats pull-left">
+                                                        <h6>HD</h6>
+                                                    </div>
+                                                    <div class="thumb-stats pull-left">
+                                                        <i class="fa fa-heart"></i>
+                                                        <span>506</span>
+                                                    </div>
+                                                    <div class="thumb-stats pull-right">
+                                                        <span>05:56</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="post-des">
+                                                <h6><a href="single-video-v2.html">There are many variations of passage.</a></h6>
+                                                <div class="post-stats clearfix">
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-user"></i>
+                                                        <span><a href="#">admin</a></span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-clock-o"></i>
+                                                        <span>5 January 16</span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-eye"></i>
+                                                        <span>1,862K</span>
+                                                    </p>
+                                                </div>
+                                                <div class="post-summary">
+                                                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+                                                </div>
+                                                <div class="post-button">
+                                                    <a href="single-video-v2.html" class="secondary-button"><i class="fa fa-play-circle"></i>watch video</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="item large-3 medium-6 columns group-item-grid-default">
+                                        <div class="post thumb-border">
+                                            <div class="post-thumb">
+                                                <img src="http://placehold.it/370x220" alt="new video">
+                                                <a href="single-video-v2.html" class="hover-posts">
+                                                    <span><i class="fa fa-play"></i>Watch Video</span>
+                                                </a>
+                                                <div class="video-stats clearfix">
+                                                    <div class="thumb-stats pull-left">
+                                                        <h6>HD</h6>
+                                                    </div>
+                                                    <div class="thumb-stats pull-left">
+                                                        <i class="fa fa-heart"></i>
+                                                        <span>506</span>
+                                                    </div>
+                                                    <div class="thumb-stats pull-right">
+                                                        <span>05:56</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="post-des">
+                                                <h6><a href="single-video-v2.html">There are many variations of passage.</a></h6>
+                                                <div class="post-stats clearfix">
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-user"></i>
+                                                        <span><a href="#">admin</a></span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-clock-o"></i>
+                                                        <span>5 January 16</span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-eye"></i>
+                                                        <span>1,862K</span>
+                                                    </p>
+                                                </div>
+                                                <div class="post-summary">
+                                                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+                                                </div>
+                                                <div class="post-button">
+                                                    <a href="single-video-v2.html" class="secondary-button"><i class="fa fa-play-circle"></i>watch video</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="item large-3 medium-6 columns group-item-grid-default">
+                                        <div class="post thumb-border">
+                                            <div class="post-thumb">
+                                                <img src="http://placehold.it/370x220" alt="new video">
+                                                <a href="single-video-v2.html" class="hover-posts">
+                                                    <span><i class="fa fa-play"></i>Watch Video</span>
+                                                </a>
+                                                <div class="video-stats clearfix">
+                                                    <div class="thumb-stats pull-left">
+                                                        <h6>HD</h6>
+                                                    </div>
+                                                    <div class="thumb-stats pull-left">
+                                                        <i class="fa fa-heart"></i>
+                                                        <span>506</span>
+                                                    </div>
+                                                    <div class="thumb-stats pull-right">
+                                                        <span>05:56</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="post-des">
+                                                <h6><a href="single-video-v2.html">There are many variations of passage.</a></h6>
+                                                <div class="post-stats clearfix">
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-user"></i>
+                                                        <span><a href="#">admin</a></span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-clock-o"></i>
+                                                        <span>5 January 16</span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-eye"></i>
+                                                        <span>1,862K</span>
+                                                    </p>
+                                                </div>
+                                                <div class="post-summary">
+                                                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+                                                </div>
+                                                <div class="post-button">
+                                                    <a href="single-video-v2.html" class="secondary-button"><i class="fa fa-play-circle"></i>watch video</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="item large-3 medium-6 columns group-item-grid-default end">
+                                        <div class="post thumb-border">
+                                            <div class="post-thumb">
+                                                <img src="http://placehold.it/370x220" alt="new video">
+                                                <a href="single-video-v2.html" class="hover-posts">
+                                                    <span><i class="fa fa-play"></i>Watch Video</span>
+                                                </a>
+                                                <div class="video-stats clearfix">
+                                                    <div class="thumb-stats pull-left">
+                                                        <h6>HD</h6>
+                                                    </div>
+                                                    <div class="thumb-stats pull-left">
+                                                        <i class="fa fa-heart"></i>
+                                                        <span>506</span>
+                                                    </div>
+                                                    <div class="thumb-stats pull-right">
+                                                        <span>05:56</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="post-des">
+                                                <h6><a href="single-video-v2.html">There are many variations of passage.</a></h6>
+                                                <div class="post-stats clearfix">
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-user"></i>
+                                                        <span><a href="#">admin</a></span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-clock-o"></i>
+                                                        <span>5 January 16</span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-eye"></i>
+                                                        <span>1,862K</span>
+                                                    </p>
+                                                </div>
+                                                <div class="post-summary">
+                                                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+                                                </div>
+                                                <div class="post-button">
+                                                    <a href="single-video-v2.html" class="secondary-button"><i class="fa fa-play-circle"></i>watch video</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="text-center row-btn">
+                            <a class="button radius" href="all-video.html">View All Video</a>
+                        </div> -->
+                    </div>
+                </div>
+            </section>
+            <section class="content">
+                <!-- End newest video -->
+                <!-- ad Section -->
+
+
+                <!-- <div class="googleAdv">
+                    <a href="#"><img src="{% static 'images/goodleadv.png' %}" alt="googel ads"></a>
+                </div> -->
+                
+                
+                <!-- End ad Section -->
+
+                <!-- popular Videos -->
+
+
+
+
+<!-- <div class="main-heading">
+    <div class="row secBg padding-14">
+        <div class="medium-8 small-8 columns">
+            <div class="head-title">
+                <i class="fa fa-star"></i>
+                <h4>Most Popular Videos</h4>
+            </div>
+        </div>
+        <div class="medium-4 small-4 columns">
+            <ul class="tabs text-right pull-right" data-tabs id="popularVideos">
+                <li class="tabs-title is-active"><a href="#popular-all">all</a></li>
+                <li class="tabs-title"><a href="#popular-hd">HD</a></li>
+            </ul>
+        </div>
+    </div>
+</div> -->
+
+
+
+
+                <div class="row secBg">
+                    <div class="large-12 columns">
+                        <div class="row column head-text clearfix">
+                            <p class="pull-left">All Videos : <span>1,862 Videos posted</span></p>
+                            <div class="grid-system pull-right show-for-large">
+                                <a class="secondary-button current grid-default" href="#"><i class="fa fa-th"></i></a>
+                                <a class="secondary-button grid-medium" href="#"><i class="fa fa-th-large"></i></a>
+                                <a class="secondary-button list" href="#"><i class="fa fa-th-list"></i></a>
+                            </div>
+                        </div>
+                        <div class="tabs-content" data-tabs-content="popularVideos">
+                            <div class="tabs-panel is-active" id="popular-all">
+                                <div class="row list-group">
+
+
+
+                                    {% for i in all_video %}
+
+                                    <div class="item large-3 medium-6 columns group-item-grid-default">
+                                        <div class="post thumb-border">
+                                            <div class="post-thumb">
+                                                <img src="{{i.poster_url}}" alt="new video" onerror="this.src='{{ base_details.default_poster_url }}';">
+                                                <a href="{% url 'single_video' i.slug %}" class="hover-posts">
+                                                    <span><i class="fa fa-play"></i>Watch Video</span>
+                                                </a>
+                                                <div class="video-stats clearfix">
+                                                    <div class="thumb-stats pull-left">
+                                                        <h6>{{i.title}}</h6>
+                                                    </div>
+                                                    <div class="thumb-stats pull-left">
+                                                        <i class="fa fa-heart"></i>
+                                                        <span>506</span>
+                                                    </div>
+                                                    <div class="thumb-stats pull-right">
+                                                        <span>05:56</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="post-des">
+                                                <h6><a href="{% url 'single_video' i.slug %}"></a></h6>
+                                                <div class="post-stats clearfix">
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-user"></i>
+                                                        <span><a href="#">admin</a></span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-clock-o"></i>
+                                                        <span>{{i.modified_at.date}}</span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-eye"></i>
+                                                        <span>{% get_hit_count for i %}K</span>
+                                                    </p>
+                                                </div>
+                                                <div class="post-summary">
+                                                    <p>{{i.desc}}</p>
+                                                </div>
+                                                <div class="post-button">
+                                                    <a href="{% url 'single_video' i.slug %}" class="secondary-button"><i class="fa fa-play-circle"></i>watch video</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                    {% endfor %}
+
+
+
+
+
+
+
+
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="tabs-panel" id="popular-hd">
+                                <div class="row list-group">
+                                    <div class="item large-3 medium-6 columns group-item-grid-default">
+                                        <div class="post thumb-border">
+                                            <div class="post-thumb">
+                                                <img src="http://placehold.it/370x220" alt="new video">
+                                                <a href="single-video-v2.html" class="hover-posts">
+                                                    <span><i class="fa fa-play"></i>Watch Video</span>
+                                                </a>
+                                                <div class="video-stats clearfix">
+                                                    <div class="thumb-stats pull-left">
+                                                        <h6>HD</h6>
+                                                    </div>
+                                                    <div class="thumb-stats pull-left">
+                                                        <i class="fa fa-heart"></i>
+                                                        <span>506</span>
+                                                    </div>
+                                                    <div class="thumb-stats pull-right">
+                                                        <span>05:56</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="post-des">
+                                                <h6><a href="single-video-v2.html">There are many variations of passage.</a></h6>
+                                                <div class="post-stats clearfix">
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-user"></i>
+                                                        <span><a href="#">admin</a></span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-clock-o"></i>
+                                                        <span>5 January 16</span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-eye"></i>
+                                                        <span>1,862K</span>
+                                                    </p>
+                                                </div>
+                                                <div class="post-summary">
+                                                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+                                                </div>
+                                                <div class="post-button">
+                                                    <a href="single-video-v2.html" class="secondary-button"><i class="fa fa-play-circle"></i>watch video</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="item large-3 medium-6 columns group-item-grid-default">
+                                        <div class="post thumb-border">
+                                            <div class="post-thumb">
+                                                <img src="http://placehold.it/370x220" alt="new video">
+                                                <a href="single-video-v2.html" class="hover-posts">
+                                                    <span><i class="fa fa-play"></i>Watch Video</span>
+                                                </a>
+                                                <div class="video-stats clearfix">
+                                                    <div class="thumb-stats pull-left">
+                                                        <h6>HD</h6>
+                                                    </div>
+                                                    <div class="thumb-stats pull-left">
+                                                        <i class="fa fa-heart"></i>
+                                                        <span>506</span>
+                                                    </div>
+                                                    <div class="thumb-stats pull-right">
+                                                        <span>05:56</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="post-des">
+                                                <h6><a href="single-video-v2.html">There are many variations of passage.</a></h6>
+                                                <div class="post-stats clearfix">
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-user"></i>
+                                                        <span><a href="#">admin</a></span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-clock-o"></i>
+                                                        <span>5 January 16</span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-eye"></i>
+                                                        <span>1,862K</span>
+                                                    </p>
+                                                </div>
+                                                <div class="post-summary">
+                                                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+                                                </div>
+                                                <div class="post-button">
+                                                    <a href="single-video-v2.html" class="secondary-button"><i class="fa fa-play-circle"></i>watch video</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="item large-3 medium-6 columns group-item-grid-default">
+                                        <div class="post thumb-border">
+                                            <div class="post-thumb">
+                                                <img src="http://placehold.it/370x220" alt="new video">
+                                                <a href="single-video-v2.html" class="hover-posts">
+                                                    <span><i class="fa fa-play"></i>Watch Video</span>
+                                                </a>
+                                                <div class="video-stats clearfix">
+                                                    <div class="thumb-stats pull-left">
+                                                        <h6>HD</h6>
+                                                    </div>
+                                                    <div class="thumb-stats pull-left">
+                                                        <i class="fa fa-heart"></i>
+                                                        <span>506</span>
+                                                    </div>
+                                                    <div class="thumb-stats pull-right">
+                                                        <span>05:56</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="post-des">
+                                                <h6><a href="single-video-v2.html">There are many variations of passage.</a></h6>
+                                                <div class="post-stats clearfix">
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-user"></i>
+                                                        <span><a href="#">admin</a></span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-clock-o"></i>
+                                                        <span>5 January 16</span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-eye"></i>
+                                                        <span>1,862K</span>
+                                                    </p>
+                                                </div>
+                                                <div class="post-summary">
+                                                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+                                                </div>
+                                                <div class="post-button">
+                                                    <a href="single-video-v2.html" class="secondary-button"><i class="fa fa-play-circle"></i>watch video</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="item large-3 medium-6 columns group-item-grid-default">
+                                        <div class="post thumb-border">
+                                            <div class="post-thumb">
+                                                <img src="http://placehold.it/370x220" alt="new video">
+                                                <a href="single-video-v2.html" class="hover-posts">
+                                                    <span><i class="fa fa-play"></i>Watch Video</span>
+                                                </a>
+                                                <div class="video-stats clearfix">
+                                                    <div class="thumb-stats pull-left">
+                                                        <h6>HD</h6>
+                                                    </div>
+                                                    <div class="thumb-stats pull-left">
+                                                        <i class="fa fa-heart"></i>
+                                                        <span>506</span>
+                                                    </div>
+                                                    <div class="thumb-stats pull-right">
+                                                        <span>05:56</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="post-des">
+                                                <h6><a href="single-video-v2.html">There are many variations of passage.</a></h6>
+                                                <div class="post-stats clearfix">
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-user"></i>
+                                                        <span><a href="#">admin</a></span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-clock-o"></i>
+                                                        <span>5 January 16</span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-eye"></i>
+                                                        <span>1,862K</span>
+                                                    </p>
+                                                </div>
+                                                <div class="post-summary">
+                                                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+                                                </div>
+                                                <div class="post-button">
+                                                    <a href="single-video-v2.html" class="secondary-button"><i class="fa fa-play-circle"></i>watch video</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="item large-3 medium-6 columns group-item-grid-default end">
+                                        <div class="post thumb-border">
+                                            <div class="post-thumb">
+                                                <img src="http://placehold.it/370x220" alt="new video">
+                                                <a href="single-video-v2.html" class="hover-posts">
+                                                    <span><i class="fa fa-play"></i>Watch Video</span>
+                                                </a>
+                                                <div class="video-stats clearfix">
+                                                    <div class="thumb-stats pull-left">
+                                                        <h6>HD</h6>
+                                                    </div>
+                                                    <div class="thumb-stats pull-left">
+                                                        <i class="fa fa-heart"></i>
+                                                        <span>506</span>
+                                                    </div>
+                                                    <div class="thumb-stats pull-right">
+                                                        <span>05:56</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="post-des">
+                                                <h6><a href="single-video-v2.html">There are many variations of passage.</a></h6>
+                                                <div class="post-stats clearfix">
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-user"></i>
+                                                        <span><a href="#">admin</a></span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-clock-o"></i>
+                                                        <span>5 January 16</span>
+                                                    </p>
+                                                    <p class="pull-left">
+                                                        <i class="fa fa-eye"></i>
+                                                        <span>1,862K</span>
+                                                    </p>
+                                                </div>
+                                                <div class="post-summary">
+                                                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+                                                </div>
+                                                <div class="post-button">
+                                                    <a href="single-video-v2.html" class="secondary-button"><i class="fa fa-play-circle"></i>watch video</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="text-center row-btn">
+                            <a class="button radius" href="all-video.html">View All Video</a>
+                        </div> -->
+                    </div>
+                </div>
+
+
+
+
+           
+
+
+
+
+            </section><!-- End main content -->
+
+
+
+
+           
+
+
+
+ 
+
+
+
+
+        </div><!--end off canvas content-->
+
+
+        {% endblock %}
+   

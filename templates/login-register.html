@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<!-- login by facebook  -->
+{% load socialaccount %}
+{% providers_media_js %}
+
+<!-- end login facebook -->
+
+
+
+<style>.info{
+    list-style:None;
+    background-color:#FF0000;
+    color:white;
+    box-shadow: 12px 12px 12px #e61c66;
+    text-align: center;}
+
+    .success{
+    list-style:None;
+    background-color:#7ba42e;
+    color:white;
+    box-shadow: 12px 12px 12px #e61c66;
+    text-align: center;}
+    </style>
+
+
+
+
+
+<!--breadcrumbs-->
+<section id="breadcrumb">
+    <div class="row">
+        <div class="large-12 columns">
+            <nav aria-label="You are here:" role="navigation">
+                <ul class="breadcrumbs">
+                    <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+                    <li>
+                        <span class="show-for-sr">Current: </span> Login
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+<!--end breadcrumbs-->
+
+<!-- registration -->
+<section class="registration">
+    <div class="row secBg">
+        <div class="large-12 columns">
+            <div class="login-register-content">
+                <div class="row collapse borderBottom">
+                    <div class="medium-6 large-centered medium-centered">
+                        <div class="page-heading text-center">
+                            <h3>Not registered yet? </h3>
+                            <!-- <h3>User Registration</h3>
+                            <p>Not registered yet? </p> -->
+                            <p>Fill the registration form below to subscribe to a plan as per your need.</p>
+
+
+
+
+
+                            <div class="large-12 medium-6 columns end">
+                                <div class="register-form">
+                                    <h5 class="text-center">Create your Account</h5>
+
+
+
+
+                                    {% if messages %}
+                                    <ul class="messages">
+                                        {% for message in messages %}
+                                        <li {% if message.tags %} class="{{message.tags}}"  {% endif %}>{{message}}</li>
+                                        {% endfor %}
+                                    </ul>
+                                    {% endif %}
+
+
+
+                                    <form data-abide novalidate method="POST">
+
+
+                                        {% csrf_token %}
+
+
+                                        <div data-abide-error class="alert callout" style="display: none;">
+                                            <p><i class="fa fa-exclamation-triangle"></i> There are some errors in your
+                                                form.</p>
+                                        </div>
+                                        <div class="input-group">
+                                            <span class="input-group-label"><i class="fa fa-user"></i></span>
+                                            <input class="input-group-field" type="text"
+                                                placeholder="Enter your username" name="username" required>
+                                        </div>
+
+                                        <div class="input-group">
+                                            <span class="input-group-label"><i class="fa fa-envelope"></i></span>
+                                            <input class="input-group-field" type="email" placeholder="Enter your email"
+                                                name="email" required>
+                                        </div>
+
+                                        <div class="input-group">
+                                            <span class="input-group-label"><i class="fa fa-lock"></i></span>
+                                            <input type="password" id="password" placeholder="Enter your password"
+                                                name="password" required>
+                                        </div>
+                                        <div class="input-group">
+                                            <span class="input-group-label"><i class="fa fa-lock"></i></span>
+                                            <input type="password" placeholder="Re-type your password" required
+                                                name="re_password" pattern="alpha_numeric" data-equalto="password">
+                                        </div>
+                                        <span class="form-error">your email is invalid</span>
+                                        <button class="button expanded" type="submit">register Now</button>
+                                        <p class="loginclick"> <a href="/login_user">Login here</a><a
+                                                href="/login_user">Already have acoount?</a></p>
+                                    </form>
+
+
+
+
+
+
+
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row" data-equalizer data-equalize-on="medium" id="test-eq">
+                    <!-- <div class="large-4 large-offset-1 medium-6 columns">
+                                    <div class="social-login" data-equalizer-watch>
+                                        <h5 class="text-center">Login via Social Profile</h5>
+                                        <div class="social-login-btn facebook">
+                                            <a href="#"><i class="fa fa-facebook"></i>login via facebook</a>
+                                        </div>
+                                        <div class="social-login-btn twitter">
+                                            <a href="#"><i class="fa fa-twitter"></i>login via twitter</a>
+                                        </div>
+                                        <div class="social-login-btn g-plus">
+                                            <a href="#"><i class="fa fa-google-plus"></i>login via google plus</a>
+                                        </div>
+                                        <div class="social-login-btn linkedin">
+                                            <a href="#"><i class="fa fa-linkedin"></i>login via linkedin</a>
+                                        </div>
+                                    </div>
+                                </div> -->
+
+
+                    <!-- <div class="large-2 medium-2 columns show-for-large">
+                                    <div class="middle-text text-center hide-for-small-only" data-equalizer-watch>
+                                        <p>
+                                            <i class="fa fa-arrow-left arrow-left"></i>
+                                            <span>OR</span>
+                                            <i class="fa fa-arrow-right arrow-right"></i>
+                                        </p>
+                                    </div>
+                                </div> -->
+
+                    <!-- 
+                                <div class="large-12 medium-6 columns end">
+                                    <div class="register-form">
+                                        <h5 class="text-center">Create your Account</h5>
+                                        <form method="post" data-abide novalidate>
+
+                                            {% csrf_token %}
+
+
+                                            <div data-abide-error class="alert callout" style="display: none;">
+                                                <p><i class="fa fa-exclamation-triangle"></i> There are some errors in your form.</p>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-label"><i class="fa fa-user"></i></span>
+                                                <input class="input-group-field" type="text" placeholder="Enter your username" name="username" required>
+                                                <span class="form-error">username is required</span>
+                                            </div>
+
+                                            <div class="input-group">
+                                                <span class="input-group-label"><i class="fa fa-lock"></i></span>
+                                                <input type="password" id="password" placeholder="Enter your password" name="password" required>
+                                                <span class="form-error">password is required</span>
+                                            </div>
+                                            <div class="checkbox">
+                                                <input id="remember" type="checkbox" name="check" value="remember">
+                                                <label class="customLabel" for="remember">Remember me</label>
+                                            </div>
+                                            <button class="button expanded" type="submit" name="submit">login Now</button>
+                                            <p class="loginclick"><a href="/forgot_password">Forgot Password</a> New Here? <a href="/register_user">Create a new Account</a></p>
+                                        </form>
+                                    </div>
+                                </div> -->
+
+
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- footer -->
+
+</div>
+<!--end off canvas content-->
+
+
+
+{% endblock %}

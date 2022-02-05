@@ -1,0 +1,6 @@
+ssfenv/*
+*.pyc
+.idea/*
+venv/*
+
+.env  
