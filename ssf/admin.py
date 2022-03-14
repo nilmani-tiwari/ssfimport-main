@@ -72,3 +72,6 @@ class UserProfileAdmin(admin.ModelAdmin):
     search_fields  = ['user','email','active','created_at']
     list_filter = ['active','created_at']
 
+
+#local project
+
