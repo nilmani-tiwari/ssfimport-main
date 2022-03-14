@@ -1,0 +1,106 @@
+
+
+<style>
+	* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.bodydiv {
+  font-family: "Roboto", sans-serif !important;
+  background: linear-gradient(to right bottom, #1b1b1e, #333) !important;
+}
+
+.containerdiv {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  min-height: 100vh !important;
+}
+
+.list {
+  flex: 0 0 20rem !important;
+}
+
+.list__item {
+  position: relative !important;
+}
+.list__item:hover > .label {
+  color: #009688 !important;
+}
+.list__item:hover > .label::before {
+  border: 0.5rem solid #009688 !important;
+  margin-right: 2rem !important;
+}
+
+.radio-btn {
+  position: absolute !important;
+  opacity: 0;
+  visibility: hidden !important;
+}
+.radio-btn:checked + .label {
+  color: #009688 !important;
+}
+.radio-btn:checked + .label::before {
+  margin-right: 2rem;
+  border: 0.5rem solid #009688 !important;
+  background: #fff !important;
+}
+
+.label {
+  display: flex !important;
+  align-items: center !important;
+  padding: 0.75rem 0 !important;
+  color: #fff !important;
+  font-size: 1.25rem !important;
+  text-transform: uppercase !important;
+  cursor: pointer !important;
+  transition: all 0.25s linear !important;
+}
+
+.label::before {
+  display: inline-block !important;
+  content: "" !important;
+  height: 1.125rem !important;
+  width: 1.125rem !important;
+  margin-right: 0.625rem !important;
+  border: 0.5rem solid #fff !important;
+  border-radius: 50% !important;
+  transition: all 0.25s linear !important;
+}
+</style>
+<div class="bodydiv">
+  
+
+
+<div class="containerdiv">
+	<ul class="list">
+        {% for i in plan %}
+
+		<li class="list__item">
+			<input type="radio" class="radio-btn" name="choice" id="a-opt{{i.plan_id}}"  name="selector" />
+			<label for="a-opt{{i.plan_id}}" class="label">{{i.title}}</label>
+		</li>
+        {% endfor %}
+		
+		<!-- <li class="list__item">
+			<input type="radio" class="radio-btn" name="choice" id="b-opt" />
+			<label for="b-opt" class="label">pick me i'm better!</label>
+		</li>
+		
+		<li class="list__item">
+			<input type="radio" class="radio-btn" name="choice" id="c-opt" />
+			<label for="c-opt" class="label">pick me i'm the best!</label>
+		</li>
+		
+		<li class="list__item">
+			<input type="radio" class="radio-btn" name="choice" id="d-opt" />
+			<label for="d-opt" class="label">pick me i'm fabulous!</label>
+		</li> -->
+	</ul>
+</div>
+<!-- partial -->
+  
+</div>
+

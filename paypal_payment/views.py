@@ -58,9 +58,10 @@ class MyCronJob(CronJobBase):
 
 
 
-def base_data():
-    base_cbntent={ 'base_details':  project_details.objects.filter(active=True).values().first(),}
-    return base_cbntent
+
+
+from ssftemp.views import base_data
+
 
 def process_payment(request):
     context={}
@@ -167,23 +168,34 @@ def checkout(request, pk,video_id=0):
 
 # trying another way
 
-def process_payment(request):
+def process_payment(request,pay_view="0-0"):
+
     
+
     context={}
+    
     context.update(base_data())
+    if pay_view !="0-0" and pay_view is not None :
+        pay_view=pay_view.split("-")
+        video_id=int(pay_view[1])
+        video_detail=VideoUpload.objects.values('poster_url',"slug","video_id","title").filter(video_id=int(pay_view[1])).first()["title"]
+        context.update({"video_title":video_detail})
+        context.update({"view_price":0.99,"view_id":int(pay_view[1]),"pay_per_view":True})
     from paypal_payment.models import Plan
     pla=Plan.objects.all().values()
     print("**********Plan",pla)
     context.update({"plan":pla})
-    if request.method == 'POST':
+    if request.method == 'POST' :
         selector = request.POST.get('selector')
         print(selector,"sssssssssssssssssssssssssssssssssssssssssssss")
         
     
 
-        if selector is not None:
+        if selector is not None and pay_view=="0-0":
             pk=int(selector)
             return redirect(f'/checkout/{pk}')
+        else:
+            return redirect(f'/checkout/99/{video_id}')
             
         
         

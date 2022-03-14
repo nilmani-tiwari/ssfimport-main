@@ -47,11 +47,11 @@
                     <div class="large-12 columns">
                         <nav aria-label="You are here:" role="navigation">
                             <ul class="breadcrumbs">
-                                <li><i class="fa fa-home"></i><a href="index.html">Home</a></li>
-                                <li><a href="#">Animation</a></li>
-                                <li class="disabled">Gene Splicing</li>
+                                <li><i class="fa fa-home"></i><a href="/">Home</a></li>
+                                <li><a href="#">Video</a></li>
+                                <!-- <li class="disabled">{{video.title}}</li> -->
                                 <li>
-                                    <span class="show-for-sr">Current: </span> Comedy video
+                                    <span class="show-for-sr">Current: </span> {{video.title}}
                                 </li>
                             </ul>
                         </nav>
@@ -70,13 +70,18 @@
                            
                             <center>{{video.title}}</center>
                       
-                        	<video id="Test_Video video" width="360" height="240" controls poster="{{video.poster_url}}">
+                        	
 
-                                {% if subscribed_status == True %}
+                                {% if subscribed_status == True %} 
+
+                                <video id="Test_Video video" width="860" height="740 " controls poster="{{video.poster_url}}"></video>
                                 <source src="{{video.video_url}}" type="video/mp4"  >
                                 {% else %}
-                                <div>Greetings {{user}}</div>
-
+                          
+                            <a href="/process_payment/99-{{video.video_id}}">
+                                <video id="Test_Video video" width="860" height="740 " controls poster="{{video.poster_url}}"></video>
+                                <source  type="video/mp4"  >
+                            </a>
                                 {% endif %}
 
 
@@ -102,7 +107,7 @@
                                     <div class="media-object-section">
                                         <div class="author-img-sec">
                                             <div class="thumbnail author-single-post">
-                                                <a href="#"><img src= "http://placehold.it/80x80" alt="post"></a>
+                                                <a href="#"><img  src= "base_details.default_poster_url" onerror="this.src='{{ base_details.default_poster_url }}';" alt="post"></a>
                                             </div>
                                             <p class="text-center"><a href="#">{{ request.user.username }}</a></p>
                                         </div>
@@ -116,13 +121,13 @@
                                                 <p>
                                                     <span><i class="fa fa-clock-o"></i>{{video.record_date}}</span>
                                                     <span><i class="fa fa-eye"></i>{% get_hit_count for video %}K</span>
-                                                    <span><i class="fa fa-thumbs-o-up"></i>1,862</span>
-                                                    <span><i class="fa fa-thumbs-o-down"></i>180</span>
+                                                    <span><i class="fa fa-thumbs-o-up"></i>{{like}}</span>
+                                                    <span><i class="fa fa-thumbs-o-down"></i>1098880</span>
                                                     <span><i class="fa fa-commenting"></i>{{video.rating}}</span>
                                                 </p>
                                             </div>
                                             <div class="subscribe">
-                                                <form method="post">
+                                                <!-- <form > -->
 
                                                     {% if subscribed_status == False %}
                                                     
@@ -132,19 +137,158 @@
                                                     
 {% csrf_token %}
                                                    
-                                                    <button type="submit" name="subscribe">Subscribe</button>
-                                                </form>
+                                                    <button type="submit" onclick="getsubscribe();" name="subscribe">Subscribe</button>    
+                                                <!-- </form> -->
                                             </div>
                                         </div>
+
+
+
+
+
+                                        <script>
+
+                                            function getCookie(name) {
+                                            var cookieValue = null;
+                                            if (document.cookie && document.cookie !== '') {
+                                                var cookies = document.cookie.split(';');
+                                                for (var i = 0; i < cookies.length; i++) {
+                                                    var cookie = cookies[i].trim();
+                                                    // Does this cookie string begin with the name we want?
+                                                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            return cookieValue;
+                                        }
+                                        
+                                        var csrftoken1 = getCookie('csrftoken');
+                                        
+                                        
+                                        function getLike() {
+                                              var csrftoken = getCookie('csrftoken');
+                                              let likeVal = document.getElementById("likeId").value;
+                                        
+                                              var url = "{% url 'add_fab' %}"
+                                        
+                                                fetch(url, {
+                                                    method:'POST',
+                                                    headers:{
+                                                        'Content-type':'application/json',
+                                                        'X-CSRFToken':csrftoken,
+                                                    },
+                                                    body:JSON.stringify({"like":likeVal,"video_id":"{{video.pk}}","subscribe":"0","user_id":"{{request.user.pk}}","newsletter":"subs_type","dislike":"0","comment":"0","fab":"0"})
+                                                })
+                                                // document.getElementById('inputId').value = ''
+                                        
+                                              alert("Thank You ");
+                                        
+                                            }
+                                            
+                                         function getdisLike() {
+                                              var csrftoken = getCookie('csrftoken');                                        
+                                              let dislikeVal = document.getElementById("dislikeId").value;
+                                        
+                                              var url = "{% url 'add_fab' %}"
+                                        
+                                                fetch(url, {
+                                                    method:'POST',
+                                                    headers:{
+                                                        'Content-type':'application/json',
+                                                        'X-CSRFToken':csrftoken,
+                                                    },
+                                                    body:JSON.stringify({"like":"0","newsletter":"subs_type","user_id":"{{request.user.pk}}","subscribe":"0","video_id":"{{video.pk}}","dislike":dislikeVal,"comment":"0","fab":"0"})
+                                                })
+                                                fetch(url)
+                                                        .then(function(response){
+                                                            return response.json();
+                                                        })
+                                                        .then(function(like){
+                                                            console.log(like);
+                                                        })
+                                                // document.getElementById('inputId').value = ''
+                                        
+                                              alert("Thank You ");
+                                        
+                                            }
+                                        
+                                         function getfab() {
+                                              var csrftoken = getCookie('csrftoken');                                        
+                                              let favVal = document.getElementById("fabId").value;
+                                        
+                                              var url = "{% url 'add_fab' %}"
+                                        
+                                                fetch(url, {
+                                                    method:'POST',
+                                                    headers:{
+                                                        'Content-type':'application/json',
+                                                        'X-CSRFToken':csrftoken,
+                                                    },
+                                                    body:JSON.stringify({"like":"0","newsletter":"subs_type","video_id":"{{video.pk}}","subscribe":"0","user_id":"{{request.user.pk}}","dislike":"0","comment":"0","fab":favVal})
+                                                })
+                                                // document.getElementById('inputId').value = ''
+                                        
+                                              alert("Thank You ");
+                                        
+                                            }
+                                            
+                                         function getcomment() {
+                                              var csrftoken = getCookie('csrftoken');                                        
+                                              let commentVal = document.getElementById("commentId").value;
+                                        
+                                              var url = "{% url 'add_fab' %}"
+                                        
+                                                fetch(url, {
+                                                    method:'POST',
+                                                    headers:{
+                                                        'Content-type':'application/json',
+                                                        'X-CSRFToken':csrftoken,
+                                                    },
+                                                    body:JSON.stringify({"like":"0","newsletter":"subs_type","video_id":"{{video.pk}}","subscribe":"0","user_id":"{{request.user.pk}}","dislike":"0","comment":commentVal,"fab":""})
+                                                })
+                                                document.getElementById('commentId').value = ''
+                                        
+                                              alert("Thank You ");
+                                        
+                                            }
+
+
+                                            function getsubscribe() {
+                                              var csrftoken = getCookie('csrftoken');                                        
+                                            //   let dislikeVal = document.getElementById("dislikeId").value;
+                                        
+                                              var url = "{% url 'add_fab' %}"
+                                        
+                                                fetch(url, {
+                                                    method:'POST',
+                                                    headers:{
+                                                        'Content-type':'application/json',
+                                                        'X-CSRFToken':csrftoken,
+                                                    },
+                                                    body:JSON.stringify({"like":"0","newsletter":"subs_type","user_id":"{{request.user.pk}}","subscribe":"1","video_id":"{{video.pk}}","dislike":"0","comment":"0","fab":"0"})
+                                                })
+                                                // document.getElementById('inputId').value = ''
+                                        
+                                              alert("Thank You ");
+                                        
+                                            }
+                                          </script>
+
+
+
+
+                                        
                                         <div class="social-share">
                                             <div class="post-like-btn clearfix">
-                                                <form method="post">
-                                                    <button type="submit" name="fav"><i class="fa fa-heart"></i>Add to</button>
-                                                </form>
-                                                <a href="#" class="secondary-button"><i class="fa fa-thumbs-o-up"></i></a>
-                                                <a href="#" class="secondary-button"><i class="fa fa-thumbs-o-down"></i></a>
+                                               
+                                                    <button  class=" secondary-button" style="height: 30px !important; white-space: nowrap !important; width: 100px !important;" id="fabId" type="submit"   onclick="getfab()" value="1" ><i class="fa fa-heart"></i>Add to</button>
+                                                
+                                                <button  id="likeId" value="1" onclick="getLike()" class="secondary-button"><i class="fa fa-thumbs-o-up"></i></button>
+                                                <button id="dislikeId" value="1" onclick="getdisLike()" class="secondary-button"><i class="fa fa-thumbs-o-down"></i></button>
 
-                                                <div class="float-right easy-share" data-easyshare data-easyshare-http data-easyshare-url="http://joinwebs.com">
+                                                <div class="float-right easy-share" data-easyshare data-easyshare-http data-easyshare-url="{{request.build_absolute_uri}}">
                                                     <!-- Total -->
                                                     <button data-easyshare-button="total">
                                                         <span>Total</span>
@@ -176,6 +320,10 @@
                                                 </div>
                                             </div>
                                         </div>
+
+
+
+
                                     </div>
                                 </div>
                             </div>
@@ -272,7 +420,7 @@
                                                     </p>
                                                     <p class="pull-left">
                                                         <i class="fa fa-clock-o"></i>
-                                                        <span>{{p.record_date }}</span>
+                                                        <span>{{p.modified_at }}</span>
                                                     </p>
                                                     <p class="pull-left">
                                                         <i class="fa fa-eye"></i>
@@ -376,9 +524,10 @@
                                             <h6><a href="#">Joseph John</a></h6>
                                         </div>
                                         <div class="media-object-section comment-textarea">
-                                            <form method="post">
-                                                <textarea name="commentText" placeholder="Add a comment here.."></textarea>
-                                                <input type="submit" name="submit" value="send">
+                                              <form action="">
+                                                <textarea id="commentId"  placeholder="Add a comment here.." required></textarea>
+                                                <input type="submit" onclick="getcomment()" name="submit" value="send">
+                                                <!-- <button class="button" onclick="getcomment();" type="submit" value="Submit">send</button> -->
                                             </form>
                                         </div>
                                     </div>
@@ -567,45 +716,7 @@
 
 
                             
-                            <!-- social Fans Widget -->
-
-
-                            <div class="large-12 medium-7 medium-centered columns">
-                                <div class="widgetBox">
-                                    <div class="widgetTitle">
-                                        <h5>social fans</h5>
-                                    </div>
-                                    <div class="widgetContent">
-                                        <div class="social-links">
-                                            <a class="socialButton" href="#">
-                                                <i class="fa fa-facebook"></i>
-                                                <span>698K</span>
-                                                <span>fans</span>
-                                            </a>
-                                            <a class="socialButton" href="#">
-                                                <i class="fa fa-twitter"></i>
-                                                <span>598</span>
-                                                <span>followers</span>
-                                            </a>
-                                            <a class="socialButton" href="#">
-                                                <i class="fa fa-google-plus"></i>
-                                                <span>98k</span>
-                                                <span>followers</span>
-                                            </a>
-                                            <a class="socialButton" href="#">
-                                                <i class="fa fa-youtube"></i>
-                                                <span>168k</span>
-                                                <span>followers</span>
-                                            </a>
-                                            <a class="socialButton" href="#">
-                                                <i class="fa fa-vimeo"></i>
-                                                <span>498</span>
-                                                <span>followers</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                          
                             
                             
                           
@@ -703,6 +814,47 @@
 
                             <!-- ad banner widget -->
 
+
+
+                              <!-- social Fans Widget -->
+
+
+                              <div class="large-12 medium-7 medium-centered columns">
+                                <div class="widgetBox">
+                                    <div class="widgetTitle">
+                                        <h5>social fans</h5>
+                                    </div>
+                                    <div class="widgetContent">
+                                        <div class="social-links">
+                                            <a class="socialButton" href="#">
+                                                <i class="fa fa-facebook"></i>
+                                                <span>698K</span>
+                                                <span>fans</span>
+                                            </a>
+                                            <a class="socialButton" href="#">
+                                                <i class="fa fa-twitter"></i>
+                                                <span>598</span>
+                                                <span>followers</span>
+                                            </a>
+                                            <a class="socialButton" href="#">
+                                                <i class="fa fa-google-plus"></i>
+                                                <span>98k</span>
+                                                <span>followers</span>
+                                            </a>
+                                            <a class="socialButton" href="#">
+                                                <i class="fa fa-youtube"></i>
+                                                <span>168k</span>
+                                                <span>followers</span>
+                                            </a>
+                                            <a class="socialButton" href="#">
+                                                <i class="fa fa-vimeo"></i>
+                                                <span>498</span>
+                                                <span>followers</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
 
 

@@ -156,9 +156,14 @@ def login_user(request):
     urll=request.build_absolute_uri()
     pth=urll.split("login_user/?next=")
     url=pth[-1]
+    url=url.replace("http://127.0.0.1:8000","")
+    if "checkout" in url:
+        url=url.replace("checkout/","checkout-")
+
     print(urll,urll,urll,urll,type(urll))
     context={}
     context.update(base_data())
+    context.update({"url":url})
     if request.method == 'POST':
         username = request.POST.get('username').strip().lower()
         
@@ -184,10 +189,18 @@ def logoutUser(request):
     return redirect('homepage')
 
 
-def register_user(request): 
+def register_user(request,url="/"): 
     dd=project_image.objects.values("image","slug")
     context={}
-    print("reloading 1234556")
+    # print("reloading 1234556")
+    # urll=request.build_absolute_uri()
+    # pth=urll.split("login_user/?next=")
+    # url=pth[-1]
+    if url !="/":
+        url="/"+url
+    if "checkout" in url:
+        url=url.replace("checkout-","checkout/")
+    print("************",url)
     context.update(base_data())
 
     if request.method == 'POST':
@@ -206,7 +219,7 @@ def register_user(request):
 
                 if user is not None:
                     login(request, user)
-                    return redirect('/submit_post')
+                    return redirect(url)
                 else:
                     messages.info(request, 'Username OR password is incorrect')
                     #return redirect('/')
@@ -224,7 +237,8 @@ def register_user(request):
 
                 if user is not None:
                     login(request, user)
-                    return redirect('/submit_post')
+                    print("******&&&&&******",url)
+                    return redirect(url)
                 else:
                     messages.info(request, 'Username OR password is incorrect')
                     return redirect('/')
@@ -235,7 +249,7 @@ def register_user(request):
 
             if user is not None:
                 login(request, user)
-                return redirect('/submit_post')
+                return redirect(url)
             else:
                 messages.info(request, 'Username OR password is incorrect')
                 return redirect('/')
@@ -251,11 +265,68 @@ def register_user(request):
     return render(request,'login-register.html' , context)
 
 
-
+@login_required(login_url='login_user')
 def myprofile(request):
     context={}
+    user_id=request.user.id
+    user = User.objects.get(id=user_id)
+
+    # user = User.objects.filter(email=email)
+    # if user.exists():
+    #     user = user.first()
+    # else:
+    #     user = User.objects.create(username=email, email=email)
+
+    videos=VideoUpload.objects.all().filter(user=user).order_by('-modified_at')[0:9]
+    print(user,user_id,videos,"jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
+    context.update({"my_latest_videos":videos})
+    context.update({
+            'my_popular_videos': VideoUpload.objects.all().filter(user=user).order_by('-hit_count_generic__hits')[0:12],
+            })
     context.update(base_data())
+
+
+
     return render(request, 'profile-page-v1.html',context)
+
+
+@login_required(login_url='login_user')
+def edit_profile(request):
+    context={}
+    user_id=request.user.id
+    usr = User.objects.filter(id=user_id)
+    user=usr.first()
+
+    print(usr.values(),user)
+    context.update(base_data())
+
+    user_pro=UserProfile.objects.filter(user=user)
+    print(user_pro)
+    if user_pro.exists():
+        user_pro = user_pro.first()
+    else:
+        user_pro = UserProfile.objects.create(user=user)
+    user_pro.email=user.email
+    user_pro.save()
+
+    if request.method == 'POST':
+        user_pro.name=request.POST.get('name').strip()
+        user_pro.email=request.POST.get('email').strip()
+        if user_pro.password!=request.POST.get('password').strip():
+            if request.POST.get('password').strip()==request.POST.get('re_password').strip() and request.POST.get('password').strip() is not None:
+                user_pro.password=request.POST.get('password').strip()
+                user.set_password(user_pro.password)  # password update to user
+                user.save()
+
+        try:   
+            user_pro.image=request.FILES['image']
+        except:pass
+        print(user_pro.name)
+        user_pro.save()
+        # login(request, user)
+         
+    context.update({"user":user_pro})
+    return render(request, 'edit_profile.html',context)
 
 
 def forgot_password(request): 
@@ -593,8 +664,27 @@ def subs(request):
         # email = request.POST.get('email')
         email = body["email"]
         newsletter = body.get('newsletter')
-        print(email,newsletter,"*************************email*****newsletter***")
-        all=1
+        fullname = body.get('fullname')
+        print(email,newsletter,fullname,"*************************email*****newsletter***")
+
+        user = User.objects.filter(email=email)
+        if user.exists():
+            user = user.first()
+        else:
+            user = User.objects.create(username=email, email=email)
+
+        all_sub_types = SubscriptionType.objects.all()
+        all_sub_type=["Newsletter","All subscribed user"]
+        if 1:
+            for sub_type in all_sub_types: 
+                if  sub_type.name in all_sub_type :
+                    subscription = EmailSubscription.objects.filter(user=user, subscription_type=sub_type)
+                    if subscription.exists():
+                        subscription = subscription.first()
+                        subscription.subscribed = True
+                        subscription.save()
+                    else:
+                        EmailSubscription.objects.create(user=user, subscription_type=sub_type, subscribed=True)    
         # all_sub_types = SubscriptionType.objects.all()
 
         # if not email:
@@ -645,3 +735,99 @@ def subs(request):
 
     # return render(request,'emails/newsletter_welcome.html' , context)
     return JsonResponse({'foo':'bar'})
+
+
+def add_fab(request): 
+
+    print("********************** i m in add_fab ")
+    body = json.loads(request.body)
+    print(body)
+    context={}
+    print(request.method)
+    _TG = "[SUBSCRIBTIONS] [NEW SUBSCRIBER]"
+ 
+    if request.method == 'POST':
+        # email = request.POST.get('email')
+        like = body["like"]
+        dislike = body.get('dislike')
+        fab = body.get('fab')
+        video_id = body.get('video_id')
+        comment = body.get('comment')
+        user_id = body.get('user_id')
+        subs = body.get('subscribe')
+       
+        user = User.objects.get(pk=user_id)
+        subscriber=subscription=EmailSubscription.objects.filter(user=user)
+        if subscription.exists()==False:
+            subscription_type=SubscriptionType.objects.get(name="All subscribed user")
+            
+            subscriber=EmailSubscription.objects.create(user=user, subscription_type=subscription_type, subscribed=True)  
+        else:
+            subscriber=subscriber.first()
+        
+        if comment!="0":
+            cmt=UserComment(subscriber=subscriber,content_type="video",content_id=video_id,comment=comment)
+            cmt.save()
+
+        
+        if like=="1":
+            label="like"
+        elif dislike=="1":
+            label="dislike"
+
+        if fab=="1":
+            user_fab=UserFavoriteVideo.objects.filter(subscriber=subscriber,content_type="video",content_id=video_id,label="favorite")
+            print("in fab")
+            if user_fab.exists()==False:
+
+                user_fab=UserFavoriteVideo(subscriber=subscriber,content_type="video",content_id=video_id,label="favorite")
+                user_fab.save()
+
+
+        if like=="1" or dislike=="1":
+            user_fab=UserFavoriteVideo.objects.filter(subscriber=subscriber,content_type="video",content_id=video_id,label="favorite")
+            if user_fab.exists():
+                UserFavoriteVideo(subscriber=subscriber,content_type="video",content_id=video_id,label=label)
+                
+            else:
+                user_fab=UserFavoriteVideo.objects.filter(subscriber=subscriber,content_type="video",content_id=video_id)
+                if user_fab.exists():
+                    user_fab.update(label=label)
+                else:
+
+                    user_fab=UserFavoriteVideo(subscriber=subscriber,content_type="video",content_id=video_id,label=label)
+                    user_fab.save()
+
+
+        
+
+        print(like,dislike,fab,f"***********{video_id}*******{comment}***uid {user_id}****email*****newsletter***")
+
+        # user = User.objects.filter(email=email)
+        # if user.exists():
+        #     user = user.first()
+        # else:
+        #     user = User.objects.create(username=email, email=email)
+
+        # all_sub_types = SubscriptionType.objects.all()
+        # all_sub_type=["Newsletter","All subscribed user"]
+        # if 1:
+        #     for sub_type in all_sub_types: 
+        #         if  sub_type.name in all_sub_type :
+        #             subscription = EmailSubscription.objects.filter(user=user, subscription_type=sub_type)
+        #             if subscription.exists():
+        #                 subscription = subscription.first()
+        #                 subscription.subscribed = True
+        #                 subscription.save()
+        #             else:
+        #                 EmailSubscription.objects.create(user=user, subscription_type=sub_type, subscribed=True)    
+        
+
+
+
+        
+    video=VideoUpload.objects.filter(slug="usa-hostwithpridenonenonetrue-lets-all")
+    video=video.first()
+    context={"like":1111,"video":video}
+    # return JsonResponse({'like':'bar'})
+    return render(request,'single-video-v1.html' , context)

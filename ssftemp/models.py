@@ -20,7 +20,7 @@ import html
 from django.db.models import CASCADE
 from django.utils.text import slugify
 
-from localwp.models import *
+# from localwp.models import *
 from ssftemp.utils import get_ssf_db
 
 # from ssfimport.utils.wputils import wp_content_processor
@@ -169,130 +169,130 @@ class Video(models.Model):
             video.update_thumb()
         return
 
-    def write_to_wp(self):
-        old = WpPosts.objects.using('wp').filter(guid=f"{settings.VIDEO_BASE}{self.ssf_id}")
-        if not old.exists():
-            if self.record_date == '0000-00-00':
-                rd = datetime.utcnow()
-            else:
-                rd = datetime.strptime(self.record_date, '%Y-%m-%d')
-            post = WpPosts.objects.using('wp').create(
-                post_author=1,
-                post_date=rd,
-                post_date_gmt=rd,
-                post_modified=rd,
-                post_modified_gmt=rd,
-                post_content=self.desc,
-                post_excerpt=self.desc,
-                post_title=self.title,
-                post_status='publish',
-                comment_status='open',
-                ping_status='closed',
-                post_name=slugify(self.title),
-                post_type='video_skrn',
-                guid=f'{settings.VIDEO_BASE}{self.ssf_id}',
-                post_parent=0,
-                menu_order=0,
-                comment_count=0
-            )
-            WpPostmeta.objects.using('wp').create(
-                post_id=post.id,
-                meta_key='progression_studios_video_post',
-                meta_value=f'{settings.VIDEO_BASE}{self.ssf_id}_1800.mp4'
-            )
-            WpPostmeta.objects.using('wp').create(
-                post_id=post.id,
-                meta_key='_average_ratings',
-                meta_value=self.rating*2
-            )
+    # def write_to_wp(self):
+    #     old = WpPosts.objects.using('wp').filter(guid=f"{settings.VIDEO_BASE}{self.ssf_id}")
+    #     if not old.exists():
+    #         if self.record_date == '0000-00-00':
+    #             rd = datetime.utcnow()
+    #         else:
+    #             rd = datetime.strptime(self.record_date, '%Y-%m-%d')
+    #         post = WpPosts.objects.using('wp').create(
+    #             post_author=1,
+    #             post_date=rd,
+    #             post_date_gmt=rd,
+    #             post_modified=rd,
+    #             post_modified_gmt=rd,
+    #             post_content=self.desc,
+    #             post_excerpt=self.desc,
+    #             post_title=self.title,
+    #             post_status='publish',
+    #             comment_status='open',
+    #             ping_status='closed',
+    #             post_name=slugify(self.title),
+    #             post_type='video_skrn',
+    #             guid=f'{settings.VIDEO_BASE}{self.ssf_id}',
+    #             post_parent=0,
+    #             menu_order=0,
+    #             comment_count=0
+    #         )
+    #         WpPostmeta.objects.using('wp').create(
+    #             post_id=post.id,
+    #             meta_key='progression_studios_video_post',
+    #             meta_value=f'{settings.VIDEO_BASE}{self.ssf_id}_1800.mp4'
+    #         )
+    #         WpPostmeta.objects.using('wp').create(
+    #             post_id=post.id,
+    #             meta_key='_average_ratings',
+    #             meta_value=self.rating*2
+    #         )
 
-            self.create_vod()
+    #         self.create_vod()
 
-        return
+    #     return
 
-    def create_vod(self):
-        wp_post = WpPosts.objects.using('wp').filter(guid=f"{settings.VIDEO_BASE}{self.ssf_id}").first()
+    # def create_vod(self):
+    #     wp_post = WpPosts.objects.using('wp').filter(guid=f"{settings.VIDEO_BASE}{self.ssf_id}").first()
 
-        WpPostmeta.objects.using('wp').create(
-            post_id=wp_post.id,
-            meta_key='arm_is_paid_post',
-            meta_value=1
-        )
+    #     WpPostmeta.objects.using('wp').create(
+    #         post_id=wp_post.id,
+    #         meta_key='arm_is_paid_post',
+    #         meta_value=1
+    #     )
 
-        WpArmSubscriptionPlans.objects.using('wp').create(
-            arm_subscription_plan_name=self.title,
-            arm_subscription_plan_description='',
-            arm_subscription_plan_type='paid_finite',
-            arm_subscription_plan_options='a:10:{s:9:"pricetext";s:' + str(len(self.title)) +':"' + self.title + '";s:11:"access_type";s:6:"finite";s:12:"payment_type";s:8:"one_time";s:11:"expiry_type";s:18:"joined_date_expiry";s:4:"eopa";a:5:{s:4:"days";s:1:"1";s:5:"weeks";s:1:"1";s:6:"months";s:1:"1";s:5:"years";s:1:"1";s:4:"type";s:1:"D";}s:11:"expiry_date";s:19:"2021-05-02 23:59:59";s:3:"eot";s:5:"block";s:12:"grace_period";a:2:{s:11:"end_of_term";i:0;s:14:"failed_payment";i:0;}s:14:"upgrade_action";s:9:"immediate";s:16:"downgrade_action";s:9:"on_expire";}',
-            arm_subscription_plan_amount=0.99,
-            arm_subscription_plan_status=1,
-            arm_subscription_plan_role='armember',
-            arm_subscription_plan_post_id=wp_post.id,
-            arm_subscription_plan_is_delete=0,
-            arm_subscription_plan_created_date=datetime.utcnow()
-        )
-        return
+        # WpArmSubscriptionPlans.objects.using('wp').create(
+        #     arm_subscription_plan_name=self.title,
+        #     arm_subscription_plan_description='',
+        #     arm_subscription_plan_type='paid_finite',
+        #     arm_subscription_plan_options='a:10:{s:9:"pricetext";s:' + str(len(self.title)) +':"' + self.title + '";s:11:"access_type";s:6:"finite";s:12:"payment_type";s:8:"one_time";s:11:"expiry_type";s:18:"joined_date_expiry";s:4:"eopa";a:5:{s:4:"days";s:1:"1";s:5:"weeks";s:1:"1";s:6:"months";s:1:"1";s:5:"years";s:1:"1";s:4:"type";s:1:"D";}s:11:"expiry_date";s:19:"2021-05-02 23:59:59";s:3:"eot";s:5:"block";s:12:"grace_period";a:2:{s:11:"end_of_term";i:0;s:14:"failed_payment";i:0;}s:14:"upgrade_action";s:9:"immediate";s:16:"downgrade_action";s:9:"on_expire";}',
+        #     arm_subscription_plan_amount=0.99,
+        #     arm_subscription_plan_status=1,
+        #     arm_subscription_plan_role='armember',
+        #     arm_subscription_plan_post_id=wp_post.id,
+        #     arm_subscription_plan_is_delete=0,
+        #     arm_subscription_plan_created_date=datetime.utcnow()
+        # )
+        # return
 
-    def update_thumb(self):
-        post = WpPosts.objects.using('wp').filter(guid=f"{settings.VIDEO_BASE}{self.ssf_id}").first()
+    # def update_thumb(self):
+    #     post = WpPosts.objects.using('wp').filter(guid=f"{settings.VIDEO_BASE}{self.ssf_id}").first()
 
-        WpPostmeta.objects.using('wp').create(
-            post_id=post.id,
-            meta_key='progression_studios_poster_image',
-            meta_value=f'{settings.THUMB_BASE}{self.ssf_id}.jpg'
-        )
+    #     WpPostmeta.objects.using('wp').create(
+    #         post_id=post.id,
+    #         meta_key='progression_studios_poster_image',
+    #         meta_value=f'{settings.THUMB_BASE}{self.ssf_id}.jpg'
+    #     )
 
-        WpPostmeta.objects.using('wp').create(
-            post_id=post.id,
-            meta_key='progression_studios_header_image',
-            meta_value=f'{settings.THUMB_BASE}{self.ssf_id}.jpg'
-        )
+    #     WpPostmeta.objects.using('wp').create(
+    #         post_id=post.id,
+    #         meta_key='progression_studios_header_image',
+    #         meta_value=f'{settings.THUMB_BASE}{self.ssf_id}.jpg'
+    #     )
 
-        WpPostmeta.objects.using('wp').create(
-            post_id=post.id,
-            meta_key='progression_studios_video_embed_poster',
-            meta_value=f'{settings.THUMB_BASE}{self.ssf_id}.jpg'
-        )
+    #     WpPostmeta.objects.using('wp').create(
+    #         post_id=post.id,
+    #         meta_key='progression_studios_video_embed_poster',
+    #         meta_value=f'{settings.THUMB_BASE}{self.ssf_id}.jpg'
+    #     )
 
-        WpPostmeta.objects.using('wp').create(
-            post_id=post.id,
-            meta_key='fifu_image_url',
-            meta_value=f'{settings.THUMB_BASE}{self.ssf_id}.jpg'
-        )
+    #     WpPostmeta.objects.using('wp').create(
+    #         post_id=post.id,
+    #         meta_key='fifu_image_url',
+    #         meta_value=f'{settings.THUMB_BASE}{self.ssf_id}.jpg'
+    #     )
 
-        WpPostmeta.objects.using('wp').create(
-            post_id=post.id,
-            meta_key='fifu_image_alt',
-            meta_value=self.title,
-        )
+    #     WpPostmeta.objects.using('wp').create(
+    #         post_id=post.id,
+    #         meta_key='fifu_image_alt',
+    #         meta_value=self.title,
+    #     )
 
-        rd = datetime.utcnow()
-        thumb = WpPosts.objects.using('wp').create(
-            post_author=1,
-            post_date=rd,
-            post_date_gmt=rd,
-            post_modified=rd,
-            post_modified_gmt=rd,
-            post_content=self.desc,
-            post_excerpt=self.desc,
-            post_title=self.title,
-            post_status='publish',
-            comment_status='open',
-            ping_status='closed',
-            post_name=slugify(self.title),
-            post_type='attachment',
-            guid=f'{settings.THUMB_BASE}{self.ssf_id}.jpg',
-            post_parent=post.id,
-            menu_order=0,
-            comment_count=0,
-            post_mime_type='image/jpeg'
-        )
+    #     rd = datetime.utcnow()
+    #     thumb = WpPosts.objects.using('wp').create(
+    #         post_author=1,
+    #         post_date=rd,
+    #         post_date_gmt=rd,
+    #         post_modified=rd,
+    #         post_modified_gmt=rd,
+    #         post_content=self.desc,
+    #         post_excerpt=self.desc,
+    #         post_title=self.title,
+    #         post_status='publish',
+    #         comment_status='open',
+    #         ping_status='closed',
+    #         post_name=slugify(self.title),
+    #         post_type='attachment',
+    #         guid=f'{settings.THUMB_BASE}{self.ssf_id}.jpg',
+    #         post_parent=post.id,
+    #         menu_order=0,
+    #         comment_count=0,
+    #         post_mime_type='image/jpeg'
+    #     )
 
-        WpPostmeta.objects.using('wp').create(
-            post_id=post.id,
-            meta_key='_thumbnail_id',
-            meta_value=thumb.id,
-        )
+    #     WpPostmeta.objects.using('wp').create(
+    #         post_id=post.id,
+    #         meta_key='_thumbnail_id',
+    #         meta_value=thumb.id,
+    #     )
 
 
 class VideoCategory(models.Model):  #Category
@@ -350,150 +350,150 @@ class VideoCategory(models.Model):  #Category
 
         return
 
-    @staticmethod
-    def write_all_to_wp():
+    # @staticmethod
+    # def write_all_to_wp():
 
-        menu_term, c = WpTerms.objects.using('wp').get_or_create(
-            name='lib_menu',
-            slug='lib_menu',
-            term_group=0
-        )
+    #     menu_term, c = WpTerms.objects.using('wp').get_or_create(
+    #         name='lib_menu',
+    #         slug='lib_menu',
+    #         term_group=0
+    #     )
 
-        menu_tax, c = WpTermTaxonomy.objects.using('wp').get_or_create(
-            term_id = menu_term.term_id,
-            taxonomy='nav_menu',
-            parent=0,
-            count=0
-        )
+    #     menu_tax, c = WpTermTaxonomy.objects.using('wp').get_or_create(
+    #         term_id = menu_term.term_id,
+    #         taxonomy='nav_menu',
+    #         parent=0,
+    #         count=0
+    #     )
 
-        menu_order = 1
-        for cat in VideoCategory.objects.filter(parent=0).order_by('parent'):
-            cat.write_to_wp(menu_order)
-            for subcat in VideoCategory.objects.filter(parent=cat.ssf_id).order_by('id'):
-                subcat.write_to_wp(menu_order, parent=cat.name)
-                menu_order += 1
-        return
+        # menu_order = 1
+        # for cat in VideoCategory.objects.filter(parent=0).order_by('parent'):
+        #     cat.write_to_wp(menu_order)
+        #     for subcat in VideoCategory.objects.filter(parent=cat.ssf_id).order_by('id'):
+        #         subcat.write_to_wp(menu_order, parent=cat.name)
+        #         menu_order += 1
+        # return
 
-    def write_to_wp(self, menu_order, parent=None):
+    # def write_to_wp(self, menu_order, parent=None):
 
-        print(
-            f"self: {self}\nmenu_order: {menu_order}\nparent: {parent}"
-        )
-        old = WpTerms.objects.using('wp').filter(slug=slugify(self.name))
-        if not old.exists():
-            term, c = WpTerms.objects.using('wp').get_or_create(
-                name=self.name,
-                slug=slugify(self.name),
-                term_group=0
-            )
-            WpTermTaxonomy.objects.using('wp').get_or_create(
-                term_id=term.term_id,
-                taxonomy='video-type' if self.parent == 0 else 'video-category',
-                description=self.desc,
-                parent=0,
-                count=0
-            )
+    #     print(
+    #         f"self: {self}\nmenu_order: {menu_order}\nparent: {parent}"
+    #     )
+    #     old = WpTerms.objects.using('wp').filter(slug=slugify(self.name))
+    #     if not old.exists():
+    #         term, c = WpTerms.objects.using('wp').get_or_create(
+    #             name=self.name,
+    #             slug=slugify(self.name),
+    #             term_group=0
+    #         )
+    #         WpTermTaxonomy.objects.using('wp').get_or_create(
+    #             term_id=term.term_id,
+    #             taxonomy='video-type' if self.parent == 0 else 'video-category',
+    #             description=self.desc,
+    #             parent=0,
+    #             count=0
+    #         )
 
-        old_post = WpPosts.objects.using('wp').filter(
-            post_status='publish',
-            post_name=slugify(self.name),
-            post_type='page'
-        )
-        if old_post.exists():
-            post = old_post.first()
-        else:
-            post = WpPosts.objects.using('wp').create(
-                post_author=1,
-                post_date=datetime.utcnow(),
-                post_date_gmt=datetime.utcnow(),
-                post_content=f"{self.name} - {self.desc}",
-                post_title=f"Videos on {self.name}",
-                post_excerpt=f"{self.desc}",
-                post_status='publish',
-                comment_status='closed',
-                ping_status='closed',
-                post_password='',
-                post_name=slugify(self.name),
-                to_ping='',
-                pinged='',
-                post_modified=datetime.utcnow(),
-                post_modified_gmt=datetime.utcnow(),
-                post_content_filtered='',
-                post_parent=0,
-                guid=f'ssf-video-cat-{slugify(self.name)}',
-                menu_order=0,
-                post_type='page',
-                post_mime_type='',
-                comment_count=0
-            )
+    #     old_post = WpPosts.objects.using('wp').filter(
+    #         post_status='publish',
+    #         post_name=slugify(self.name),
+    #         post_type='page'
+    #     )
+    #     if old_post.exists():
+    #         post = old_post.first()
+    #     else:
+    #         post = WpPosts.objects.using('wp').create(
+    #             post_author=1,
+    #             post_date=datetime.utcnow(),
+    #             post_date_gmt=datetime.utcnow(),
+    #             post_content=f"{self.name} - {self.desc}",
+    #             post_title=f"Videos on {self.name}",
+    #             post_excerpt=f"{self.desc}",
+    #             post_status='publish',
+    #             comment_status='closed',
+    #             ping_status='closed',
+    #             post_password='',
+    #             post_name=slugify(self.name),
+    #             to_ping='',
+    #             pinged='',
+    #             post_modified=datetime.utcnow(),
+    #             post_modified_gmt=datetime.utcnow(),
+    #             post_content_filtered='',
+    #             post_parent=0,
+    #             guid=f'ssf-video-cat-{slugify(self.name)}',
+    #             menu_order=0,
+    #             post_type='page',
+    #             post_mime_type='',
+    #             comment_count=0
+    #         )
 
-        menu_item = WpPosts.objects.using('wp').create(
-            post_author=1,
-            post_date=datetime.utcnow(),
-            post_date_gmt=datetime.utcnow(),
-            post_content='',
-            post_title=self.name,
-            post_excerpt='',
-            post_status='publish',
-            comment_status='closed',
-            ping_status='closed',
-            post_password='',
-            post_name=f'menu_for_{slugify(self.name)}',
-            to_ping='',
-            pinged='',
-            post_modified=datetime.utcnow(),
-            post_modified_gmt=datetime.utcnow(),
-            post_content_filtered='',
-            post_parent=0,
-            guid=f'ssf-video-cat-{slugify(self.name)}',
-            menu_order=menu_order,
-            post_type='nav_menu_item',
-            post_mime_type='',
-            comment_count=0
-        )
-        menu_item.post_name = menu_item.id
-        menu_item.guid = f"{settings.WORDPRESS_BASE}?p={menu_item.id}"
-        menu_item.save()
+    #     menu_item = WpPosts.objects.using('wp').create(
+    #         post_author=1,
+    #         post_date=datetime.utcnow(),
+    #         post_date_gmt=datetime.utcnow(),
+    #         post_content='',
+    #         post_title=self.name,
+    #         post_excerpt='',
+    #         post_status='publish',
+    #         comment_status='closed',
+    #         ping_status='closed',
+    #         post_password='',
+    #         post_name=f'menu_for_{slugify(self.name)}',
+    #         to_ping='',
+    #         pinged='',
+    #         post_modified=datetime.utcnow(),
+    #         post_modified_gmt=datetime.utcnow(),
+    #         post_content_filtered='',
+    #         post_parent=0,
+    #         guid=f'ssf-video-cat-{slugify(self.name)}',
+    #         menu_order=menu_order,
+    #         post_type='nav_menu_item',
+    #         post_mime_type='',
+    #         comment_count=0
+    #     )
+    #     menu_item.post_name = menu_item.id
+    #     menu_item.guid = f"{settings.WORDPRESS_BASE}?p={menu_item.id}"
+    #     menu_item.save()
 
-        menu_tax = WpTermTaxonomy.objects.using('wp').get(
-            term_id=WpTerms.objects.using('wp').get(slug='lib_menu').term_id,
-            taxonomy='nav_menu'
-        )
+    #     menu_tax = WpTermTaxonomy.objects.using('wp').get(
+    #         term_id=WpTerms.objects.using('wp').get(slug='lib_menu').term_id,
+    #         taxonomy='nav_menu'
+    #     )
 
-        WpTermRelationships.objects.using('wp').create(
-            object_id=menu_item.id,
-            term_taxonomy_id=menu_tax.term_taxonomy_id,
-            term_order=0
-        )
+    #     WpTermRelationships.objects.using('wp').create(
+    #         object_id=menu_item.id,
+    #         term_taxonomy_id=menu_tax.term_taxonomy_id,
+    #         term_order=0
+    #     )
 
-        WpPostmeta.objects.using('wp').create(
-            post_id=menu_item.id,
-            meta_key='_menu_item_type',
-            meta_value='post_type'
-        )
+    #     WpPostmeta.objects.using('wp').create(
+    #         post_id=menu_item.id,
+    #         meta_key='_menu_item_type',
+    #         meta_value='post_type'
+    #     )
 
-        WpPostmeta.objects.using('wp').create(
-            post_id=menu_item.id,
-            meta_key='_menu_item_menu_item_parent',
-            meta_value=WpPosts.objects.using('wp').filter(post_title=parent, post_status='publish', post_type='nav_menu_item').first().id if parent else 0
-        )
+    #     WpPostmeta.objects.using('wp').create(
+    #         post_id=menu_item.id,
+    #         meta_key='_menu_item_menu_item_parent',
+    #         meta_value=WpPosts.objects.using('wp').filter(post_title=parent, post_status='publish', post_type='nav_menu_item').first().id if parent else 0
+    #     )
 
-        WpPostmeta.objects.using('wp').create(
-            post_id=menu_item.id,
-            meta_key='_menu_item_object_id',
-            meta_value=WpPosts.objects.using('wp').filter(post_name=slugify(self.name), post_status='publish', post_type='page').first().id
-        )
+    #     WpPostmeta.objects.using('wp').create(
+    #         post_id=menu_item.id,
+    #         meta_key='_menu_item_object_id',
+    #         meta_value=WpPosts.objects.using('wp').filter(post_name=slugify(self.name), post_status='publish', post_type='page').first().id
+    #     )
 
-        WpPostmeta.objects.using('wp').create(
-            post_id=menu_item.id,
-            meta_key='_menu_item_object',
-            meta_value='page'
-        )
+    #     WpPostmeta.objects.using('wp').create(
+    #         post_id=menu_item.id,
+    #         meta_key='_menu_item_object',
+    #         meta_value='page'
+    #     )
 
-        print("*"*300)
+    #     print("*"*300)
 
 
-        return
+    #     return
 
 
 class VideoCategoryMapping(models.Model):
@@ -540,36 +540,36 @@ class VideoCategoryMapping(models.Model):
             vc.write_to_wp()
         return
 
-    def write_to_wp(self):
+    # def write_to_wp(self):
 
-        video_post = WpPosts.objects.using('wp').filter(guid__icontains=f'{settings.VIDEO_BASE}{self.video.ssf_id}')
-        if not video_post.exists():
-            print(f"Some error for {video_post} / {self.video}")
-            return
-        video_post = video_post.first()
-        category_id = WpTerms.objects.using('wp').get(slug=slugify(self.category.name))
-        parent_category_id = WpTerms.objects.using('wp').get(
-            slug=slugify(VideoCategory.objects.get(ssf_id=self.category.parent).name))
+    #     video_post = WpPosts.objects.using('wp').filter(guid__icontains=f'{settings.VIDEO_BASE}{self.video.ssf_id}')
+    #     if not video_post.exists():
+    #         print(f"Some error for {video_post} / {self.video}")
+    #         return
+    #     video_post = video_post.first()
+    #     category_id = WpTerms.objects.using('wp').get(slug=slugify(self.category.name))
+    #     parent_category_id = WpTerms.objects.using('wp').get(
+    #         slug=slugify(VideoCategory.objects.get(ssf_id=self.category.parent).name))
 
-        rel1, c = WpTermRelationships.objects.using('wp').get_or_create(
-            object_id=video_post.id,
-            term_taxonomy_id=category_id.term_id,
-            term_order=0
-        )
-        rel2, c1 = WpTermRelationships.objects.using('wp').get_or_create(
-            object_id=video_post.id,
-            term_taxonomy_id=parent_category_id.term_id,
-            term_order=0
-        )
+    #     rel1, c = WpTermRelationships.objects.using('wp').get_or_create(
+    #         object_id=video_post.id,
+    #         term_taxonomy_id=category_id.term_id,
+    #         term_order=0
+    #     )
+    #     rel2, c1 = WpTermRelationships.objects.using('wp').get_or_create(
+    #         object_id=video_post.id,
+    #         term_taxonomy_id=parent_category_id.term_id,
+    #         term_order=0
+    #     )
 
-        if not rel1:
-            print(f"Failed to update category ({category_id.name}) for {self.video}")
-            pdb.set_trace()
-        if not rel2:
-            print(f"Failed to update parent category ({parent_category_id.name}) for {self.video}")
-            pdb.set_trace()
-        print(f"{self} done")
-        return
+    #     if not rel1:
+    #         print(f"Failed to update category ({category_id.name}) for {self.video}")
+    #         pdb.set_trace()
+    #     if not rel2:
+    #         print(f"Failed to update parent category ({parent_category_id.name}) for {self.video}")
+    #         pdb.set_trace()
+    #     print(f"{self} done")
+    #     return
 
 
 class SubscribedUser(models.Model):
@@ -667,32 +667,32 @@ class SubscribedUser(models.Model):
             i += 1
         return
 
-    def write_to_wp(self):
-        old = WpUsers.objects.using('wp').filter(user_login=self.username)
-        if not old.exists():
-            user = WpUsers.objects.using('wp').create(
-                user_login=self.username,
-                user_pass=self.pwd,
-                user_nicename=f"{self.fname} {self.lname}" if self.fname else self.username,
-                user_email=self.email,
-                user_url=self.website,
-                user_registered=datetime.utcfromtimestamp(int(self.addtime)),
-                user_activation_key='',
-                user_status=0,
-                display_name=self.username
-            )
+    # def write_to_wp(self):
+    #     old = WpUsers.objects.using('wp').filter(user_login=self.username)
+    #     if not old.exists():
+    #         user = WpUsers.objects.using('wp').create(
+    #             user_login=self.username,
+    #             user_pass=self.pwd,
+    #             user_nicename=f"{self.fname} {self.lname}" if self.fname else self.username,
+    #             user_email=self.email,
+    #             user_url=self.website,
+    #             user_registered=datetime.utcfromtimestamp(int(self.addtime)),
+    #             user_activation_key='',
+    #             user_status=0,
+    #             display_name=self.username
+    #         )
 
-            WpUsermeta.objects.using('wp').create(
-                user_id=user.id,
-                meta_key='nickname',
-                meta_value=self.username,
-            )
-            WpUsermeta.objects.using('wp').create(
-                user_id=user.id,
-                meta_key='wp_capabilities',
-                meta_value='a:1:{s:8:"armember";b:1;}',
-            )
-        return
+    #         WpUsermeta.objects.using('wp').create(
+    #             user_id=user.id,
+    #             meta_key='nickname',
+    #             meta_value=self.username,
+    #         )
+    #         WpUsermeta.objects.using('wp').create(
+    #             user_id=user.id,
+    #             meta_key='wp_capabilities',
+    #             meta_value='a:1:{s:8:"armember";b:1;}',
+    #         )
+    #     return
 
 
 class Plan(models.Model):
@@ -884,57 +884,57 @@ class Comment(models.Model):
 
         return
 
-    @staticmethod
-    def write_all_to_wp():
-        # Ratings
-        videos = Video.objects.filter(vid_com_v__isnull=False)
-        for video in videos:
-            video_post = WpPosts.objects.using('wp').get(guid=f"{settings.VIDEO_BASE}{video.ssf_id}")
-            post_meta = WpPostmeta.objects.using('wp').filter(
-                post_id=video_post.id,
-                meta_key='_average_ratings'
-            )
-            if not post_meta.exists():
-                post_meta = WpPostmeta.objects.using('wp').create(
-                    post_id=video_post.id,
-                    meta_key='_average_ratings',
-                    meta_value=9
-                )
-            else:
-                post_meta.update(meta_value=9)
+    # @staticmethod
+    # def write_all_to_wp():
+    #     # Ratings
+    #     videos = Video.objects.filter(vid_com_v__isnull=False)
+    #     for video in videos:
+    #         video_post = WpPosts.objects.using('wp').get(guid=f"{settings.VIDEO_BASE}{video.ssf_id}")
+    #         post_meta = WpPostmeta.objects.using('wp').filter(
+    #             post_id=video_post.id,
+    #             meta_key='_average_ratings'
+    #         )
+    #         if not post_meta.exists():
+    #             post_meta = WpPostmeta.objects.using('wp').create(
+    #                 post_id=video_post.id,
+    #                 meta_key='_average_ratings',
+    #                 meta_value=9
+    #             )
+    #         else:
+    #             post_meta.update(meta_value=9)
 
-        # Comments
-        for comment in Comment.objects.all():
-            comment.write_to_wp()
-        return
+    #     # Comments
+    #     for comment in Comment.objects.all():
+    #         comment.write_to_wp()
+    #     return
 
-    def write_to_wp(self):
-        video_post = WpPosts.objects.using('wp').get(guid=f"{settings.VIDEO_BASE}{self.video.ssf_id}")
-        cd = datetime.utcfromtimestamp(int(self.addtime))
-        comment, c = WpComments.objects.using('wp').get_or_create(
-            comment_post_id=video_post.id,
-            comment_author=self.subscriber.username,
-            comment_author_email=self.subscriber.email,
-            comment_author_url=self.subscriber.website,
-            comment_author_ip='::1',
-            comment_date=cd,
-            comment_date_gmt=cd,
-            comment_content=self.comment,
-            comment_karma=0,
-            comment_approved=1,
-            comment_agent='auto',
-            comment_type='comment',
-            comment_parent=0,
-            user_id=WpUsers.objects.using('wp').get(user_login=self.subscriber.username).id
-        )
+    # def write_to_wp(self):
+    #     video_post = WpPosts.objects.using('wp').get(guid=f"{settings.VIDEO_BASE}{self.video.ssf_id}")
+    #     cd = datetime.utcfromtimestamp(int(self.addtime))
+    #     comment, c = WpComments.objects.using('wp').get_or_create(
+    #         comment_post_id=video_post.id,
+    #         comment_author=self.subscriber.username,
+    #         comment_author_email=self.subscriber.email,
+    #         comment_author_url=self.subscriber.website,
+    #         comment_author_ip='::1',
+    #         comment_date=cd,
+    #         comment_date_gmt=cd,
+    #         comment_content=self.comment,
+    #         comment_karma=0,
+    #         comment_approved=1,
+    #         comment_agent='auto',
+    #         comment_type='comment',
+    #         comment_parent=0,
+    #         user_id=WpUsers.objects.using('wp').get(user_login=self.subscriber.username).id
+    #     )
 
-        WpCommentmeta.objects.using('wp').create(
-            comment_id=comment.comment_id,
-            meta_key='rating',
-            meta_value=9
-        )
+    #     WpCommentmeta.objects.using('wp').create(
+    #         comment_id=comment.comment_id,
+    #         meta_key='rating',
+    #         meta_value=9
+    #     )
 
-        return
+    #     return
 
 
 class UserFavorite(models.Model):
@@ -976,27 +976,27 @@ class UserFavorite(models.Model):
 
         return
 
-    @staticmethod
-    def write_all_to_wp():
-        subs = SubscribedUser.objects.filter(sub_fav_s__isnull=False).distinct('id')
-        for sub in subs:
-            videos = Video.objects.filter(sub_fav_v__subscriber=sub)
-            count = videos.count()
-            vid_ids = []
-            for video in videos:
-                vid_ids.append(WpPosts.objects.using('wp').get(guid=f"{settings.VIDEO_BASE}{video.ssf_id}").id)
+    # @staticmethod
+    # def write_all_to_wp():
+    #     subs = SubscribedUser.objects.filter(sub_fav_s__isnull=False).distinct('id')
+    #     for sub in subs:
+    #         videos = Video.objects.filter(sub_fav_v__subscriber=sub)
+    #         count = videos.count()
+    #         vid_ids = []
+    #         for video in videos:
+    #             vid_ids.append(WpPosts.objects.using('wp').get(guid=f"{settings.VIDEO_BASE}{video.ssf_id}").id)
 
-            i = 0
-            s = ""
-            for vid_id in vid_ids:
-                s = f"{s}i:{i};i:{vid_id};"
-                i += 1
+    #         i = 0
+    #         s = ""
+    #         for vid_id in vid_ids:
+    #             s = f"{s}i:{i};i:{vid_id};"
+    #             i += 1
 
-            WpUsermeta.objects.using('wp').create(
-                user_id=WpUsers.objects.using('wp').get(user_login=sub.username).id,
-                meta_key='post_favorites',
-                meta_value=f"a:{count}:{{{s}}}"
-            )
+    #         WpUsermeta.objects.using('wp').create(
+    #             user_id=WpUsers.objects.using('wp').get(user_login=sub.username).id,
+    #             meta_key='post_favorites',
+    #             meta_value=f"a:{count}:{{{s}}}"
+    #         )
 
 
 def populate_all():
@@ -1045,12 +1045,12 @@ class BlogPage(models.Model):
         verbose_name = 'Blog Page'
         verbose_name_plural = '9- Blog Pages'
 
-    @staticmethod
-    def sync_from_wp():
-        wpposts = WpPosts.objects.using('wp').filter(post_type='page', post_status='publish')
-        blog, c, u = BlogPage.sync_from_wp_page(wpposts)
+    # @staticmethod
+    # def sync_from_wp():
+    #     wpposts = WpPosts.objects.using('wp').filter(post_type='page', post_status='publish')
+    #     blog, c, u = BlogPage.sync_from_wp_page(wpposts)
 
-        return c, u
+    #     return c, u
 
     @staticmethod
     def sync_from_wp_page(wpposts):

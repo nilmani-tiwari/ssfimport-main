@@ -3,9 +3,10 @@ from hitcount.models import HitCountMixin, HitCount
 from django.contrib.contenttypes.fields import GenericRelation
 
 from django.core.validators import FileExtensionValidator
-from django.db.models import CASCADE
+from django.db.models import CASCADE, SET_NULL
 from django.utils.text import slugify
 from django.conf import settings
+from django.contrib.auth.models import User
 import uuid
 import os
 # Create your models here.
@@ -234,7 +235,9 @@ class BlogPost(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         return super(BlogPost, self).save(*args, **kwargs)
-
+    class Meta:
+        verbose_name = "VideoCategory"
+        verbose_name_plural = "4- Blog Post"
 
 
 def get_file_path(instance, filename):
@@ -296,7 +299,7 @@ class VideoCategory(models.Model):  #Category
 
     class Meta:
         verbose_name = "VideoCategory"
-        verbose_name_plural = "3- Videos Categories"
+        verbose_name_plural = "1- Videos Categories"
 
 
 
@@ -314,7 +317,7 @@ class VideoSubCategory(models.Model):  #Category
         verbose_name_plural = "2- Videos Sub Categories"
 
 class VideoUpload(models.Model):
-    
+    user = models.ForeignKey(User, related_name='user_uploded_video', on_delete=CASCADE,null=True, blank=True)
     video_id = models.AutoField(primary_key=True)
     vendor_id = models.IntegerField(default=0,null=True, blank=True)                   
     title = models.CharField(max_length=500)
@@ -340,8 +343,10 @@ class VideoUpload(models.Model):
     director = models.TextField(null=True, blank=True)
     video_url = models.URLField(null=True, blank=True) 
     poster_url = models.URLField(null=True, blank=True) 
+
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(blank=True, auto_now=True, null=True)
+    
     active = models.BooleanField(default=True)
     home_active = models.BooleanField(default=True)
     # hit_count=models.IntegerField(default=0, blank=True, null=True)
@@ -353,7 +358,7 @@ class VideoUpload(models.Model):
     class Meta:
         db_table = 'VideoUpload'
         verbose_name = "Video"
-        verbose_name_plural = "4- Videos"
+        verbose_name_plural = "3- Videos"
 
 
     @classmethod
@@ -438,3 +443,117 @@ class VideoUpload(models.Model):
 #     if not old_file == new_file:
 #         #if os.path.isfile(old_file.path):
 #         os.remove(old_file.path)
+
+
+
+class SubscriptionType(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(max_length=10000)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(blank=True, auto_now=True, null=True)
+
+    def __str__(self):
+        return f"[SubscritionType: {self.id}] {self.name}"
+
+    class Meta:
+        verbose_name = "Subscription Type"
+        verbose_name_plural = "5- Subscription Types"
+
+
+
+class EmailSubscription(models.Model):
+    user = models.ForeignKey(User, related_name='subscriber', on_delete=CASCADE)
+    subscription_type = models.ForeignKey('SubscriptionType', related_name='subscription_type', on_delete=SET_NULL, null=True, blank=True)
+    subscribed = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(blank=True, auto_now=True, null=True)
+
+    def __str__(self):
+        return f"[EmailSubscription: {self.id}] {self.user} <-> {self.subscription_type.name}"
+
+    class Meta:
+        verbose_name = "Email Subscription"
+        verbose_name_plural = "6- Email Subscriptions"
+
+
+
+    @staticmethod
+    def user_upload(type, email_ids=None):
+
+        # email_ids =['parag@tickle.life', 'a@a.com', 'sevenaces@gmail.com']
+
+        existing_users = User.objects.filter(email__in=email_ids).values_list('email', flat=True)
+        userslist = []
+        for email in email_ids:
+            u = User.objects.filter(email=email)
+            if u.exists():
+                userslist.append(u.first())
+            else:
+                u = User.objects.create(username=email, email=email)
+                userslist.append(u)
+
+
+
+        for user in userslist:
+            EmailSubscription.objects.get_or_create(subscription_type=type, user=user)
+
+        return
+
+class UserFavoriteVideo(models.Model):
+    CHOICESs=( ("video","video"),("blog","blog"))
+    CHOICES=( ("like","like"),("dislike","dislike"),("favorite","favorite"))
+
+    subscriber = models.ForeignKey('EmailSubscription', related_name='sub_fav_s', on_delete=CASCADE)
+    content_type = models.CharField(max_length=50, choices=CHOICESs, default='video',blank=True, null=True)
+    content_id = models.IntegerField(blank=True, null=True)
+
+    label = models.CharField(max_length=50, choices=CHOICES, default='like',blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(blank=True, auto_now=True, null=True)
+
+    def __str__(self):
+        return f"{self.subscriber} (favs) {self.label}"
+
+    class Meta:
+        verbose_name = "User Favorite"
+        verbose_name_plural = "7- User Favorite Videos"
+
+
+class UserComment(models.Model):
+    CHOICESs=( ("video","video"),("blog","blog"))
+    subscriber = models.ForeignKey('EmailSubscription', related_name='vid_com_s', on_delete=CASCADE)
+
+    content_type = models.CharField(max_length=50, choices=CHOICESs, default='video',blank=True, null=True)
+    content_id = models.IntegerField(blank=True, null=True)
+
+    comment = models.TextField(default='This is very nice.',blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(blank=True, auto_now=True, null=True)
+
+    def __str__(self):
+        return f"{self.subscriber} comment on {self.content_type}"
+
+    class Meta:
+        verbose_name = "Video Comment"
+        verbose_name_plural = "8- Video Comments"
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, related_name='user_profile', on_delete=CASCADE)
+    name = models.CharField(max_length=100,blank=True, null=True)
+    email = models.CharField(max_length=100,blank=True, null=True)
+    password = models.CharField(max_length=100,blank=True, null=True)
+    image = models.ImageField(upload_to='project_image/', blank=True, null=True)
+    image_url = models.URLField(null=True, blank=True) 
+
+    active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(blank=True, auto_now=True, null=True)
+
+    def __str__(self):
+        return f"{self.user}  {self.email}"
+
+    class Meta:
+        verbose_name = "User Profile"
+        verbose_name_plural = "9- User Profile"

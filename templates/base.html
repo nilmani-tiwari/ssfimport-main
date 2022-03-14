@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
     <link rel="stylesheet" href="css/responsive.css">  -->
 
- <!-- <link rel="stylesheet" href="{% static 'SchoolDesign/css/all.min.css' %}" -->
+ <!-- <link rel="stylesheet" href="{% static 'SchoolDesign/css/all.min.css' %}"  css/jquery.kyco.easyshare.css  -->
 
      <link rel="stylesheet" href="{% static 'css/app.css' %}">
     <link rel="stylesheet" href="{% static 'css/theme.css' %}">
@@ -31,10 +31,60 @@
     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery.kyco.easyshare.css' %}">
 
     <!-- <link rel="stylesheet" href="{% static 'layerslider/skins/noskin/skin.css' %}"> -->
 
     <style>
+            .res-circle {
+      /* (A) PERCENTAGE WIDTH & BORDER RADIUS */
+      width: 20%;
+      border-radius: 50%;
+    
+      /* (B) BACKGROUND COLOR */ 
+      background: #bcd6ff;
+     
+      /* (C) NECESSARY TO POSITION TEXT BLOCK */
+      line-height: 0;
+      position: relative;
+    }
+     
+    /* (D) MATCH HEIGHT */
+    .res-circle::after {
+      content: "";
+      display: block;
+      padding-bottom: 100%;
+    }
+     
+    /* (E) TEXT BLOCK */
+    .circle-txt {
+      /* (E1) CENTER TEXT IN CIRCLE */
+      position: absolute;
+      bottom: 50%;
+      width: 100%;
+      text-align: center;
+      text-transform: uppercase;
+     
+      /* (E2) THE FONT - NOT REALLY IMPORTANT */
+      font-family: arial, sans-serif;
+      font-weight: bold;
+      /* white-space: nowrap !important; */
+    }
+
+    .circle-txt-right {
+      /* (E1) CENTER TEXT IN CIRCLE */
+      position: absolute;
+      bottom: 5%;
+      width: 100%;
+      text-align: right;
+      left: 70px;
+      text-transform: uppercase;
+     
+      /* (E2) THE FONT - NOT REALLY IMPORTANT */
+      font-family: arial, sans-serif;
+      font-weight: bold;
+      white-space: nowrap !important;
+    }
         body p{
             color: blue;
         }
@@ -319,9 +369,11 @@
                             <!-- process_payment/ -->
 
                             <li class="dropdown-login">
-                                <a class="loginReg fa fa-user" data-toggle="example-dropdown" href="/login_user"> {{request.user.username}}</a>
+                                <a class="loginReg fa fa-user" data-toggle="example-dropdown" href="/login_user"> {{request.user.username|slice:1}}</a>
                                 <div class="login-form">
-                                    <h6 class="text-center">Great to have you back!</h6>
+                                   
+                                    <!-- <h3 style="text-transform:capitalize;" class="text-center">{{request.user.username}}</h3> -->
+                     
                                     <form method="POST">
 
                                         {% csrf_token %}
@@ -337,15 +389,29 @@
                                         </div>
                                         <div class="radio">
                                             <input id="check1" type="radio" name="check" value="check">
-                                            <label class="customLabel" for="check1">Remember me</label>
+                                            <label class="customLabel" for="check1">Remember me</label>    /myprofile/
                                         </div> -->
+                                        {% if request.user.username %}
+                                        <div  class="res-circle">
+                                            <div  class="circle-txt">{{request.user.username|slice:1}}</div>
+                                           <h3 class="circle-txt-right"> {{request.user.username}}</h3>
+                                          </div>
+                                          <hr>
+                                        <p class="text-center"> <a class="newaccount" href="/myprofile/">My Profile</a></p>
+                                          <hr>
+             
+                                        <button class="blink submit" style="width: 225px; height: auto;" type="" name="subscribe"><a href="/logout">LogOut</a></button>
+                                        {% else %}
                                         <button class="blink submit" style="width: 225px; height: auto;" type="" name="subscribe"><a href="/login_user/">Login Now</a></button>
 
+
+                                        {% endif %}
                                         <!-- <input type="submit" name="submit" value="Login Now"> -->
                                     </form>
+                                    <hr>
+                                    <!-- <p class="text-center">LogOut here? <a class="newaccount" href="/logout">LogOut</a></p> -->
 
                                     <p class="text-center">New here? <a class="newaccount" href="/register_user">Create a new Account</a></p>
-                                    <p class="text-center">LogOut here? <a class="newaccount" href="/logout">LogOut</a></p>
                                 </div>
                             </li>
 
@@ -659,9 +725,9 @@
 
                                 <form data-abide novalidate method="post">
                                     {% csrf_token %} 
-                                    <p>Subscribe to get exclusive videos</p>
+                                    <p>Subscribe to get exclusive videos,weekly newsletter</p>
                                     <div class="input">
-                                        <input type="text" placeholder="Enter your full Name" required>
+                                        <input type="text" id="inputName" placeholder="Enter your full Name" required>
                                         <span class="form-error">
                                             Yo, you had better fill this out, it's required.
                                         </span>
@@ -764,6 +830,8 @@ var csrftoken = getCookie('csrftoken');
 	function getInputValue() {
 	  
 	  let inputVal = document.getElementById("inputId").value;
+      let inputValName = document.getElementById("inputName").value;
+
 	  var url = "{% url 'subs' %}"
 
 		fetch(url, {
@@ -772,7 +840,7 @@ var csrftoken = getCookie('csrftoken');
 				'Content-type':'application/json',
 				'X-CSRFToken':csrftoken,
 			},
-			body:JSON.stringify({"email":inputVal,"newsletter":"subs_type"})
+			body:JSON.stringify({"email":inputVal,"newsletter":"subs_type","fullname":inputValName})
 		})
         document.getElementById('inputId').value = ''
 	  

@@ -48,7 +48,7 @@ SECRET_KEY = '2qe*9kw(!2p60$-65zx&eoe0(*mcxj-b=^hkji(=h8qe6&#2mo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-DEBUG = False
+# DEBUG = False
 
 ALLOWED_HOSTS = ['*',"159.89.175.153","54.146.148.119","ec2-54-146-148-119.compute-1.amazonaws.com"]
 
@@ -67,7 +67,7 @@ INSTALLED_APPS = [
     #  'login',
 
     'ssftemp',
-    'localwp',
+    # 'localwp',
     'storages',
     'ssf',
     'hitcount',
@@ -242,13 +242,13 @@ TEMPLATES = [
     },
 ]
 
-SSF_DB = {
-    'host': 'sexsmartfilms.com',
-    'port': 3306,
-    'username': 'sexsmartopen',
-    'password': 'sEZfdeWqFF2r6tGA',
-    'db_name': 'sexsmart_portal'
-}
+# SSF_DB = {
+#     'host': 'sexsmartfilms.com',
+#     'port': 3306,
+#     'username': 'sexsmartopen',
+#     'password': 'sEZfdeWqFF2r6tGA',
+#     'db_name': 'sexsmart_portal'
+# }
 
 VIDEO_BASE = 'https://s3.amazonaws.com/wp-ssf/vids/'
 THUMB_BASE = 'https://s3.amazonaws.com/wp-ssf/thumbs/'

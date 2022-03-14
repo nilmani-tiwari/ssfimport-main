@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title> CSS Radio Button Example </title>
+    <style>
+        .divbody {
+            background: #898585;
+        }
+
+        .containerdiv {
+            display: block;
+            position: relative;
+            margin: 20px auto;
+            height: auto;
+            width: 800px;
+            padding: 10px;
+        }
+
+        h2 {
+            color: #ffffff;
+        }
+
+        ul li {
+            color: #00FA9A;
+            display: block;
+            position: relative;
+            border-bottom: 1px dotted #DAA520;
+        }
+
+        ul li input[type=radio] {
+            position: absolute;
+            visibility: hidden;
+        }
+
+        ul li label {
+            display: block;
+            position: relative;
+            font-weight: 200;
+            font-size: 1.15em;
+            padding: 25px 25px 25px 80px;
+            margin: 8px auto;
+            height: 20px;
+            z-index: 9;
+            cursor: pointer;
+        }
+
+        ul li:hover label {
+            color: #0b1ddd !important;
+        }
+
+        ul li .radio_demo {
+            display: block;
+            position: absolute;
+            border: 3px solid #AAAAAA;
+            border-radius: 100%;
+            height: 30px;
+            width: 30px;
+            top: 25px;
+            left: 30px;
+            z-index: 5;
+        }
+
+        ul li .radio_demo::before {
+            position: absolute;
+            content: '';
+            border-radius: 80%;
+            height: 20px;
+            width: 20px;
+            top: 2px;
+            left: 2px;
+            margin: auto;
+            transition: background 0.25s linear;
+        }
+
+        input[type=radio]:checked~.radio_demo {
+            border: 3px solid #0DFF92;
+        }
+
+        input[type=radio]:checked~.radio_demo::before {
+            background: #0DFF92;
+        }
+
+        .btnclr{
+                color:#ffffff;
+                background-color:#e0de58;
+                width: 700px !important;
+                margin-top: 50px !important;
+            }
+    </style>
+</head>
+<div class="divbody">
+    <div class="containerdiv">
+        <h2> 1. Subscription Plans</h2>
+        <p style="color: #ffffff !important;">To Renew A Subscription, First Sign In With Your Existing Login And Password Here. Your Receipts And
+            Statements Will Show A Charge From Mark Schoen Productions. Note That We Zealously Protect The Privacy Of
+            Our Users. We Will Never Share Your Personal Information Or Viewing History With Outside Parties.</p>
+
+        <ul>
+
+        
+            <form  data-abide novalidate  method="POST">
+                                            
+
+   
+                {% csrf_token %}
+          
+
+            {% for i in plan %}
+            <li>
+                <input type="radio" id="option_one{{i.plan_id}}"  value="{{i.plan_id}}" name="selector">
+                <label style="color: #ffffff; font: bold !important;" for="option_one{{i.plan_id}}"> <b>{{i.title}}</b> </label>
+                <div class="radio_demo"></div>
+            </li>
+            {% endfor %}
+
+          
+
+            <h2> 2. Pay Per View</h2>
+            <p style="color: #ffffff !important;">For Pay-Per-View viewing, click on individual video titles. Prices range from $0.99 to $1.99 per title.</p>
+    
+
+            {% if pay_per_view  %}
+            <li>
+                <input type="radio" id="option_one{{view_id}}" checked = true  value="{{view_id}}" name="selector">
+                <label style="color: #ffffff; font: bold !important;" for="option_one{{view_id}}"> <b>{{video_title}}</b> </label>
+                <div class="radio_demo"></div>
+            </li>
+           {% endif %}
+            <div style="text-align: center; size: 600px !important;">
+                <!-- {{ form.render }} -->
+                <!-- <button class="button expanded" type="submit" name="submit">publish now</button> -->
+                <button class="button expanded btnclr" type="submit" name="submit">Buy Now</button>
+                <!-- <button style="width: 400; color:blue">Buy Now</button> -->
+            </div> 
+        </form>
+
+
+            <!-- <li>
+                <input type="radio" id="option_two" name="selector">
+                <label for="option_two"> Virat Kohli</label>
+                <div class="radio_demo">
+                    <div class="inside"></div>
+                </div>
+            </li>
+            <li>
+                <input type="radio" id="option_three" name="selector">
+                <label for="option_three"> Rohit Sharma </label>
+                <div class="radio_demo">
+                    <div class="inside"></div>
+                </div>
+            </li> -->
+        </ul>
+
+      
+    </div>
+</div>
+
+
+
+</html>

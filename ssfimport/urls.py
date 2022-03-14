@@ -28,9 +28,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('profile/', profile, name="profile"),
     path('myprofile/', myprofile, name="myprofile"),
+    path('edit-profile/', edit_profile, name="edit_profile"),
     path('login_user/', login_user,name="login_user"),
     path('logout/', logoutUser, name="logout"),
     path('register_user/', register_user,name="register_user"),
+    path('register_user/<str:url>/', register_user,name="register_user"),
     path('forgot_password/', forgot_password,name="forgot_password"),
     path('subscribe_plan/', subscribe_plan,name="subscribe_plan"),
     path('submit_post/', submit_post,name="submit_post"),
@@ -44,11 +46,14 @@ urlpatterns = [
       path('blog/<slug:slug>/', single_blog,name="single_blog"),
     path('about_us/', about_us,name="about"),
     path('online_course/', about_course,name="online_course"),
-     path('contact_us/', contact_us,name="contact_us"),
+     path('contact_us/', contact_us,name="contact_us"),                                #add_fab
      path("subs/", subs, name='subs'),
+     path("add_fab/", add_fab, name='add_fab'),
 
 
     path('process_payment/', process_payment, name='process_payment'),
+    path('process_payment/<str:pay_view>/', process_payment, name='process_payment'),
+
     path('payment-done/', payment_done, name='payment_done'),
     path('payment-cancelled/', payment_canceled, name='payment_cancelled'),
 
