@@ -61,6 +61,7 @@
 
 
             <!-- full width Video -->
+
             <section class="fullwidth-single-video">
                 <div class="row">
                     <div class="large-12 columns">
@@ -70,11 +71,36 @@
                            
                             <center>{{video.title}}</center>
                       
-                        	
+                        	<video id="Test_Video video" width="360" height="240" controls poster="{{video.poster_url}}">
+
+                                {% if subscribed_status == True %}
+                                <source src="{{video.video_url}}" type="video/mp4"  >
+                                {% else %}
+                                <div>Greetings {{user}}</div>
+
+                                {% endif %}
+
+
+                                <!-- <source src="https://s3.us-east-2.amazonaws.com/test2.tickle.life/uploads/logos/63a0af36-1f0f-4fc9-ac3b-0ba50b5bd903.mp4" type="video/ogg"> -->
+                            </video>
+                        </div>  
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- <section class="fullwidth-single-video">
+                <div class="row">
+                    <div class="large-12 columns">
+                        <div class="flex-video widescreen decrease container">
+                           
+                           
+                            <center>{{video.title}}</center>
+                
 
                                 {% if subscribed_status == True %} 
 
-                                <video id="Test_Video video" width="860" height="740 " controls poster="{{video.poster_url}}"></video>
+                                <video id="" width="860" height="740 " autoplay controls poster="{{video.poster_url}}"></video>
                                 <source src="{{video.video_url}}" type="video/mp4"  >
                                 {% else %}
                           
@@ -85,12 +111,11 @@
                                 {% endif %}
 
 
-                                <!-- <source src="https://s3.us-east-2.amazonaws.com/test2.tickle.life/uploads/logos/63a0af36-1f0f-4fc9-ac3b-0ba50b5bd903.mp4" type="video/ogg"> -->
                             </video>
                         </div>  
                     </div>
                 </div>
-            </section>
+            </section> -->
             <div class="row">
 
 

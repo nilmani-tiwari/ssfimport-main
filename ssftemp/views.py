@@ -118,6 +118,12 @@ class single_video(HitCountDetailView):
             })
 
         context.update(base_data())
+
+
+        if self.request.user.is_superuser == True:
+            subscribed_status={"subscribed_status":True}
+            context.update(subscribed_status)
+
         return context
 
     # def get_queryset(self):
