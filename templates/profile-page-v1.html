@@ -43,7 +43,9 @@
         <div class="row secBg">
             <div class="large-12 columns">
                 <div class="profile-author-img">
-                    <img src="{{base_details.default_poster_url}}" alt="profile author img" onerror="this.src='{{ base_details.default_poster_url }}';">
+                    {% if user_profile.image %}
+                    <img src="{{user_profile.image.url}}" alt="profile author img" onerror="this.src='{{ base_details.default_poster_url }}';">
+                    {% endif %}
                 </div>
                 <div class="profile-subscribe">
                     <span><i class="fa fa-users"></i>6</span>

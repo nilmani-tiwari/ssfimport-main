@@ -63,7 +63,8 @@ class MyCronJob(CronJobBase):
 from ssftemp.views import base_data
 
 
-def process_payment(request):
+def process_payment(request,pay_view):
+    print("here***********************************************")
     context={}
     context.update(base_data())
 
@@ -157,7 +158,7 @@ def checkout(request, pk,video_id=0):
         return render(request, 'paypal_payment/checkout.html', context)
     else:
         product={"price":0.99}
-        plan_title_details={"plan_title":"2. Pay Per View ","video_id":video_id,"pay_per_view":True}
+        plan_title_details={"plan_title":"2. Pay Per View ","video_id":video_id,"pay_per_view":False}
         context = {'product':product}
         context.update(base_data())
         context.update(plan_title_details)
@@ -183,15 +184,19 @@ def process_payment(request,pay_view="0-0"):
         context.update({"view_price":0.99,"view_id":int(pay_view[1]),"pay_per_view":True})
     from paypal_payment.models import Plan
     pla=Plan.objects.all().values()
-    print("**********Plan",pla)
+    # print("**********Plan",pla)
     context.update({"plan":pla})
     if request.method == 'POST' :
         selector = request.POST.get('selector')
-        print(selector,"sssssssssssssssssssssssssssssssssssssssssssss")
+        print(selector,"sssssssssssssssssssssssssssssssssssssssssssss",str(selector) in pay_view)
         
     
 
         if selector is not None and pay_view=="0-0":
+            pk=int(selector)
+            return redirect(f'/checkout/{pk}')
+
+        elif selector is not None and str(selector) not in pay_view:
             pk=int(selector)
             return redirect(f'/checkout/{pk}')
         else:

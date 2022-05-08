@@ -51,8 +51,8 @@ class EmailSubscriptionAdmin(admin.ModelAdmin):
 
 @admin.register(UserFavoriteVideo)
 class FavoriteAdmin(admin.ModelAdmin):
-    list_display = ['subscriber', 'label','content_type']
-    list_filter = ['subscriber', 'label','content_type','created_at']
+    list_display = ['subscriber', 'label','content_type',"content_id","fab","subscribed"]
+    list_filter = ['subscriber', 'label','content_type',"fab","subscribed",'created_at']
     search_fields = ['subscriber', 'label','content_type','created_at']
 
 
@@ -72,6 +72,13 @@ class UserProfileAdmin(admin.ModelAdmin):
     search_fields  = ['user','email','active','created_at']
     list_filter = ['active','created_at']
 
+
+# @admin.register(VideoBlogSubscription)
+# class VideoBlogSubscriptionAdmin(admin.ModelAdmin):
+#     list_display = ['user', 'subscription_type', 'subscribed', 'created_at', 'modified_at']
+#     list_filter = ['subscription_type', 'subscribed','created_at']
+#     search_fields = ['user', 'subscription_type','subscribed','created_at']
+    #TODO:  actions = [Subscribe, Unsubscribe]
 
 #local project
 #testing pull on server

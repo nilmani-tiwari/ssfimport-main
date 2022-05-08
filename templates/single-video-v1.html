@@ -62,11 +62,10 @@
 
             <!-- full width Video -->
 
-            <section class="fullwidth-single-video">
+            <!-- <section class="fullwidth-single-video">
                 <div class="row">
                     <div class="large-12 columns">
                         <div class="flex-video widescreen decrease container">
-                            <!-- <iframe width="560" height="315" src="https://s3.us-east-2.amazonaws.com/test2.tickle.life/uploads/logos/63a0af36-1f0f-4fc9-ac3b-0ba50b5bd903.mp4" allowfullscreen></iframe> -->
                            
                            
                             <center>{{video.title}}</center>
@@ -81,15 +80,14 @@
                                 {% endif %}
 
 
-                                <!-- <source src="https://s3.us-east-2.amazonaws.com/test2.tickle.life/uploads/logos/63a0af36-1f0f-4fc9-ac3b-0ba50b5bd903.mp4" type="video/ogg"> -->
                             </video>
                         </div>  
                     </div>
                 </div>
-            </section>
+            </section> -->
 
 
-            <!-- <section class="fullwidth-single-video">
+            <section class="fullwidth-single-video">
                 <div class="row">
                     <div class="large-12 columns">
                         <div class="flex-video widescreen decrease container">
@@ -100,12 +98,13 @@
 
                                 {% if subscribed_status == True %} 
 
-                                <video id="" width="860" height="740 " autoplay controls poster="{{video.poster_url}}"></video>
+                                <video id="Test_Video video" width="360" height="240" controls poster="{{video.poster_url}}">
                                 <source src="{{video.video_url}}" type="video/mp4"  >
+                                <div>Greetings {{user}}</div>
                                 {% else %}
                           
                             <a href="/process_payment/99-{{video.video_id}}">
-                                <video id="Test_Video video" width="860" height="740 " controls poster="{{video.poster_url}}"></video>
+                                <video id="Test_Video video" width="860" height="740 " controls poster="{{video.poster_url}}">
                                 <source  type="video/mp4"  >
                             </a>
                                 {% endif %}
@@ -115,7 +114,7 @@
                         </div>  
                     </div>
                 </div>
-            </section> -->
+            </section>
             <div class="row">
 
 
@@ -132,7 +131,9 @@
                                     <div class="media-object-section">
                                         <div class="author-img-sec">
                                             <div class="thumbnail author-single-post">
-                                                <a href="#"><img  src= "base_details.default_poster_url" onerror="this.src='{{ base_details.default_poster_url }}';" alt="post"></a>
+                                                {% if user_profile.image %}
+                                                <a href="/myprofile/"><img  src= "{{user_profile.image.url}}" onerror="this.src='{{ base_details.default_poster_url }}';" alt="post"></a>
+                                                 {% endif %}
                                             </div>
                                             <p class="text-center"><a href="#">{{ request.user.username }}</a></p>
                                         </div>
@@ -142,13 +143,14 @@
                                             <div class="post-title">
                                                
                                                 <h4>{{video.title}}</h4>
-                                              
+                                                
                                                 <p>
-                                                    <span><i class="fa fa-clock-o"></i>{{video.record_date}}</span>
+                                                    <!-- <span><i class="fa fa-clock-o"></i>{{video.record_date}}</span> -->
                                                     <span><i class="fa fa-eye"></i>{% get_hit_count for video %}K</span>
-                                                    <span><i class="fa fa-thumbs-o-up"></i>{{like}}</span>
-                                                    <span><i class="fa fa-thumbs-o-down"></i>1098880</span>
-                                                    <span><i class="fa fa-commenting"></i>{{video.rating}}</span>
+                                                    <span   ><i class="fa fa-heart"></i><b id="fabidd">{{fabrate}}</b></span>
+                                                    <span ><i  class="fa fa-thumbs-o-up"> </i> <b  id="likeiid">{{like}}</b></span>
+                                                    <span  ><i class="fa fa-thumbs-o-down"></i><b id="dislikeiid">{{dislike}}</b></span>
+                                                    <span ><i  class="fa fa-commenting"></i><b id="commentid">{{comment}}</b></span>
                                                 </p>
                                             </div>
                                             <div class="subscribe">
@@ -196,19 +198,38 @@
                                               var csrftoken = getCookie('csrftoken');
                                               let likeVal = document.getElementById("likeId").value;
                                         
-                                              var url = "{% url 'add_fab' %}"
+                                            //   var url = "{% url 'add_fab' %}"
                                         
-                                                fetch(url, {
-                                                    method:'POST',
-                                                    headers:{
-                                                        'Content-type':'application/json',
-                                                        'X-CSRFToken':csrftoken,
-                                                    },
-                                                    body:JSON.stringify({"like":likeVal,"video_id":"{{video.pk}}","subscribe":"0","user_id":"{{request.user.pk}}","newsletter":"subs_type","dislike":"0","comment":"0","fab":"0"})
-                                                })
-                                                // document.getElementById('inputId').value = ''
+                                            //     fetch(url, {
+                                            //         method:'POST',
+                                            //         headers:{
+                                            //             'Content-type':'application/json',
+                                            //             'X-CSRFToken':csrftoken,
+                                            //         },
+                                            //         body:JSON.stringify({"like":likeVal,"video_id":"{{video.pk}}","subscribe":"0","user_id":"{{request.user.pk}}","newsletter":"subs_type","dislike":"0","comment":"0","fab":"0"})
+                                            //     })
+                                                //  document.getElementById('likeiid').value = '8000'
+                                                // const res = await fetch('http://jsonplaceholder.typicode.com/todos');
+                                                // const json = await res.json();
+
+                                                let fetchRes = fetch(
+                                                    "{% url 'video_comments' video.pk 'like' %}");
+
+                                                    // fetchRes is the promise to resolve
+                                                    // it by using.then() method
+                                                    fetchRes.then(res =>
+                                                        res.json()).then(d => {
+                                                            console.log(d)
+                                                            document.getElementById("likeiid").innerHTML = d["like"];
+                                                            document.getElementById("dislikeiid").innerHTML = d["dislike"];
+                                                            document.getElementById("commentid").innerHTML = d["comment"];
+                                                            document.getElementById("commentidd").innerHTML = d["comment"];
+                                                            document.getElementById("fabidd").innerHTML = d["fabrate"];
+                                                        });
+                                                // document.getElementById("likeiid").innerHTML = d.list["like"];
+                                                // likeiid.innerHTML=800;                                                         
                                         
-                                              alert("Thank You ");
+                                            //   alert("Thank You ");
                                         
                                             }
                                             
@@ -216,26 +237,34 @@
                                               var csrftoken = getCookie('csrftoken');                                        
                                               let dislikeVal = document.getElementById("dislikeId").value;
                                         
-                                              var url = "{% url 'add_fab' %}"
+                                            //   var url = "{% url 'add_fab' %}"
                                         
-                                                fetch(url, {
-                                                    method:'POST',
-                                                    headers:{
-                                                        'Content-type':'application/json',
-                                                        'X-CSRFToken':csrftoken,
-                                                    },
-                                                    body:JSON.stringify({"like":"0","newsletter":"subs_type","user_id":"{{request.user.pk}}","subscribe":"0","video_id":"{{video.pk}}","dislike":dislikeVal,"comment":"0","fab":"0"})
-                                                })
-                                                fetch(url)
-                                                        .then(function(response){
-                                                            return response.json();
-                                                        })
-                                                        .then(function(like){
-                                                            console.log(like);
-                                                        })
+                                            //     fetch(url, {
+                                            //         method:'POST',
+                                            //         headers:{
+                                            //             'Content-type':'application/json',
+                                            //             'X-CSRFToken':csrftoken,
+                                            //         },
+                                            //         body:JSON.stringify({"like":"0","newsletter":"subs_type","user_id":"{{request.user.pk}}","subscribe":"0","video_id":"{{video.pk}}","dislike":dislikeVal,"comment":"0","fab":"0"})
+                                            //     });
+                                                
+                                                let fetchRes = fetch(
+                                                    "{% url 'video_comments' video.pk 'dislike' %}");
+
+                                                    // fetchRes is the promise to resolve
+                                                    // it by using.then() method
+                                                    fetchRes.then(res =>
+                                                        res.json()).then(d => {
+                                                            console.log(d)
+                                                            document.getElementById("likeiid").innerHTML = d["like"];
+                                                            document.getElementById("dislikeiid").innerHTML = d["dislike"];
+                                                            document.getElementById("commentid").innerHTML = d["comment"];
+                                                            document.getElementById("commentidd").innerHTML = d["comment"];
+                                                            document.getElementById("fabidd").innerHTML = d["fabrate"];
+                                                        });
                                                 // document.getElementById('inputId').value = ''
                                         
-                                              alert("Thank You ");
+                                            //   alert("Thank You ");
                                         
                                             }
                                         
@@ -243,39 +272,89 @@
                                               var csrftoken = getCookie('csrftoken');                                        
                                               let favVal = document.getElementById("fabId").value;
                                         
-                                              var url = "{% url 'add_fab' %}"
+                                            //   var url = "{% url 'add_fab' %}"
                                         
-                                                fetch(url, {
-                                                    method:'POST',
-                                                    headers:{
-                                                        'Content-type':'application/json',
-                                                        'X-CSRFToken':csrftoken,
-                                                    },
-                                                    body:JSON.stringify({"like":"0","newsletter":"subs_type","video_id":"{{video.pk}}","subscribe":"0","user_id":"{{request.user.pk}}","dislike":"0","comment":"0","fab":favVal})
-                                                })
+                                            //     fetch(url, {
+                                            //         method:'POST',
+                                            //         headers:{
+                                            //             'Content-type':'application/json',
+                                            //             'X-CSRFToken':csrftoken,
+                                            //         },
+                                            //         body:JSON.stringify({"like":"0","newsletter":"subs_type","video_id":"{{video.pk}}","subscribe":"0","user_id":"{{request.user.pk}}","dislike":"0","comment":"0","fab":favVal})
+                                            //     });
+                                                let fetchRes = fetch(
+                                                    "{% url 'video_comments' video.pk 'fab' %}");
+
+                                                    // fetchRes is the promise to resolve
+                                                    // it by using.then() method
+                                                    fetchRes.then(res =>
+                                                        res.json()).then(d => {
+                                                            console.log(d)
+                                                            document.getElementById("likeiid").innerHTML = d["like"];
+                                                            document.getElementById("dislikeiid").innerHTML = d["dislike"];
+                                                            document.getElementById("commentid").innerHTML = d["comment"];
+                                                            document.getElementById("commentidd").innerHTML = d["comment"];
+                                                            document.getElementById("fabidd").innerHTML = d["fabrate"];
+                                                        });
                                                 // document.getElementById('inputId').value = ''
                                         
-                                              alert("Thank You ");
+                                            //   alert("Thank You ");
                                         
                                             }
+                                          
+
+                                            function updateurl()  {
+
+                                            var csrftoken = getCookie('csrftoken');                                        
+                                              let commentVal = document.getElementById("commentId").value;
+                                              document.getElementById("fabidd").innerHTML = "ggggggggggg";
+
+
+                                            }
                                             
+
                                          function getcomment() {
                                               var csrftoken = getCookie('csrftoken');                                        
                                               let commentVal = document.getElementById("commentId").value;
                                         
-                                              var url = "{% url 'add_fab' %}"
+                                            //   var url = "{% url 'add_fab' %}"
                                         
-                                                fetch(url, {
-                                                    method:'POST',
-                                                    headers:{
-                                                        'Content-type':'application/json',
-                                                        'X-CSRFToken':csrftoken,
-                                                    },
-                                                    body:JSON.stringify({"like":"0","newsletter":"subs_type","video_id":"{{video.pk}}","subscribe":"0","user_id":"{{request.user.pk}}","dislike":"0","comment":commentVal,"fab":""})
-                                                })
-                                                document.getElementById('commentId').value = ''
-                                        
-                                              alert("Thank You ");
+                                            //     fetch(url, {
+                                            //         method:'POST',
+                                            //         headers:{
+                                            //             'Content-type':'application/json',
+                                            //             'X-CSRFToken':csrftoken,
+                                            //         },
+                                            //         body:JSON.stringify({"like":"0","newsletter":"subs_type","video_id":"{{video.pk}}","subscribe":"0","user_id":"{{request.user.pk}}","dislike":"0","comment":commentVal,"fab":""})
+                                            //     })
+                                                // document.getElementById('commentId').value = '';
+                                                let fetchRes = fetch(
+                                                    "/video_comments/{{video.pk}}/"+commentVal);
+
+                                                    // fetchRes is the promise to resolve
+                                                    // it by using.then() method
+                                                    fetchRes.then(res =>
+                                                        res.json()).then(d => {
+                                                            console.log(d)
+                                                            document.getElementById("likeiid").innerHTML = d["like"];
+                                                            document.getElementById("dislikeiid").innerHTML = d["dislike"];
+                                                            document.getElementById("commentid").innerHTML = d["comment"];
+                                                            document.getElementById("commentidd").innerHTML = d["comment"];
+                                                            document.getElementById("fabidd").innerHTML = d["fabrate"];
+                                                            // document.getElementById("commentId").innerHTML = "";
+                                                            document.getElementById('commentId').value = '';
+                                                            // document.getElementById('_appendHere').append(d);
+                                                            document.getElementById("changecmntid").innerHTML = commentVal;
+                                                            document.getElementById("imgchangeid").innerHTML = 
+                                                            '<img src= "{{request.user.last_name}}" alt="comment">';
+                                                            document.getElementById("userchangeid").innerHTML = "{{request.user}}";
+
+                                                            
+                                                        });
+                                                        
+                                                           
+                                            //   alert("Thank You ");
+                                            
                                         
                                             }
 
@@ -284,19 +363,33 @@
                                               var csrftoken = getCookie('csrftoken');                                        
                                             //   let dislikeVal = document.getElementById("dislikeId").value;
                                         
-                                              var url = "{% url 'add_fab' %}"
+                                            //   var url = "{% url 'add_fab' %}"
                                         
-                                                fetch(url, {
-                                                    method:'POST',
-                                                    headers:{
-                                                        'Content-type':'application/json',
-                                                        'X-CSRFToken':csrftoken,
-                                                    },
-                                                    body:JSON.stringify({"like":"0","newsletter":"subs_type","user_id":"{{request.user.pk}}","subscribe":"1","video_id":"{{video.pk}}","dislike":"0","comment":"0","fab":"0"})
-                                                })
+                                            //     fetch(url, {
+                                            //         method:'POST',
+                                            //         headers:{
+                                            //             'Content-type':'application/json',
+                                            //             'X-CSRFToken':csrftoken,
+                                            //         },
+                                            //         body:JSON.stringify({"like":"0","newsletter":"subs_type","user_id":"{{request.user.pk}}","subscribe":"1","video_id":"{{video.pk}}","dislike":"0","comment":"0","fab":"0"})
+                                            //     });
+                                                let fetchRes = fetch(
+                                                    "{% url 'video_comments' video.pk 'subs' %}");
+
+                                                    // fetchRes is the promise to resolve
+                                                    // it by using.then() method
+                                                    fetchRes.then(res =>
+                                                        res.json()).then(d => {
+                                                            console.log(d)
+                                                            document.getElementById("likeiid").innerHTML = d["like"];
+                                                            document.getElementById("dislikeiid").innerHTML = d["dislike"];
+                                                            document.getElementById("commentid").innerHTML = d["comment"];
+                                                            document.getElementById("commentidd").innerHTML = d["comment"];
+                                                            document.getElementById("fabidd").innerHTML = d["fabrate"];
+                                                        });
                                                 // document.getElementById('inputId').value = ''
                                         
-                                              alert("Thank You ");
+                                            //   alert("Thank You ");
                                         
                                             }
                                           </script>
@@ -308,7 +401,7 @@
                                         <div class="social-share">
                                             <div class="post-like-btn clearfix">
                                                
-                                                    <button  class=" secondary-button" style="height: 30px !important; white-space: nowrap !important; width: 100px !important;" id="fabId" type="submit"   onclick="getfab()" value="1" ><i class="fa fa-heart"></i>Add to</button>
+                                                    <button  class=" secondary-button" style="height: 30px !important; white-space: nowrap !important; width: 100px !important;" id="fabId" type="submit"   onclick="getfab()" value="1" ><i class="fa fa-heart"></i></button>
                                                 
                                                 <button  id="likeId" value="1" onclick="getLike()" class="secondary-button"><i class="fa fa-thumbs-o-up"></i></button>
                                                 <button id="dislikeId" value="1" onclick="getdisLike()" class="secondary-button"><i class="fa fa-thumbs-o-down"></i></button>
@@ -363,7 +456,10 @@
                                     <h5>Description</h5>
                                 </div>
                                 <div class="description showmore_one">
+
+                                    {% if video.desc %}
                                     <p>{{video.desc | safe}}</p>
+                                    {% endif %}
 
                                     <!-- <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur</p> -->
                                     <!-- <h6>Bullets List :</h6> -->
@@ -437,7 +533,7 @@
                                                 </div>
                                             </div>
                                             <div class="post-des">
-                                                <h6><a href="#">{{p.title}}</a></h6>
+                                                <h6><a href="#">{{p.title |slice:"0:30"}}...</a></h6>
                                                 <div class="post-stats clearfix">
                                                     <p class="pull-left">
                                                         <i class="fa fa-user"></i>
@@ -453,7 +549,7 @@
                                                     </p>
                                                 </div>
                                                 <div class="post-summary">
-                                                    <p>ttttttttttttttttttttttttttttttttttttttttttttttttttt</p>
+                                                    <p>{{p.desc}}</p>
                                                 </div>
                                                 <div class="post-button">
                                                     <a href="#" class="secondary-button"><i class="fa fa-play-circle"></i>watch video</a>
@@ -534,7 +630,7 @@
                                         <div class="medium-12 small-12 columns">
                                             <div class="head-title">
                                                 <i class="fa fa-comments"></i>
-                                                <h4>Comments <span>(4)</span></h4>
+                                                <h4>Comments <span>(<b id ="commentidd">{{comment}}</b>)</span></h4>
                                             </div>
                                         </div>
                                     </div>
@@ -544,16 +640,18 @@
                                     <div class="media-object stack-for-small">
                                         <div class="media-object-section comment-img text-center">
                                             <div class="comment-box-img">
-                                                <img src= "http://placehold.it/80x80" alt="comment">
+                                                {% if user_profile.image %}
+                                                <b id="imgchangeid"><img src= "{{user_profile.image.url}}" alt="comment"></b>
+                                                {% endif %}
                                             </div>
-                                            <h6><a href="#">Joseph John</a></h6>
+                                            <h6><a href="#">{{ request.user.username }} </a></h6>
                                         </div>
                                         <div class="media-object-section comment-textarea">
-                                              <form action="">
+                                              <!-- <form > -->
                                                 <textarea id="commentId"  placeholder="Add a comment here.." required></textarea>
                                                 <input type="submit" onclick="getcomment()" name="submit" value="send">
                                                 <!-- <button class="button" onclick="getcomment();" type="submit" value="Submit">send</button> -->
-                                            </form>
+                                            <!-- </form> -->
                                         </div>
                                     </div>
                                 </div>
@@ -566,12 +664,17 @@
                                 <div class="main-comment showmore_one">
                                     <div class="media-object stack-for-small">
                                         <div class="media-object-section comment-img text-center">
-                                            <div class="comment-box-img">
+                                            <!-- <div class="comment-box-img">
                                                 <img src= "http://placehold.it/80x80" alt="comment">
-                                            </div>
+                                            </div> -->
                                         </div>
                                         <div class="media-object-section comment-desc">
-                                            <div class="comment-title">
+
+
+
+
+
+                                            <!-- <div class="comment-title">
                                                 <span class="name"><a href="#">Joseph John</a> Said:</span>
                                                 <span class="time float-right"><i class="fa fa-clock-o"></i>1 minute ago</span>
                                             </div>
@@ -582,10 +685,41 @@
                                                 <span><a href="#"><i class="fa fa-thumbs-o-up"></i></a> | <a href="#"><i class="fa fa-thumbs-o-down"></i></a></span>
                                                 <span><a href="#"><i class="fa fa-share"></i>Reply</a></span>
                                                 <span class='reply float-right hide-reply'></span>
+                                            </div> -->
+
+                                            <!--sub comment-->
+
+                                             {% for cmt in comments %}
+                                            <div class="media-object stack-for-small reply-comment">
+                                                <div class="media-object-section comment-img text-center">
+                                                    <div class="comment-box-img">
+                                                        <img src= "{{cmt.subscriber.user.last_name}}" alt="comment">
+                                                    </div>
+                                                </div>
+                                                <div class="media-object-section comment-desc">
+                                                    <div class="comment-title">
+                                                        <span class="name"><a href="#"><b id="userchangeid">{{cmt.subscriber.user}}</b></a> Said:</span>
+                                                        <span class="time float-right"><i class="fa fa-clock-o"></i>{{cmt.created_at}}</span>
+                                                    </div>
+                                                    <div class="comment-text">
+                                                        <p id="changecmntid">{{cmt.comment}}</p>
+                                                    </div>
+                                                    <div class="comment-btns">
+                                                        <!-- <span><a href="#"><i class="fa fa-thumbs-o-up"></i></a> | <a href="#"><i class="fa fa-thumbs-o-down"></i></a></span> -->
+                                                        <!-- <span><a href="#"><i class="fa fa-share"></i>Reply</a></span> -->
+                                                        <span class='reply float-right hide-reply'></span>
+                                                    </div>
+                                                </div>
                                             </div>
+                                            
+                                            {% endfor%}
 
-                                            <!--sub comment-->
-                                            <div class="media-object stack-for-small reply-comment">
+
+
+                                            
+
+
+                                            <!-- <div class="media-object stack-for-small reply-comment">
                                                 <div class="media-object-section comment-img text-center">
                                                     <div class="comment-box-img">
                                                         <img src= "http://placehold.it/80x80" alt="comment">
@@ -605,10 +739,17 @@
                                                         <span class='reply float-right hide-reply'></span>
                                                     </div>
                                                 </div>
-                                            </div><!-- end sub comment -->
+                                            </div> -->
+                                            
+                                            <!-- end sub comment -->
 
                                             <!--sub comment-->
-                                            <div class="media-object stack-for-small reply-comment">
+
+
+
+                                            
+
+                                            <!-- <div class="media-object stack-for-small reply-comment">
                                                 <div class="media-object-section comment-img text-center">
                                                     <div class="comment-box-img">
                                                         <img src= "http://placehold.it/80x80" alt="comment">
@@ -629,12 +770,15 @@
                                                     </div>
 
                                                 </div>
-                                            </div><!-- end sub comment -->
+                                            </div> -->
+                                            
+                                            
+                                            <!-- end sub comment -->
 
                                         </div>
                                     </div>
 
-                                    <div class="media-object stack-for-small">
+                                    <!-- <div class="media-object stack-for-small">
                                         <div class="media-object-section comment-img text-center">
                                             <div class="comment-box-img">
                                                 <img src= "http://placehold.it/80x80" alt="comment">
@@ -655,79 +799,39 @@
                                             </div>
 
                                         </div>
-                                    </div>
+                                    </div> -->
 
-                                    <div class="media-object stack-for-small">
-                                        <div class="media-object-section comment-img text-center">
-                                            <div class="comment-box-img">
-                                                <img src= "http://placehold.it/80x80" alt="comment">
-                                            </div>
-                                        </div>
-                                        <div class="media-object-section comment-desc">
-                                            <div class="comment-title">
-                                                <span class="name"><a href="#">Joseph John</a> Said:</span>
-                                                <span class="time float-right"><i class="fa fa-clock-o"></i>1 minute ago</span>
-                                            </div>
-                                            <div class="comment-text">
-                                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventoresunt explicabo.</p>
-                                            </div>
-                                            <div class="comment-btns">
-                                                <span><a href="#"><i class="fa fa-thumbs-o-up"></i></a> | <a href="#"><i class="fa fa-thumbs-o-down"></i></a></span>
-                                                <span><a href="#"><i class="fa fa-share"></i>Reply</a></span>
-                                                <span class='reply float-right hide-reply'></span>
-                                            </div>
-                                            <!--sub comment-->
-                                            <div class="media-object stack-for-small reply-comment">
-                                                <div class="media-object-section comment-img text-center">
-                                                    <div class="comment-box-img">
-                                                        <img src= "http://placehold.it/80x80" alt="comment">
-                                                    </div>
-                                                </div>
-                                                <div class="media-object-section comment-desc">
-                                                    <div class="comment-title">
-                                                        <span class="name"><a href="#">Joseph John</a> Said:</span>
-                                                        <span class="time float-right"><i class="fa fa-clock-o"></i>1 minute ago</span>
-                                                    </div>
-                                                    <div class="comment-text">
-                                                        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventoresunt explicabo.</p>
-                                                    </div>
-                                                    <div class="comment-btns">
-                                                        <span><a href="#"><i class="fa fa-thumbs-o-up"></i></a> | <a href="#"><i class="fa fa-thumbs-o-down"></i></a></span>
-                                                        <span><a href="#"><i class="fa fa-share"></i>Reply</a></span>
-                                                        <span class='reply float-right hide-reply'></span>
-                                                    </div>
-                                                    <!--sub comment-->
-                                                    <div class="media-object stack-for-small reply-comment">
-                                                        <div class="media-object-section comment-img text-center">
-                                                            <div class="comment-box-img">
-                                                                <img src= "http://placehold.it/80x80" alt="comment">
-                                                            </div>
-                                                        </div>
-                                                        <div class="media-object-section comment-desc">
-                                                            <div class="comment-title">
-                                                                <span class="name"><a href="#">Joseph John</a> Said:</span>
-                                                                <span class="time float-right"><i class="fa fa-clock-o"></i>1 minute ago</span>
-                                                            </div>
-                                                            <div class="comment-text">
-                                                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventoresunt explicabo.</p>
-                                                            </div>
-                                                            <div class="comment-btns">
-                                                                <span><a href="#"><i class="fa fa-thumbs-o-up"></i></a> | <a href="#"><i class="fa fa-thumbs-o-down"></i></a></span>
-                                                                <span><a href="#"><i class="fa fa-share"></i>Reply</a></span>
-                                                                <span class='reply float-right hide-reply'></span>
-                                                            </div>
-                                                        </div>
-                                                    </div><!-- end sub comment -->
-                                                </div>
-                                            </div><!-- end sub comment -->
-                                        </div>
-                                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                 </div><!-- End main comment -->
 
                             </div>
                         </div>
                     </section><!-- End Comments -->
                 </div><!-- end left side content area -->
+
+
+
+
                 <!-- sidebar -->
 
 

@@ -1,11 +1,15 @@
-from django.http import request
+from cProfile import label
+from xml.etree.ElementTree import Comment
+from django.http import HttpResponse, request
 from django.shortcuts import render,redirect
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from hitcount.views import HitCountDetailView
 from django.db.models.expressions import F
 from django.contrib.auth.models import User
+from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
@@ -15,6 +19,7 @@ from ssf.models import *
 from paypal_payment.models import *
 import json
 from django.http import JsonResponse
+from django.db.models import Q
 #from paypal_payment.models import Plan
 # Create your views here.
 
@@ -29,6 +34,19 @@ from django.http import JsonResponse
 
 
 #     return render(request,'index.html' , p_data)
+
+def get_json_from_request(request):
+    output = {}
+    keep_keys = ["REMOTE_HOST", "REQUEST_METHOD", "PATH_INFO", "QUERY_STRING", "REMOTE_ADDR", "HTTP_HOST",
+                 "HTTP_USER_AGENT", "HTTP_REFERER", "HTTP_X_FORWARDED_FOR"]
+    for key in keep_keys:
+        output[key] = request.META.get(key, '')
+    return output
+
+
+
+
+
 
 
 def base_data():
@@ -79,6 +97,8 @@ from django.utils.decorators import method_decorator
 
 
 
+
+
 class single_video(HitCountDetailView):
     model = VideoUpload
     template_name = 'single-video-v1.html'
@@ -105,6 +125,14 @@ class single_video(HitCountDetailView):
             #print(subscribed_status,self.request.user.id,ViewPlan.objects.filter(user=self.request.user.id).values(),"aaaaaa")
         
         # name=user_name(request)
+        video_id=context["video"].video_id
+
+        user_profile=UserProfile.objects.filter(user__id=user)
+        if user_profile.exists():
+            user_profile=user_profile.first()
+            context.update({"user_profile":user_profile})
+
+        print(user_profile,"******************************nil((((((((")
         print(context["video"].video_id)
         if plan.exists():
 
@@ -118,7 +146,18 @@ class single_video(HitCountDetailView):
             })
 
         context.update(base_data())
+          #like dislike comment
+        all=UserFavoriteVideo.objects.filter(content_type="video",content_id=video_id)
+        like=all.filter(label="like").count()
+        dislike=all.filter(label="dislike").count()
+        fab=all.filter(fab=True).count()
 
+        comment=UserComment.objects.filter(content_type="video",content_id=video_id).order_by("-created_at")
+        cmnt=comment.count()
+
+
+        video_like_data={"name":"video","like":like,"dislike":dislike,"pk":video_id,"fabrate":fab,"comment":cmnt,"comments":comment}
+        context.update(video_like_data)
 
         if self.request.user.is_superuser == True:
             subscribed_status={"subscribed_status":True}
@@ -277,6 +316,11 @@ def myprofile(request):
     user_id=request.user.id
     user = User.objects.get(id=user_id)
 
+    user_profile=UserProfile.objects.filter(user__id=user_id)
+    if user_profile.exists():
+        user_profile=user_profile.first()
+        context.update({"user_profile":user_profile})
+
     # user = User.objects.filter(email=email)
     # if user.exists():
     #     user = user.first()
@@ -284,7 +328,7 @@ def myprofile(request):
     #     user = User.objects.create(username=email, email=email)
 
     videos=VideoUpload.objects.all().filter(user=user).order_by('-modified_at')[0:9]
-    print(user,user_id,videos,"jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
+    # print(user,user_id,videos,"jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
     context.update({"my_latest_videos":videos})
     context.update({
             'my_popular_videos': VideoUpload.objects.all().filter(user=user).order_by('-hit_count_generic__hits')[0:12],
@@ -303,11 +347,11 @@ def edit_profile(request):
     usr = User.objects.filter(id=user_id)
     user=usr.first()
 
-    print(usr.values(),user)
+    # print(usr.values(),user)
     context.update(base_data())
 
     user_pro=UserProfile.objects.filter(user=user)
-    print(user_pro)
+    # print(user_pro)
     if user_pro.exists():
         user_pro = user_pro.first()
     else:
@@ -327,8 +371,13 @@ def edit_profile(request):
         try:   
             user_pro.image=request.FILES['image']
         except:pass
-        print(user_pro.name)
+        
         user_pro.save()
+
+
+        user_pro=UserProfile.objects.get(user=user)
+        usr.update(last_name=user_pro.image.url)
+        print(user_pro.image.url,"saving to lastname of user")
         # login(request, user)
          
     context.update({"user":user_pro})
@@ -782,11 +831,11 @@ def add_fab(request):
             label="dislike"
 
         if fab=="1":
-            user_fab=UserFavoriteVideo.objects.filter(subscriber=subscriber,content_type="video",content_id=video_id,label="favorite")
+            user_fab=UserFavoriteVideo.objects.filter(subscriber=subscriber,content_type="video",content_id=video_id,fab=True)
             print("in fab")
             if user_fab.exists()==False:
 
-                user_fab=UserFavoriteVideo(subscriber=subscriber,content_type="video",content_id=video_id,label="favorite")
+                user_fab=UserFavoriteVideo(subscriber=subscriber,content_type="video",content_id=video_id,fab=True)
                 user_fab.save()
 
 
@@ -837,3 +886,112 @@ def add_fab(request):
     context={"like":1111,"video":video}
     # return JsonResponse({'like':'bar'})
     return render(request,'single-video-v1.html' , context)
+
+from django.http import JsonResponse
+def video_comments(request,pk,label=None):
+    user_id = request.user.pk
+     
+    subscription_type=SubscriptionType.objects.get(name="All subscribed user")
+    subscriber=subscription=EmailSubscription.objects.filter(user_id=user_id,subscription_type=subscription_type)
+    if subscription.exists()==False:
+        user = User.objects.get(pk=user_id)
+        
+        
+        subscriber=EmailSubscription.objects.create(user=user, subscription_type=subscription_type, subscribed=True)  
+    else:
+        subscriber=subscriber.first()
+    
+
+    video=UserFavoriteVideo.objects.filter(subscriber__user__pk=user_id,content_type="video",content_id=pk)
+    if video.exists() ==False:
+        video=UserFavoriteVideo.objects.create(subscriber=subscriber,content_type="video",content_id=pk)
+        if label=="like":
+            video.label="like"
+        if label=="dislike":
+            video.label="dislike"
+        if label=="fab":
+            video.fab=True
+
+        if label=="subs":
+            video.subscribed=True
+        video.save()
+
+    
+    if video.exists():
+        if label=="like":
+            video.update(label="like")
+        if label=="dislike":
+            video.update(label="dislike")
+        if label=="fab":
+            video.update(fab=True)
+        if label=="subs":
+            video.update(subscribed=True)
+        
+    if label!="like" and label!="dislike" and label!="fab" and label!="ok" and  label is not None and label!="subs":
+        # print("coment hai *******************************************")
+        cmt=UserComment.objects.create(subscriber=subscriber,content_type="video",content_id=pk,comment=label)
+        
+        pass
+    
+        
+        
+
+    
+    all=UserFavoriteVideo.objects.filter(content_type="video",content_id=pk)
+    like=all.filter(label="like").count()
+    dislike=all.filter(label="dislike").count()
+    fab=all.filter(fab=True).count()
+
+    comment=UserComment.objects.filter(content_type="video",content_id=pk)
+    cmnt=comment.count()
+
+
+    data={"name":"video","like":like,"dislike":dislike,"pk":pk,"fabrate":fab,"comment":cmnt}
+    print(data,label)
+
+    # if label=="subs":
+    #     subscriber=UserFavoriteVideo.objects.filter(user_id=user_id,subscription_type=subscription_type)
+    #     subscriber.update(subscribed=True)
+
+
+    return JsonResponse(data,safe=False)
+
+
+def search(request): 
+    context={}
+    context.update(base_data())
+    current_url = request.path_info
+    name=request.POST.get('search')
+    query= request.GET.get('search')
+    gdata=get_json_from_request(request)
+    print("************************************************************",name,query)
+    print(current_url.split)
+    print(gdata)
+    print("************************************************************")
+    q=request.META.get("QUERY_STRING", '')
+    q=q.split("&")[0]
+    q=q.split("=")[1]
+    # q=q.replace("search","")
+    # q=q.replace("=","")
+    # q=q.replace("&","")
+    q=q.replace("+"," ")
+    print(request.META.get("QUERY_STRING", ''))
+    print(q)
+
+    lookups= Q(title__icontains=q) #title__contains=q
+
+    results= VideoUpload.objects.filter(lookups).distinct()
+    result= BlogPost.objects.filter(lookups).distinct()
+    print(results.count())
+    context.update({"videos":results,"q":q,"video_count":results.count()})
+    context.update({"blog_data":result,"blog_count":result.count()})
+
+
+    # print(request.META)
+
+
+
+
+
+
+    return render(request,'search.html' , context)

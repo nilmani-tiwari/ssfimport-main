@@ -464,12 +464,12 @@ class SubscriptionType(models.Model):
 class EmailSubscription(models.Model):
     user = models.ForeignKey(User, related_name='subscriber', on_delete=CASCADE)
     subscription_type = models.ForeignKey('SubscriptionType', related_name='subscription_type', on_delete=SET_NULL, null=True, blank=True)
-    subscribed = models.BooleanField(default=True)
+    subscribed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(blank=True, auto_now=True, null=True)
 
     def __str__(self):
-        return f"[EmailSubscription: {self.id}] {self.user} <-> {self.subscription_type.name}"
+        return f" {self.id}] {self.user} <-> {self.subscription_type.name}"
 
     class Meta:
         verbose_name = "Email Subscription"
@@ -501,13 +501,18 @@ class EmailSubscription(models.Model):
 
 class UserFavoriteVideo(models.Model):
     CHOICESs=( ("video","video"),("blog","blog"))
-    CHOICES=( ("like","like"),("dislike","dislike"),("favorite","favorite"))
+    CHOICES=( ("like","like"),("dislike","dislike"))
 
     subscriber = models.ForeignKey('EmailSubscription', related_name='sub_fav_s', on_delete=CASCADE)
     content_type = models.CharField(max_length=50, choices=CHOICESs, default='video',blank=True, null=True)
     content_id = models.IntegerField(blank=True, null=True)
 
-    label = models.CharField(max_length=50, choices=CHOICES, default='like',blank=True, null=True)
+    label = models.CharField(max_length=50, choices=CHOICES,blank=True, null=True)
+    fab=models.BooleanField(default=False)
+    subscribed = models.BooleanField(default=False)
+    # like=models.PositiveBigIntegerField(default=0)
+    # dislike=models.PositiveBigIntegerField(default=0)
+    # fabrate=models.PositiveBigIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(blank=True, auto_now=True, null=True)
 
@@ -527,7 +532,7 @@ class UserComment(models.Model):
     content_id = models.IntegerField(blank=True, null=True)
 
     comment = models.TextField(default='This is very nice.',blank=True, null=True)
-
+    home_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(blank=True, auto_now=True, null=True)
 
@@ -557,3 +562,14 @@ class UserProfile(models.Model):
     class Meta:
         verbose_name = "User Profile"
         verbose_name_plural = "9- User Profile"
+
+
+# class VideoBlogSubscription(models.Model):
+#     CHOICESs=( ("video","video"),("blog","blog"))
+#     user = models.ForeignKey(User, related_name='video_blog_subscriber', on_delete=CASCADE)
+#     content_type = models.CharField(max_length=50, choices=CHOICESs, default='video',blank=True, null=True)
+#     content_id = models.IntegerField(blank=True, null=True)
+
+#     subscribed = models.BooleanField(default=False)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     modified_at = models.DateTimeField(blank=True, auto_now=True, null=True)

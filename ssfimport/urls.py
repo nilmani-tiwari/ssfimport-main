@@ -52,15 +52,18 @@ urlpatterns = [
 
 
     path('process_payment/', process_payment, name='process_payment'),
+    path('search/', search, name='search'),
     path('process_payment/<str:pay_view>/', process_payment, name='process_payment'),
 
     path('payment-done/', payment_done, name='payment_done'),
     path('payment-cancelled/', payment_canceled, name='payment_cancelled'),
 
      path('checkout/<int:pk>/', checkout, name="checkout"),  
-     path('checkout/<int:pk>/<int:video_id>/', checkout, name="checkout"),                    #
+     path('checkout/<int:pk>/<int:video_id>/', checkout, name="checkout"),                    #  video_comments
      path('complete/', paymentComplete, name="complete"),
      path('upload_data/',upload_data,name='upload_data'),
+
+      path('video_comments/<pk>/<label>/', video_comments, name="video_comments"),
 
     path('', include('ssftemp.urls')),
 
