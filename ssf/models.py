@@ -226,7 +226,8 @@ class BlogPost(models.Model):
     published = models.DateField(auto_now_add=True)
     hit_count=models.IntegerField(default=0, blank=True, null=True)
     hit_count_generic = GenericRelation(HitCount, object_id_field='object_pk', related_query_name='hit_count_generic_relation')
-
+    # created_at = models.DateTimeField(auto_now_add=True)
+    # modified_at = models.DateTimeField(blank=True, auto_now=True, null=True)
 
     def __str__(self):
         return self.title

@@ -528,7 +528,7 @@ def blog(request):
     for items in dd:
         p_data.update({items["slug"]:items["image"]})
 
-    blog_data=BlogPost.objects.values().all()
+    blog_data=BlogPost.objects.values().all().order_by("-id")
     p_data.update({"blog_data":blog_data})
 
 
