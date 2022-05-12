@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!--COUNTRIES is the root element-->
+<COUNTRIES>
+	<country name="INDIA">
+		<neighbor name="Dubai" direction="W"/>
+	</country>
+	<country name="Singapore">
+		<neighbor name="Malaysia" direction="N"/>
+	</country>
+</COUNTRIES>

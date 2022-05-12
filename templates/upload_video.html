@@ -60,7 +60,7 @@
         <div class="row secBg">
             <div class="large-12 columns">
                 <div class="profile-author-img">
-                    <img src="{{base_details.default_poster_url}}" alt="profile author img" onerror="this.src='{{ base_details.default_poster_url }}';">
+                    <img src="{{request.user.last_name}}" alt="profile author img" onerror="this.src='{{ base_details.default_poster_url }}';">
                 </div>
                 <div class="profile-subscribe">
                     <span><i class="fa fa-users"></i>6</span>
@@ -254,8 +254,8 @@
 
                                                     <div class="upload-video">
                                                         <label for="videoUpload" class="button">Upload video File</label>
-                                                        <input type="file" id="videoUpload" class="show-for-sr" name="video_file" required>
-                                                        <span>No file chosen</span>
+                                                        <input onchange="javascript:updateList('videoUpload','videoUploadid')" type="file" id="videoUpload" class="show-for-sr" name="video_file" required>
+                                                        <span id="videoUploadid">No file chosen</span>
                                                     </div>
                                                     <!-- mp4, m4v, webmv, webm, ogv and flv. -->
                                                     <p class="extraMargin"> Supported Video Formats: MOV, avi , mp4 , webm , mkv , flv  </p>
@@ -302,12 +302,47 @@
                                                             </select>
                                                         </label>
                                                     </div>
-                                                    <div class="upload-video">
+                                                    <!-- <div class="upload-video">
                                                         <label for="imgUpload" class="button">Upload Video Thumbnail</label>
-                                                        <input type="file" id="imgUpload" class="show-for-sr" name="poster" required>
-                                                        <span>No file chosen</span>
-                                                    </div>
+                                                        <input onchange="javascript:updateList()" type="file" id="file" class="show-for-sr" name="poster" required>
+                                                        <span id="fileList">No file chosen</span>
+                                                    </div> -->
                                                 </div>
+                                                <div class="large-12 columns">
+                                                    <div class="large-12 columns upload-video">
+                                                        <label for="imgUpload" class="button">Upload Profile Image</label>
+                                                        <input  onchange="javascript:updateList('file','fileList')" id="imgUpload" type="file" id="file" class="show-for-sr" name="poster" >
+                                                        <span id="fileList">No file chosen</span>
+                                                    </div>
+
+                                                    <p class="extraMargin"> Supported Video Formats: webm , png , jpg  </p>
+
+
+
+
+                                                <script type="application/javascript">
+                                                    updateList = function(file,fileList) {
+                                                     var input = document.getElementById(file);
+                                                     var output = document.getElementById(fileList);
+        
+                                                     output.innerHTML ="input.file.selected" ;
+                                                     // for (var i = 0; i < input.files.length; ++i) {
+                                                     //     output.innerHTML +=  "hello";
+                                                     // }
+        
+                                                     
+                                                     
+                                                     }
+        
+        
+                                                     $('#button').click(function(){
+                                                         $("input[type='file']").trigger('click');
+                                                         })
+        
+                                                         $("input[type='file']").change(function(){
+                                                         $('#val').text(this.value.replace(/C:\\fakepath\\/i, ''))
+                                                         }) 
+                                              </script>    
                                                 <!-- <div class="large-12 columns">
                                                     <div class="video-sprite clearfix">
                                                         <div class="video-layout">
@@ -339,7 +374,7 @@
                                         </form>
 
 
-
+                                       
 
 
 

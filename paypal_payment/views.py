@@ -102,7 +102,7 @@ def process_payment(request,pay_view):
 def checkout(request):
     return render(request, 'paypal_payment/checkout.html')
 
-@login_required(login_url='login_user')
+@login_required(login_url='register_user')
 def paymentComplete(request):
     body = json.loads(request.body)
     print('BODY:', body)
@@ -144,8 +144,12 @@ def paymentComplete(request):
 
     #return JsonResponse('Payment completed ok report!', safe=False)
 
-@login_required(login_url='login_user')
+@login_required(login_url='register_user')
 def checkout(request, pk,video_id=0):
+
+    redirect_url=request.META.get("PATH_INFO", '')
+    # gdata=get_json_from_request(request)
+    print(redirect_url,"*******************in checkout****************(((((((((((((((((")
     print(pk,video_id,type(video_id))
     if video_id==0:
 

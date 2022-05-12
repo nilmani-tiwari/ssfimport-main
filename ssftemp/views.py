@@ -235,6 +235,10 @@ def logoutUser(request):
 
 
 def register_user(request,url="/"): 
+
+    redirect_url=request.META
+    # gdata=get_json_from_request(request)
+    print(redirect_url,"*******************ok report in register****************(((((((((((((((((")
     dd=project_image.objects.values("image","slug")
     context={}
     # print("reloading 1234556")
@@ -310,7 +314,7 @@ def register_user(request,url="/"):
     return render(request,'login-register.html' , context)
 
 
-@login_required(login_url='login_user')
+@login_required(login_url='register_user')
 def myprofile(request):
     context={}
     user_id=request.user.id
@@ -340,7 +344,7 @@ def myprofile(request):
     return render(request, 'profile-page-v1.html',context)
 
 
-@login_required(login_url='login_user')
+@login_required(login_url='register_user')
 def edit_profile(request):
     context={}
     user_id=request.user.id
@@ -401,8 +405,11 @@ def subscribe_plan(request):
 
 
 #upload video
-@login_required(login_url='login_user')
+@login_required(login_url='register_user')
 def submit_post(request): 
+    redirect_url=request.META.get("PATH_INFO", '')
+    # gdata=get_json_from_request(request)
+    print(redirect_url,"***********************************(((((((((((((((((")
 
     dd=project_image.objects.values("image","slug")
     context={}
@@ -446,6 +453,7 @@ def submit_post(request):
 
             print(uid,super_status,name)
             messages.success(request, "successfully saved!!")
+            return redirect(f'/{obj.slug}')
             
 
         print(description,title)
@@ -458,7 +466,7 @@ def submit_post(request):
 
 
 #upload video
-@login_required(login_url='login_user')
+@login_required(login_url='register_user')
 def upload_video(request): 
     dd=project_image.objects.values("image","slug")
     context={}
@@ -490,7 +498,9 @@ def upload_video(request):
                 obj.save()
 
             print(uid,super_status,name)
-            messages.success(request, "successfully saved!!")
+            # messages.success(request, "successfully saved!!")
+            print(f'/{obj.slug} (((((((((((((((((((((&&&&&&&&&&&&&&&&&&&*******************')
+            return redirect(f'/{obj.slug}')
             
 
         print(description,title)

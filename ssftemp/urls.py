@@ -12,7 +12,7 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
     path('', homepage.as_view(), name='homepage'),
     # path('<slug:slug>/', login_required(single_video.as_view(),login_url='/admin/login/?next=/admin/'), name='single_video'),
-    path('<slug:slug>/', login_required(single_video.as_view(),login_url='/login_user/'), name='single_video'),
+    path('<slug:slug>/', login_required(single_video.as_view(),login_url='/register_user/'), name='single_video'),
 
     # path('hitcount/', include(('hitcount.urls', 'hitcount'), namespace='hitcount')),
 ]
