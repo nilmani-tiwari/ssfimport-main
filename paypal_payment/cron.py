@@ -1,5 +1,9 @@
 from django_cron import CronJobBase, Schedule
 from paypal_payment.models import *
+from datetime import datetime
+from datetime import timedelta
+from datetime import date
+
 class MyCronJob(CronJobBase):
     RUN_EVERY_MINS = 10 # every 2 hours
 
@@ -41,6 +45,9 @@ def my_cron_job():
     # your functionality goes here
     obj=s3control(active=False)
     obj.save()
-    data=ViewPlan.objects.all().filter(active=True).update(active=False)
+    data=ViewPlan.objects.filter(active=True).update(active=False)
+    Begindatestring = date.today()
+    PlanSubscribedUser.objects.filter(expiry_date=Begindatestring).update(active=False)
+
     
     print("**************cron************$$$$$$22222$$$*****************")

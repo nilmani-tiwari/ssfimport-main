@@ -274,7 +274,7 @@ def register_user(request,url="/"):
                     #return redirect('/')
 
             else:
-                user, created = User.objects.get_or_create(username=username, is_staff=0, is_active=1,)
+                user, created = User.objects.get_or_create(username=username,email=email, is_staff=0, is_active=1,)
                                                                 
                 user.set_password(password)
                 user.save()
@@ -321,6 +321,25 @@ def myprofile(request):
     user = User.objects.get(id=user_id)
 
     user_profile=UserProfile.objects.filter(user__id=user_id)
+
+    # comment video count
+    uid=request.user.pk
+    super_status=request.user.is_superuser
+    all_video=VideoUpload.objects.all()
+    if super_status:
+        t= all_video.filter(vendor_id=0)
+        total=t.count()
+        context.update({"total":total})
+    else:
+        t=all_video.filter(vendor_id=uid)
+        total= t.count()
+        context.update({"total":total})
+    id_tuple=t.values("video_id")
+
+    cmnt=UserComment.objects.filter(content_type="video",content_id__in=id_tuple)   
+    context.update({"comments":cmnt.count()})
+     # comment video count end
+
     if user_profile.exists():
         user_profile=user_profile.first()
         context.update({"user_profile":user_profile})
@@ -350,6 +369,24 @@ def edit_profile(request):
     user_id=request.user.id
     usr = User.objects.filter(id=user_id)
     user=usr.first()
+
+     # comment video count
+    uid=request.user.pk
+    super_status=request.user.is_superuser
+    all_video=VideoUpload.objects.all()
+    if super_status:
+        t= all_video.filter(vendor_id=0)
+        total=t.count()
+        context.update({"total":total})
+    else:
+        t=all_video.filter(vendor_id=uid)
+        total= t.count()
+        context.update({"total":total})
+    id_tuple=t.values("video_id")
+
+    cmnt=UserComment.objects.filter(content_type="video",content_id__in=id_tuple)   
+    context.update({"comments":cmnt.count()})
+     # comment video count end
 
     # print(usr.values(),user)
     context.update(base_data())
@@ -419,12 +456,22 @@ def submit_post(request):
     super_status=request.user.is_superuser
     all_video=VideoUpload.objects.all()
     if super_status:
-        total= all_video.filter(vendor_id=0).count()
+        t= all_video.filter(vendor_id=0)
+        total=t.count()
         context.update({"total":total})
     else:
-        total= all_video.filter(vendor_id=uid).count()
+        t=all_video.filter(vendor_id=uid)
+        total= t.count()
         context.update({"total":total})
-
+    id_tuple=t.values("video_id")
+    # all=UserFavoriteVideo.objects.filter(content_type="video",content_id=video_id)
+    #     like=all.filter(label="like").count()
+    #     dislike=all.filter(label="dislike").count()
+    #     fab=all.filter(fab=True).count()
+    cmnt=UserComment.objects.filter(content_type="video",content_id__in=id_tuple)
+        # comment=UserComment.objects.filter(content_type="video",content_id=video_id).order_by("-created_at")
+        # cmnt=comment.count()
+    context.update({"comments":cmnt.count()})
     if request.method == 'POST':
         title = request.POST.get('title') 
         description =request.POST.get('description')

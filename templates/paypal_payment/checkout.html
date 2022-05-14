@@ -11,14 +11,14 @@
                 <div class="row collapse borderBottom">
                     <div class="medium-6 large-centered medium-centered">
                         <div class="page-heading text-center">
-                            <h3 style="font-size: 28px;">{{plan_title}}</h3>
+                            <h3 style="font-size: 28px;">{{plan_title}}{{product.plan_id}}</h3>
                             <!-- <h3 style="text-align: left; font-size: 15px;">To renew a subscription, first sign in with your existing login and password here.
                                 Your receipts and statements will show a charge from Mark Schoen Productions.
                                 Note that we zealously protect the privacy of our users. We will never share your personal information or viewing history with outside parties.</h3> -->
                                 
 
 								<div class="googleAdv">
-									<a href="#"><img src="{{poster_url}}" alt="googel ads" onerror="this.src='{{ base_details.default_poster_url }}';"></a>
+									<a href="{% url 'single_video' slug %}"><img src="{{poster_url}}" alt="googel ads" onerror="this.src='{{ base_details.default_poster_url }}';"></a>
 								</div>
 
 								{% if pay_per_view == True %}
@@ -162,7 +162,14 @@
 			  <script src="https://www.paypal.com/sdk/js?client-id=AfYgaf7iJ3Dbtm9-pPSn6TSMAq2OQzv0ZbDOrRopPg_kJPgpFv7oNywR9dc1dKp8kMGrOwFM-sSeHrnO&currency=USD"></script>
  
 			 
-			 <script>			
+			 <script>
+			var csrftoken = getCookie('csrftoken');
+			var total = '{{product.price}}';
+			var price = '{{product.price}}';
+			var productId = '{{product.plan_id}}';
+			var video_id ='{{video_id}}'
+			var pay_per_view='{{pay_per_view}}';	
+
 			  function initPayPalButton() {
 				paypal.Buttons({
 				  style: {
@@ -173,9 +180,10 @@
 					
 				  },
 		  
+				    
 				  createOrder: function(data, actions) {
 					return actions.order.create({
-					  purchase_units: [{"amount":{"currency_code":"USD","value":1}}]
+					  purchase_units: [{"amount":{"currency_code":"USD","value":price}}]
 					});
 				  },
 		  
@@ -183,12 +191,22 @@
 					return actions.order.capture().then(function(orderData) {
 					  
 					  // Full available details
-					  console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+					//   console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+					  var url = "{% url 'complete' %}"
+
+						fetch(url, {
+							method:'POST',
+							headers:{
+								'Content-type':'application/json',
+								'X-CSRFToken':csrftoken,
+							},
+							body:JSON.stringify({'productId':productId,"video_id":video_id,"pay_per_view":pay_per_view,"total":total,"report":orderData})
+						})
 		  
 					  // Show a success message within this page, e.g.
 					  const element = document.getElementById('paypal-button-container');
 					  element.innerHTML = '';
-					  element.innerHTML = '<h3>Thank you for your payment!</h3>';
+					  element.innerHTML = "<button  class='button expanded btnclr' ><a href='{% url 'single_video' slug %}''>Play Now</a></button>";
 		  
 					  // Or go to another URL:  actions.redirect('thank_you.html');
 					  

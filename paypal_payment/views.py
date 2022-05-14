@@ -21,6 +21,15 @@ from ssf.models import *
 
 from django.http import JsonResponse
 import json
+from datetime import timedelta
+
+from datetime import datetime
+from datetime import timedelta
+from datetime import date
+
+  
+
+
 from django.contrib.auth.decorators import login_required
 
 
@@ -105,6 +114,8 @@ def checkout(request):
 @login_required(login_url='register_user')
 def paymentComplete(request):
     body = json.loads(request.body)
+    Begindatestring = date.today()
+    
     print('BODY:', body)
     
     #print("ccccccccccccccccccc",plan)
@@ -113,16 +124,21 @@ def paymentComplete(request):
     user_id=request.user.pk
     pay_per_view=body['pay_per_view']
     total=body['total']
+    report=body['report']
 
     redirect_url="/"
-    if video_id==0:
+    if pay_per_view==False:
+        print("plan((((((((((((((((((((((((((((((((((((((()__________________",body['productId'])
+    if video_id=="0" or pay_per_view=="False":
+        print(1)
         plan = Plan.objects.get(plan_id=body['productId'])
         plan_id=plan.pk
-        new=PlanSubscribedUser(plan=plan_id,user=user_id,active=True,username=request.user.username,amount=plan.price)
+        new=PlanSubscribedUser(plan=plan,user=user_id,active=True,username=request.user.username,email=request.user.email,amount=plan.price,log_status=report,expiry_date=Begindatestring + timedelta(days=plan.duration_day))
         new.save()
         return redirect(redirect_url)
     else:
-        new=ViewPlan(video=video_id,user=user_id,active=True,username=request.user.username,amount=total)
+        print(2)
+        new=ViewPlan(video=video_id,user=user_id,active=True,username=request.user.username,email=request.user.email,amount=total,log_status=report,expiry_date=Begindatestring + timedelta(days=1))
         new.save()
         ul= VideoUpload.objects.values().filter(video_id=body['video_id']).first()["slug"]
         print(ul)
@@ -161,8 +177,8 @@ def checkout(request, pk,video_id=0):
         #print(pk,video_id,type(video_id))
         return render(request, 'paypal_payment/checkout.html', context)
     else:
-        product={"price":0.99}
-        plan_title_details={"plan_title":"2. Pay Per View ","video_id":video_id,"pay_per_view":False}
+        product={"price":0.99,"plan_id":11}
+        plan_title_details={"plan_title":"2. Pay Per View ","video_id":video_id,"pay_per_view":"True"}
         context = {'product':product}
         context.update(base_data())
         context.update(plan_title_details)
