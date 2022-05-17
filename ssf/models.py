@@ -549,6 +549,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='user_profile', on_delete=CASCADE)
     name = models.CharField(max_length=100,blank=True, null=True)
     email = models.CharField(max_length=100,blank=True, null=True)
+    desc=models.TextField(max_length=2000,blank=True, null=True)
     password = models.CharField(max_length=100,blank=True, null=True)
     image = models.ImageField(upload_to='project_image/', blank=True, null=True)
     image_url = models.URLField(null=True, blank=True) 
@@ -563,6 +564,23 @@ class UserProfile(models.Model):
     class Meta:
         verbose_name = "User Profile"
         verbose_name_plural = "9- User Profile"
+
+class UserContactMessage(models.Model):
+    user = models.ForeignKey(User, related_name='user_contact_us', on_delete=CASCADE)
+    name = models.CharField(max_length=100,blank=True, null=True)
+    email = models.CharField(max_length=100,blank=True, null=True)
+    subject = models.CharField(max_length=100,blank=True, null=True)
+    message=models.TextField(max_length=2000,blank=True, null=True)
+    active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(blank=True, auto_now=True, null=True)
+
+    # def __str__(self):
+    #     return f"{self.user}  {self.email}"
+
+    class Meta:
+        verbose_name = "User Profile"
+        verbose_name_plural = "10- User Contact Us Message"
 
 
 # class VideoBlogSubscription(models.Model):

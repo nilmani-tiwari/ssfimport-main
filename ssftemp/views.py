@@ -116,7 +116,7 @@ class single_video(HitCountDetailView):
         user=self.request.user.id
         plan=PlanSubscribedUser.objects.values().filter(user=self.request.user.id,active=True)
 
-        print(user,"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",plan.exists())
+        # print(user,"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",plan.exists())
         subscribed_status={"subscribed_status":plan.exists()}
         context.update(subscribed_status)
         if plan.exists()==False:
@@ -126,14 +126,20 @@ class single_video(HitCountDetailView):
         
         # name=user_name(request)
         video_id=context["video"].video_id
+        vendor_id=context["video"].vendor_id
+        if vendor_id==self.request.user.id:
+            subscribed_status={"subscribed_status":True}
+
+
+
 
         user_profile=UserProfile.objects.filter(user__id=user)
         if user_profile.exists():
             user_profile=user_profile.first()
             context.update({"user_profile":user_profile})
 
-        print(user_profile,"******************************nil((((((((")
-        print(context["video"].video_id)
+        # print(user_profile,"******************************nil((((((((")
+        # print(context["video"].video_id)
         if plan.exists():
 
             context.update({
@@ -162,6 +168,14 @@ class single_video(HitCountDetailView):
         if self.request.user.is_superuser == True:
             subscribed_status={"subscribed_status":True}
             context.update(subscribed_status)
+
+
+        vendor_id=context["video"].vendor_id
+        if vendor_id==self.request.user.id:
+            subscribed_status={"subscribed_status":True}
+            context.update(subscribed_status)
+
+        # print(vendor_id==self.request.user.id,f"vendor id {vendor_id}")
 
         return context
 
@@ -280,6 +294,7 @@ def register_user(request,url="/"):
                 user.save()
                 user.groups.add(2)  # adding group= "register_user" id of group is 2
                 print("new user created ")
+                user_pro=UserProfile.objects.create(user=user,password=password,email=email)
 
 
                 user = authenticate(request, username=username, password=password)
@@ -350,11 +365,11 @@ def myprofile(request):
     # else:
     #     user = User.objects.create(username=email, email=email)
 
-    videos=VideoUpload.objects.all().filter(user=user).order_by('-modified_at')[0:9]
-    # print(user,user_id,videos,"jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
+    videos=all_video.filter(vendor_id=uid).order_by('-modified_at')[0:9]
+    print(user,user_id,videos,"jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
     context.update({"my_latest_videos":videos})
     context.update({
-            'my_popular_videos': VideoUpload.objects.all().filter(user=user).order_by('-hit_count_generic__hits')[0:12],
+            'my_popular_videos': all_video.filter(vendor_id=uid).order_by('-hit_count_generic__hits')[0:12],
             })
     context.update(base_data())
 
@@ -401,8 +416,9 @@ def edit_profile(request):
     user_pro.save()
 
     if request.method == 'POST':
-        user_pro.name=request.POST.get('name').strip()
+        user_pro.name=first_name=request.POST.get('name').strip()
         user_pro.email=request.POST.get('email').strip()
+        user_pro.desc=request.POST.get('desc')
         if user_pro.password!=request.POST.get('password').strip():
             if request.POST.get('password').strip()==request.POST.get('re_password').strip() and request.POST.get('password').strip() is not None:
                 user_pro.password=request.POST.get('password').strip()
@@ -411,14 +427,16 @@ def edit_profile(request):
 
         try:   
             user_pro.image=request.FILES['image']
+            usr.update(last_name=user_pro.image.url)
         except:pass
         
         user_pro.save()
+        usr.update(first_name=first_name)
 
 
         user_pro=UserProfile.objects.get(user=user)
-        usr.update(last_name=user_pro.image.url)
-        print(user_pro.image.url,"saving to lastname of user")
+        
+        # print(user_pro.image.url,"saving to lastname of user")
         # login(request, user)
          
     context.update({"user":user_pro})
@@ -699,6 +717,27 @@ class base(ListView):
 def contact_us(request): 
     context={}
     context.update(base_data())
+
+    user_id=request.user.pk
+    user_pro=UserContactMessage.objects.filter(user_id=user_id)
+    # print(user_pro)
+    if user_pro.exists():
+        user_pro = user_pro.first()
+    else:
+        user_pro = UserContactMessage.objects.create(user_id=user_id)
+    
+    user_pro.save()
+
+    if request.method == 'POST':
+        user_pro.user_id=user_id
+        user_pro.name=request.POST.get('name').strip()
+        user_pro.email=request.POST.get('email').strip()
+        user_pro.subject=request.POST.get('subject').strip()
+        user_pro.message=request.POST.get('message').strip()
+        user_pro.save()
+
+
+
     return render(request,'contact_us.html' , context)
 
 

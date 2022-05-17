@@ -73,6 +73,16 @@ class UserProfileAdmin(admin.ModelAdmin):
     list_filter = ['active','created_at']
 
 
+    #UserContactMessage
+
+
+@admin.register(UserContactMessage)
+class UserContactMessageAdmin(admin.ModelAdmin):
+    list_display = ['user','name','email','subject','active']
+    search_fields  = ['user','name','email','subject','created_at']
+    list_filter = ['active','created_at']
+
+
 # @admin.register(VideoBlogSubscription)
 # class VideoBlogSubscriptionAdmin(admin.ModelAdmin):
 #     list_display = ['user', 'subscription_type', 'subscribed', 'created_at', 'modified_at']

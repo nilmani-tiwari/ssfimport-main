@@ -81,7 +81,7 @@
                                                     <i class="fa fa-phone"></i>
                                                     <h6>Phone Numers</h6>
                                                     <p><strong>Office No :</strong> 626-660-5823
-                                                        <br/> <strong>Fax No : </strong> </p>
+                                                        <!-- <br/> <strong>Fax No : </strong> </p> -->
                                                 </div>
                                             </div>
                                             <div class="large-6 medium-6 columns">
@@ -105,23 +105,24 @@
                                     <h4>We'd Love to hear from you!</h4>
                                     <div class="register-form">
                                     <form method="post" data-abide novalidate>
+                                        {% csrf_token %}
                                         <div data-abide-error class="alert callout" style="display: none;">
                                             <p><i class="fa fa-exclamation-triangle"></i> There are some errors in your form.</p>
                                         </div>
                                         <div class="input-group">
                                             <span class="input-group-label"><i class="fa fa-user"></i></span>
-                                            <input class="input-group-field" type="text" placeholder="Enter your name" required>
+                                            <input class="input-group-field" type="text" placeholder="Enter your name" name="name" value="{{request.user.first_name}}" required>
                                         </div>
                                         <div class="input-group">
                                             <span class="input-group-label"><i class="fa fa-envelope"></i></span>
-                                            <input class="input-group-field" type="email" placeholder="Enter your email" required>
+                                            <input class="input-group-field" type="email" placeholder="Enter your email" value="{{request.user.email}}" name="email" required>
                                         </div>
                                         <div class="input-group">
                                             <span class="input-group-label"><i class="fa fa-book"></i></span>
-                                            <input class="input-group-field" type="text" placeholder="Enter your subject" required>
+                                            <input class="input-group-field" type="text" placeholder="Enter your subject" name="subject" required>
                                         </div>
-                                        <textarea required placeholder="Your message"></textarea>
-                                        <button class="button expanded" type="submit" name="submit">register Now</button>
+                                        <textarea required placeholder="Your message" name="message"></textarea>
+                                        <button class="button expanded" type="submit" name="submit">Submit</button>
                                     </form>
                                     </div>
                                 </div>
