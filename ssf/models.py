@@ -373,7 +373,7 @@ class VideoUpload(models.Model):
             self.poster_url = self.poster_image.url
             
         elif self.poster_image and ("uploads/poster/" not in str(self.poster_image) ):
-            self.poster_url = settings.AWS_S3_ENDPOINT_URL+settings.AWS_STORAGE_BUCKET_NAME+"/uploads/poster/"+get_poster_path(VideoUpload,str(self.poster_image),"")
+            self.poster_url = settings.AWS_S3_ENDPOINT_URL+settings.AWS_STORAGE_BUCKET_NAME+"/uploads/poster/"+    str(self.poster_image.url)
             
         if  self.video and ("uploads/VideoUpload/" in str(self.video) ):
             self.video_url = self.video.url
