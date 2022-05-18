@@ -7,6 +7,7 @@ from django.db.models import CASCADE, SET_NULL
 from django.utils.text import slugify
 from django.conf import settings
 from django.contrib.auth.models import User
+from ckeditor.fields import RichTextField
 import uuid
 import os
 # Create your models here.
@@ -221,8 +222,10 @@ class project_details(models.Model):
 class BlogPost(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
+    content=RichTextField(blank=True,null=True)
     blog_image = models.ImageField(upload_to='blog_image/', blank=True, null=True)
     slug = models.SlugField(unique=True, max_length=100)
+    author=models.CharField(max_length=100, blank=True, null=True)
     published = models.DateField(auto_now_add=True)
     hit_count=models.IntegerField(default=0, blank=True, null=True)
     hit_count_generic = GenericRelation(HitCount, object_id_field='object_pk', related_query_name='hit_count_generic_relation')

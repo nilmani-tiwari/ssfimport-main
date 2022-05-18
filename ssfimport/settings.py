@@ -65,6 +65,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     
     #  'login',
+    # 'texteditor',
+    'ckeditor',
 
     'ssftemp',
     # 'localwp',
