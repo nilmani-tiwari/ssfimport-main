@@ -438,6 +438,9 @@ def edit_profile(request):
         
         # print(user_pro.image.url,"saving to lastname of user")
         # login(request, user)
+        return redirect('/myprofile/')
+
+
          
     context.update({"user":user_pro})
     return render(request, 'edit_profile.html',context)

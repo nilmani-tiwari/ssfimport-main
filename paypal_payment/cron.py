@@ -39,15 +39,22 @@ class Command(BaseCommand):
 
         cron.write()
 
+import datetime
+
 
 def my_cron_job():
     from paypal_payment.models import ViewPlan
     # your functionality goes here
+    today_now = datetime.datetime.now()
     obj=s3control(active=False)
     obj.save()
     data=ViewPlan.objects.filter(active=True).update(active=False)
     Begindatestring = date.today()
-    PlanSubscribedUser.objects.filter(expiry_date=Begindatestring).update(active=False)
+    # sdata=PlanSubscribedUser.objects.filter(expiry_date=Begindatestring)
+    sdata=PlanSubscribedUser.objects.filter(expiry_date__lt=today_now)
+    sdata.update(active=False)
+    # print(sdata.expiry_date==Begindatestring,sdata.expiry_date,Begindatestring)
+    print(Begindatestring,"*****",today_now)
 
     
     print("**************cron************$$$$$$22222$$$*****************")
