@@ -716,7 +716,7 @@ class base(ListView):
 
 
 
-
+@login_required(login_url='register_user')
 def contact_us(request): 
     context={}
     context.update(base_data())
