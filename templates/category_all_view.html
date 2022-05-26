@@ -88,7 +88,7 @@
                 <div class="row secBg">
                     <div class="large-12 columns">
                         <div class="row column head-text clearfix">
-                            <p class="pull-left">All Videos : <span>1,862 Videos posted</span></p>
+                            <p class="pull-left">All Videos : <span>{{count}} Videos posted</span></p>
                             <div class="grid-system pull-right show-for-large">
                                 <a class="secondary-button current grid-default" href="#"><i class="fa fa-th"></i></a>
                                 <a class="secondary-button grid-medium" href="#"><i class="fa fa-th-large"></i></a>
@@ -98,9 +98,9 @@
                         <div class="tabs-content" data-tabs-content="newVideos">
                             <div class="tabs-panel is-active" id="new-all">
                                 <div class="row list-group">
-                        {% for i in subcat %}
+                        <!-- {% for i in subcat %}
                                     <a class="button radius btnnn" href="/videos/{{i.sub_cat.slug}}/{{i.slug}}">{{i.subcategory_name}}</a>
-                        {% endfor %}
+                        {% endfor %} -->
 
                         </div>
                                     <!-- <a class="button radius btnnn" href="all-video.html">View All Video</a>
@@ -461,7 +461,7 @@
                 <div class="row secBg">
                     <div class="large-12 columns">
                         <div class="row column head-text clearfix">
-                            <p class="pull-left">All Videos : <span>1,862 Videos posted</span></p>
+                            <p class="pull-left">All Videos : <span>{{count}} Videos posted</span></p>
                             <div class="grid-system pull-right show-for-large">
                                 <a class="secondary-button current grid-default" href="#"><i class="fa fa-th"></i></a>
                                 <a class="secondary-button grid-medium" href="#"><i class="fa fa-th-large"></i></a>

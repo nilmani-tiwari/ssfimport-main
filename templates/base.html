@@ -176,14 +176,25 @@
       <!--header-->
   <div class="off-canvas position-left light-off-menu" id="offCanvas-responsive" data-off-canvas>
     <div class="off-menu-close">
+
+        {% if request.user.is_anonymous %}   
         <h3>Menu</h3>
-        <span data-toggle="offCanvas-responsive"><i class="fa fa-times"></i></span>
+     <span data-toggle="offCanvas-responsive"><i class="fa fa-times"></i></span>
+        {% endif %}
+  
+        {% if request.user.username %}
+            <div  class="res-circle">
+                <div  class="circle-txt"><a  href="/myprofile/">{{request.user.username|slice:1}}</a></div>
+               <h3 class="circle-txt-right"> <a  href="/edit-profile/">{{request.user.username}} <span class="fa fa-pencil-square-o"></span></a> </h3>
+              </div>
+
+        {% endif %}
     </div>
     <ul class="vertical menu off-menu" data-responsive-menu="drilldown">
         <li class="has-submenu">
             <a href="/"><i class="fa fa-home"></i>Home</a>
             <!-- <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
-                <li><a href="index.html"><i class="fa fa-home"></i>Home page v1 </a></li>
+                <li><a href="/"><i class="fa fa-home"></i>Home page v1 </a></li>
                 <li><a href="home-v2.html"><i class="fa fa-home"></i>Home page v2</a></li>
                 <li><a href="home-v3.html"><i class="fa fa-home"></i>Home page v3</a></li>
                 <li><a href="home-v4.html"><i class="fa fa-home"></i>Home page v4</a></li>
@@ -209,7 +220,21 @@
             <a href="#"><i class="fa fa-th"></i>category</a>
             <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up"> 
                 {% for i in cat %}
-                <li><a href="{% url 'all_view' i.slug %}"><i class="fa fa-th"></i>{{i.category_name}}</a></li>
+                <li><a href="{% url 'all_view' i.slug %}"><i class="fa fa-th"></i>{{i.category_name}}</a>
+                    
+                    <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
+
+
+
+                       {% for j in subcat %}
+
+                       {% if i.category_name  ==  j.sub_cat.category_name %}
+                        <li><a href="{% url 'all_view' 'category' j.slug %}"><i class="fa fa-magic"></i>{{j.subcategory_name }}</a></li>
+
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                </li>
                 {% endfor %}
                
               
@@ -263,7 +288,7 @@
         <li><a href="/contact_us"><i class="fa fa-envelope"></i>contact</a></li>
     </ul>
     <div class="responsive-search">
-        <form method="post">
+        <form action="/search" method="GET">
             <div class="input-group">
                 <input class="input-group-field" type="text" placeholder="search Here">
                 <div class="input-group-button">
@@ -291,13 +316,40 @@
             <li>
                 <a href="/submit_post">upload Video</a>
             </li>
-            <li class="dropdown-login">
+
+
+            {% if request.user.is_anonymous %}   
+            <li>
+                <a href="/register_user">Register</a>
+            </li>
+
+            <li>
+                <a class=""  href="/login_user">login</a>
+            </li>
+            {% endif %}
+
+
+            {% if request.user.username %}
+            <li><a class=""  href="/logout">LogOut</a></li>
+            
+            
+
+            <!-- <button class="blink submit" style="width: 225px; height: auto;" type="" name="subscribe"><a href="/logout">LogOut</a></button> -->
+            {% endif %}
+
+
+
+
+            <!-- <li class="dropdown-login">
                 <a href="/register_user">Register</a>
             </li>
 
             <li>
                 <a href="/login_user">Login</a>
-            </li>
+            </li> -->
+
+
+
         </ul>
     </div>
 </div>
@@ -371,6 +423,8 @@
 
                                         {% endif %}
                                     </form>
+
+                            
                                     <hr>
 
                                     <p class="text-center">New here? <a class="newaccount" href="/register_user">Create a new Account</a></p>
@@ -392,7 +446,7 @@
     <!-- <span>{{base_details.about_logo}}</span><br>
     <span style="font-size: 15px; color: coral;">— Douglas Braun-Harvey, MFT CGP —</span> -->
 
-        <a class="mobile_off" href="index.html"><img src="{{base_details.logo_url}}" alt="logo"></a>
+        <a class="mobile_off" href="/"><img src="{{base_details.logo_url}}" alt="logo"></a>
 
 
     <!-- {{project_details}} -->
@@ -419,8 +473,8 @@
                                 <div class="top-bar-left">
                                     <ul class="menu">
                                         <li class="menu-text">
-                                            <!-- <a href="index.html"><img src="{% static 'images/logo.png' %}" alt="logo"></a> -->
-                                            <!-- <a class="div11_desktop" href="index.html"><img src="{{base_details.logo_url}}" alt="logo"></a> -->
+                                            <!-- <a href="/"><img src="{% static 'images/logo.png' %}" alt="logo"></a> -->
+                                            <!-- <a class="div11_desktop" href="/"><img src="{{base_details.logo_url}}" alt="logo"></a> -->
                                         </li>
                                     </ul>
                                 </div>
@@ -434,10 +488,10 @@
 
                                 <div class="top-bar-right">
                                     <ul class="menu vertical medium-horizontal" data-responsive-menu="drilldown medium-dropdown">
-                                        <li class="has-submenu active">
+                                        <li class="has-submenu {{home_active}}">
                                             <a href="/"><i class="fa fa-home"></i>Home</a>
                                             <!-- <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
-                                                <li><a href="index.html"><i class="fa fa-home"></i>Home page v1 </a></li>
+                                                <li><a href="/"><i class="fa fa-home"></i>Home page v1 </a></li>
                                                 <li><a href="home-v2.html"><i class="fa fa-home"></i>Home page v2</a></li>
                                                 <li><a href="home-v3.html"><i class="fa fa-home"></i>Home page v3</a></li>
                                                 <li><a href="home-v4.html"><i class="fa fa-home"></i>Home page v4</a></li>
@@ -461,11 +515,38 @@
 
 
                                         <!-- <li><a href="/categories"><i class="fa fa-th"></i>category</a></li> -->
-                                        <li>
+
+                                        
+                                        <!-- <li>
                                             <a href="#"><i class="fa fa-th"></i>category</a>
                                             <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up"> 
                                                 {% for i in cat %}
                                                 <li><a href="{% url 'all_view' i.slug %}"><i class="fa fa-th"></i>{{i.category_name}}</a></li>
+                                                {% endfor %}
+                                               
+                                              
+                                            </ul>
+                                        </li> -->
+
+                                        <li class="{{category_active}}">
+                                            <a href="#"><i class="fa fa-th "></i>category</a>
+                                            <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up"> 
+                                                {% for i in cat %}
+                                                <li><a href="{% url 'all_view' i.slug %}"><i class="fa fa-th"></i>{{i.category_name}}</a>
+                                                    
+                                                    <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
+                                
+                                
+                                
+                                                       {% for j in subcat %}
+                                
+                                                       {% if i.category_name  ==  j.sub_cat.category_name %}
+                                                        <li><a href="{% url 'all_view' 'category' j.slug %}"><i class="fa fa-magic"></i>{{j.subcategory_name }}</a></li>
+                                
+                                                        {% endif %}
+                                                        {% endfor %}
+                                                    </ul>
+                                                </li>
                                                 {% endfor %}
                                                
                                               
@@ -479,7 +560,7 @@
 
 
 
-                                        <li>
+                                        <li class="{{blog_active}}">
                                             <a href="/blog"><i class="fa fa-edit"></i>blog</a>
                                             <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
                                                 <!-- <li><a href="blog-single-post.html"><i class="fa fa-edit"></i>blog single post</a></li> -->
@@ -512,7 +593,7 @@
 
                                         <!-- <li><a href="/about_us"><i class="fa fa-user"></i>about</a></li> -->
 
-                                        <li >
+                                        <li class="{{about_active}}">
                                             <a href="#"><i class="fa fa-user"></i>about</a>
                                             <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
                                                 <li><a href="/about_us"><i class="fa fa-user"></i>about us</a></li>
@@ -527,7 +608,7 @@
 
 
 
-                                        <li><a href="/contact_us"><i class="fa fa-envelope"></i>contact</a></li>
+                                        <li class="{{contact_active}}"><a href="/contact_us"><i class="fa fa-envelope"></i>contact</a></li>
                                     </ul>
                                 </div>
                             </div>

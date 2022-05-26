@@ -74,6 +74,7 @@ class homepage(ListView):
         context = super(homepage, self).get_context_data(**kwargs)
         context['poster_data'] = VideoUpload.objects.filter(active=True,home_active=True).values('poster_url',"slug",'title','hit_count_generic','video').order_by('-hit_count_generic__hits')
         context.update(base_data())
+        context["home_active"]="active"
         
         videos=VideoUpload.objects.all().filter(active=True,home_active=True).order_by('-modified_at')[0:24]
         context.update({"videos":videos})
@@ -232,7 +233,7 @@ def login_user(request):
 
         if user is not None:
             login(request, user)
-            return redirect(url)
+            return redirect("/")
         else:
             messages.info(request, 'Username OR password is incorrect')
             return redirect('/login_user')
@@ -581,6 +582,7 @@ def about_us(request):
     
     context={}
     context.update(base_data())
+    context["about_active"]="active"
 
 
     return render(request,'about/about-us.html' , context)
@@ -588,8 +590,10 @@ def about_us(request):
 
 def about_course(request): 
     
+    
     context={}
     context.update(base_data())
+    context["about_active"]="active"
 
 
     return render(request,'about/about_online_courses.html' , context)
@@ -598,6 +602,8 @@ def about_course(request):
 def blog(request): 
     context={}
     context.update(base_data())
+
+    context["blog_active"]="active"
 
     dd=project_image.objects.values("image","slug")
     p_data={}
@@ -648,36 +654,40 @@ def all_view(request,slug="0",sub_slug="0"):
     print(slug,sub_slug)
     context={}
     context.update(base_data())
+    context["category_active"]="active"
     subcat=VideoSubCategory.objects.all()
+    all_video=VideoUpload.objects.all()
+    count=all_video.count()
+    context.update({"count":count})
     if slug=="all":
-        context.update({"subcat":VideoSubCategory.objects.all()})
-        context.update({"all_video":VideoUpload.objects.all().filter(active=True).order_by('-modified_at')},)
+        context.update({"subcat":subcat})
+        context.update({"all_video":all_video.filter(active=True).order_by('-modified_at')},)
     elif slug=="populer":
-        context.update({"subcat":VideoSubCategory.objects.all()})
-        context.update({'all_video': VideoUpload.objects.all().filter(active=True).order_by('-hit_count_generic__hits')},)
+        context.update({"subcat":subcat})
+        context.update({'all_video': all_video.filter(active=True).order_by('-hit_count_generic__hits')},)
 
     elif slug=="category":
         sbid=VideoSubCategory.objects.get(slug=sub_slug).pk
-        context.update({"all_video":VideoUpload.objects.all().filter(active=True,sub_cat=sbid).order_by('-modified_at')},)
+        context.update({"all_video":all_video.filter(active=True,sub_cat=sbid).order_by('-modified_at')},)
 
     else:
         cid=VideoCategory.objects.get(slug=slug).pk
 
-        context.update({"subcat":VideoSubCategory.objects.all().filter(sub_cat=cid)})
+        context.update({"subcat":subcat.filter(sub_cat=cid)})
         
-        context.update({"all_video":VideoUpload.objects.all().filter(active=True,video_cat=cid).order_by('-modified_at')},)
+        context.update({"all_video":all_video.filter(active=True,video_cat=cid).order_by('-modified_at')},)
     
 
         if sub_slug!="0":
             try:
                 cid=VideoCategory.objects.get(slug=slug).pk
                 sbid=VideoSubCategory.objects.get(slug=sub_slug).pk
-                context.update({"subcat":VideoSubCategory.objects.all().filter(sub_cat=cid)})
-                context.update({"all_video":VideoUpload.objects.all().filter(active=True,video_cat=cid,sub_cat=sbid).order_by('-modified_at')},)
+                context.update({"subcat":subcat.filter(sub_cat=cid)})
+                context.update({"all_video":all_video.filter(active=True,video_cat=cid,sub_cat=sbid).order_by('-modified_at')},)
             except:
                 # cid=VideoCategory.objects.filter(slug=slug).first()
                 sbid=VideoSubCategory.objects.get(slug=sub_slug).pk
-                context.update({"all_video":VideoUpload.objects.all().filter(active=True,sub_cat=sbid).order_by('-modified_at')},)
+                context.update({"all_video":all_video.filter(active=True,sub_cat=sbid).order_by('-modified_at')},)
 
 
 
@@ -720,6 +730,8 @@ class base(ListView):
 def contact_us(request): 
     context={}
     context.update(base_data())
+
+    context["contact_active"]="active"
 
     user_id=request.user.pk
     user_pro=UserContactMessage.objects.filter(user_id=user_id)
