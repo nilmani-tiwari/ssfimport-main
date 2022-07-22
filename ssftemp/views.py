@@ -726,31 +726,69 @@ class base(ListView):
 
 
 
-@login_required(login_url='register_user')
+# @login_required(login_url='register_user')
 def contact_us(request): 
     context={}
     context.update(base_data())
 
     context["contact_active"]="active"
+    try:
 
-    user_id=request.user.pk
-    user_pro=UserContactMessage.objects.filter(user_id=user_id)
-    # print(user_pro)
-    if user_pro.exists():
-        user_pro = user_pro.first()
-    else:
-        user_pro = UserContactMessage.objects.create(user_id=user_id)
-    
-    user_pro.save()
+        user_id=request.user.pk
+        user_pro=UserContactMessage.objects.filter(user_id=user_id)
+        # print(user_pro)
+        if user_pro.exists():
+            user_pro = user_pro.first()
+        else:
+            user_pro = UserContactMessage.objects.create(user_id=user_id)
+            
+        user_pro.save()
+        user_logedin=True
+
+    except:
+        user_logedin=False
+        pass
 
     if request.method == 'POST':
-        user_pro.user_id=user_id
-        user_pro.name=request.POST.get('name').strip()
-        user_pro.email=request.POST.get('email').strip()
-        user_pro.subject=request.POST.get('subject').strip()
-        user_pro.message=request.POST.get('message').strip()
-        user_pro.save()
+        
+        name=request.POST.get('name').strip()
+        email=request.POST.get('email').strip()
+        subject=request.POST.get('subject').strip()
+        message=request.POST.get('message').strip()
 
+        if user_logedin:
+            user_pro.name=name
+            user_pro.email=email
+            user_pro.subject=subject
+            user_pro.message=message
+            user_pro.save()
+        else:
+            user=User.objects.filter(email=email)
+            if user.exists():
+
+                user_id=user.pk
+
+            else:
+                user=User.objects.create(username=email,emil=email,)
+                user_id=user.pk
+
+            user_pro = UserContactMessage.objects.create(user_id=user_id)
+            user_pro.name=name
+            user_pro.email=email
+            user_pro.subject=subject
+            user_pro.message=message
+            user_pro.save()
+
+
+            
+
+
+
+
+
+
+      
+       
 
 
     return render(request,'contact_us.html' , context)

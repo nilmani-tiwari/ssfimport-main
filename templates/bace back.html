@@ -24,11 +24,6 @@
 
 
     <style>
-        .navbarcss{
-            font-size: 23px !important;
-            font-weight: 500 !important;
-
-        }
             .res-circle {
       /* (A) PERCENTAGE WIDTH & BORDER RADIUS */
       width: 20%;
@@ -180,7 +175,6 @@
     <div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
       <!--header-->
   <div class="off-canvas position-left light-off-menu" id="offCanvas-responsive" data-off-canvas>
-    
     <div class="off-menu-close">
 
         {% if request.user.is_anonymous %}   
@@ -196,59 +190,95 @@
 
         {% endif %}
     </div>
-<ul class="vertical menu off-menu" data-responsive-menu="drilldown">
-    <li class="has-submenu">
-        <a href="/"><i class="fa fa-home"></i style="font:40px;">Home</a>
-      
-    </li>
-  
-    
+    <ul class="vertical menu off-menu" data-responsive-menu="drilldown">
+        <li class="has-submenu">
+            <a href="/"><i class="fa fa-home"></i>Home</a>
+            <!-- <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
+                <li><a href="/"><i class="fa fa-home"></i>Home page v1 </a></li>
+                <li><a href="home-v2.html"><i class="fa fa-home"></i>Home page v2</a></li>
+                <li><a href="home-v3.html"><i class="fa fa-home"></i>Home page v3</a></li>
+                <li><a href="home-v4.html"><i class="fa fa-home"></i>Home page v4</a></li>
+                <li><a href="home-v5.html"><i class="fa fa-home"></i>Home page v5</a></li>
+                <li><a href="home-v6.html"><i class="fa fa-home"></i>Home page v6</a></li>
+                <li><a href="home-v7.html"><i class="fa fa-home"></i>Home page v7</a></li>
+                <li><a href="home-v8.html"><i class="fa fa-home"></i>Home page v8</a></li>
+                <li><a href="home-v9.html"><i class="fa fa-home"></i>Home page v9</a></li>
+                <li><a href="home-v10.html"><i class="fa fa-home"></i>Home page v10</a></li>
+            </ul> -->
+        </li>
+        <!-- <li class="has-submenu" data-dropdown-menu="example1">
+            <a href="#"><i class="fa fa-film"></i>Videos</a>
+            <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
+                <li><a href="single-video-v1.html"><i class="fa fa-film"></i>single video v1</a></li>
+                <li><a href="single-video-v2.html"><i class="fa fa-film"></i>single video v2</a></li>
+                <li><a href="single-video-v3.html"><i class="fa fa-film"></i>single video v3</a></li>
+                <li><a href="submit-post.html"><i class="fa fa-film"></i>submit post</a></li>
+            </ul>
+        </li> -->
+        <!-- <li><a href="/categories"><i class="fa fa-th"></i>category</a></li> -->
+        <li>
+            <a href="#"><i class="fa fa-th"></i>category</a>
+            <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up"> 
+                {% for i in cat %}
+                <li><a href="{% url 'all_view' i.slug %}"><i class="fa fa-th"></i>{{i.category_name}}</a>
+                    
+                    <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
 
 
-    <li>
-        <a href="#"><i class="fa fa-th"></i>category</a>
-        <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up"> 
-            {% for i in cat %}
 
-            <li>
-                <a href="{% url 'all_view' i.slug %}"><i class="fa fa-magic"></i>{{i.category_name}}</a>
-                <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
+                       {% for j in subcat %}
 
-                    {% for j in subcat %}
-                     
-                    <li><a href="profile-page-v1.html"><i class="fa fa-magic"></i>profile v1</a></li>
-                    {% endfor %}
-                    <li><a href="profile-page-v1.html"><i class="fa fa-magic"></i>profile v1</a></li>
+                       {% if i.category_name  ==  j.sub_cat.category_name %}
+                        <li><a href="{% url 'all_view' 'category' j.slug %}"><i class="fa fa-magic"></i>{{j.subcategory_name }}</a></li>
 
-                    <li><a href="profile-page-v1.html"><i class="fa fa-magic"></i>profile v1</a></li>
-                    <li><a href="profile-page-v1.html"><i class="fa fa-magic"></i>profile v1</a></li>
-
-                   
-                </ul>
-                
-            </li>
-            {% endfor %}
-
-            
-           
-          
-        </ul>
-    </li>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endfor %}
+               
+              
+            </ul>
+        </li>
 
 
-    <li>
-        <a href="/blog"><i class="fa fa-edit"></i>blog</a>
-        <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
-            <!-- <li><a href="/blog-single-post"><i class="fa fa-edit"></i>blog single post</a></li> -->
-        </ul>
-    </li>
-       
+        <li>
+            <a href="/blog"><i class="fa fa-edit"></i>blog</a>
+            <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
+                <!-- <li><a href="/blog-single-post"><i class="fa fa-edit"></i>blog single post</a></li> -->
+            </ul>
+        </li>
+        <!-- <li>
+            <a href="/features"><i class="fa fa-magic"></i>features</a>
+            <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
+
+
+                <li><a href="/myprofile/"><i class="fa fa-magic"></i>MY Profile</a></li>
+                <li><a href="/login_user"><i class="fa fa-magic"></i>login</a></li>
+                <li><a href="/register_user"><i class="fa fa-magic"></i>Register</a></li>
+                <li><a href="/forgot_password"><i class="fa fa-magic"></i>Forgot Password</a></li>
+                <li><a href="/logout"><i class="fa fa-magic"></i>logout</a></li>
+
+
+              
+
+            </ul>
+        </li> -->
+
+
+
+        <!-- <li><a href="/about_us"><i class="fa fa-user"></i>about</a></li> -->
+
+
      <li >
             <a href="#"><i class="fa fa-user"></i>about</a>
             <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
                 <li><a href="/about_us"><i class="fa fa-user"></i>about us</a></li>
                 <li><a href="/online_course"><i class="fa fa-user"></i>online courses</a></li>
 
+                <!-- <li><a href="single-video-v3.html"><i class="fa fa-film"></i>single video v3</a></li>
+                <li><a href="submit-post.html"><i class="fa fa-film"></i>submit post</a></li> -->
+            
             
             </ul>
         </li>
@@ -275,7 +305,10 @@
         <a href="https://instagram.com/schoen.mark?utm_medium=copy_link"><i class="fa fa-instagram"></i></a>
 
 
-  
+        <!-- <a href="#"><i class="fa fa-google-plus"></i></a>
+        <a href="#"><i class="fa fa-vimeo"></i></a>
+        <a href="#"><i class="fa fa-youtube"></i></a> -->
+
 
     </div>
     <div class="top-button">
@@ -301,10 +334,19 @@
             
             
 
+            <!-- <button class="blink submit" style="width: 225px; height: auto;" type="" name="subscribe"><a href="/logout">LogOut</a></button> -->
             {% endif %}
 
 
 
+
+            <!-- <li class="dropdown-login">
+                <a href="/register_user">Register</a>
+            </li>
+
+            <li>
+                <a href="/login_user">Login</a>
+            </li> -->
 
 
 
@@ -326,6 +368,9 @@
 
 
 
+                        <!-- <a href="#"><i class="fa fa-google-plus"></i></a>
+                        <a href="#"><i class="fa fa-vimeo"></i></a>
+                        <a href="#"><i class="fa fa-youtube"></i></a> -->
 
                     </div>
                 </div>
@@ -444,16 +489,50 @@
                                 <div class="top-bar-right">
                                     <ul class="menu vertical medium-horizontal" data-responsive-menu="drilldown medium-dropdown">
                                         <li class="has-submenu {{home_active}}">
-                                            <a href="/" class="navbarcss"><i class="fa fa-home"></i>Home</a>
-                                            
+                                            <a href="/"><i class="fa fa-home"></i>Home</a>
+                                            <!-- <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
+                                                <li><a href="/"><i class="fa fa-home"></i>Home page v1 </a></li>
+                                                <li><a href="home-v2.html"><i class="fa fa-home"></i>Home page v2</a></li>
+                                                <li><a href="home-v3.html"><i class="fa fa-home"></i>Home page v3</a></li>
+                                                <li><a href="home-v4.html"><i class="fa fa-home"></i>Home page v4</a></li>
+                                                <li><a href="home-v5.html"><i class="fa fa-home"></i>Home page v5</a></li>
+                                                <li><a href="home-v6.html"><i class="fa fa-home"></i>Home page v6</a></li>
+                                                <li><a href="home-v7.html"><i class="fa fa-home"></i>Home page v7</a></li>
+                                                <li><a href="home-v8.html"><i class="fa fa-home"></i>Home page v8</a></li>
+                                                <li><a href="home-v9.html"><i class="fa fa-home"></i>Home page v9</a></li>
+                                                <li><a href="home-v10.html"><i class="fa fa-home"></i>Home page v10</a></li>
+                                            </ul> -->
                                         </li>
-                                       
+                                        <!-- <li class="has-submenu" data-dropdown-menu="example1">
+                                            <a href="#"><i class="fa fa-film"></i>Videos</a>
+                                            <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
+                                                <li><a href="single-video-v1.html"><i class="fa fa-film"></i>single video v1</a></li>
+                                                <li><a href="single-video-v2.html"><i class="fa fa-film"></i>single video v2</a></li>
+                                                <li><a href="single-video-v3.html"><i class="fa fa-film"></i>single video v3</a></li>
+                                                <li><a href="submit-post.html"><i class="fa fa-film"></i>submit post</a></li>
+                                            </ul>
+                                        </li> -->
 
-                                        <li class="{{category_active}}">
-                                            <a href="#" class="navbarcss"><i class="fa fa-th "></i>category</a>
+
+                                        <!-- <li><a href="/categories"><i class="fa fa-th"></i>category</a></li> -->
+
+                                        
+                                        <!-- <li>
+                                            <a href="#"><i class="fa fa-th"></i>category</a>
                                             <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up"> 
                                                 {% for i in cat %}
-                                                <li><a href="{% url 'all_view' i.slug %}" class="navbarcss"><i class="fa fa-th"></i>{{i.category_name}}</a>
+                                                <li><a href="{% url 'all_view' i.slug %}"><i class="fa fa-th"></i>{{i.category_name}}</a></li>
+                                                {% endfor %}
+                                               
+                                              
+                                            </ul>
+                                        </li> -->
+
+                                        <li class="{{category_active}}">
+                                            <a href="#"><i class="fa fa-th "></i>category</a>
+                                            <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up"> 
+                                                {% for i in cat %}
+                                                <li><a href="{% url 'all_view' i.slug %}"><i class="fa fa-th"></i>{{i.category_name}}</a>
                                                     
                                                     <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
                                 
@@ -462,7 +541,7 @@
                                                        {% for j in subcat %}
                                 
                                                        {% if i.category_name  ==  j.sub_cat.category_name %}
-                                                        <li><a href="{% url 'all_view' 'category' j.slug %}" ><i class="fa fa-magic"></i>{{j.subcategory_name }}</a></li>
+                                                        <li><a href="{% url 'all_view' 'category' j.slug %}"><i class="fa fa-magic"></i>{{j.subcategory_name }}</a></li>
                                 
                                                         {% endif %}
                                                         {% endfor %}
@@ -482,7 +561,7 @@
 
 
                                         <li class="{{blog_active}}">
-                                            <a href="/blog" class="navbarcss"><i class="fa fa-edit" ></i>blog</a>
+                                            <a href="/blog"><i class="fa fa-edit"></i>blog</a>
                                             <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
                                                 <!-- <li><a href="blog-single-post.html"><i class="fa fa-edit"></i>blog single post</a></li> -->
                                             </ul>
@@ -490,25 +569,46 @@
 
 
 
-                                        
+                                        <!-- <li>
+                                            <a href="#"><i class="fa fa-magic"></i>features</a>
+                                            <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
+                                                
+                                                
+                                                <li><a href="/myprofile/"><i class="fa fa-magic"></i>MY Profile</a></li>
+                                                <li><a href="/login_user"><i class="fa fa-magic"></i>login</a></li>
+                                                <li><a href="/register_user"><i class="fa fa-magic"></i>Register</a></li>
+                                                <li><a href="/forgot_password"><i class="fa fa-magic"></i>Forgot Password</a></li>
+                                                <li><a href="/logout"><i class="fa fa-magic"></i>logout</a></li>
 
 
 
+                                               
+
+
+                                           
+                                            </ul>
+                                        </li> -->
+
+
+
+                                        <!-- <li><a href="/about_us"><i class="fa fa-user"></i>about</a></li> -->
 
                                         <li class="{{about_active}}">
-                                            <a href="#" class="navbarcss"><i class="fa fa-user" ></i>about</a>
+                                            <a href="#"><i class="fa fa-user"></i>about</a>
                                             <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
                                                 <li><a href="/about_us"><i class="fa fa-user"></i>about us</a></li>
                                                 <li><a href="/online_course"><i class="fa fa-user"></i>online courses</a></li>
                                 
-                                             
+                                                <!-- <li><a href="single-video-v3.html"><i class="fa fa-film"></i>single video v3</a></li>
+                                                <li><a href="submit-post.html"><i class="fa fa-film"></i>submit post</a></li> -->
+                                            
                                             
                                             </ul>
                                         </li>
 
 
 
-                                        <li class="{{contact_active}}"><a href="/contact_us" class="navbarcss"><i class="fa fa-envelope"></i>contact</a></li>
+                                        <li class="{{contact_active}}"><a href="/contact_us"><i class="fa fa-envelope"></i>contact</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -530,6 +630,31 @@
             </nav>
         </section>
     </header><!-- End Header -->
+
+    <!-- <script>
+         var val = 55;
+        function updateurl()  {
+
+            var csrftoken = getCookie('csrftoken');                                        
+            let valueser = document.getElementById("searchid").value;
+            document.getElementById("prghph").innerHTML = valueser;
+
+
+            }
+
+
+            var csrftoken = getCookie('csrftoken');                                        
+            let valueser = document.getElementById("searchid").value;
+            document.getElementById("prghph").innerHTML = valueser;
+    </script>
+       
+             -->
+
+ <!-- ad Section -->
+ <!-- <div class="googleAdv promoLine div-1 ">
+   
+    <a href="#"><img src="{{base_details.about_logo}}" alt="googel ads"></a>
+</div> -->
 
 
 &nbsp;
@@ -607,7 +732,17 @@
                                 <a href="{% url 'all_view' i.slug %}">{{i.category_name }}</a>
                                 {% endfor %}
 
-                                
+                                <!-- <a href="#">3D Videos</a>
+                                <a href="#">Videos</a>
+                                <a href="#">HD</a>
+                                <a href="#">Movies</a>
+                                <a href="#">Sports</a>
+                                <a href="#">3D</a>
+                                <a href="#">Movies</a>
+                                <a href="#">Animation</a>
+                                <a href="#">HD</a>
+                                <a href="#">Music</a>
+                                <a href="#">Recreation</a> -->
                             </div>
                         </div>
                     </div>
@@ -621,7 +756,13 @@
                             <div class="widgetContent">
 
 
-                           
+                                <!-- <form class="new-added-form"  method="post" id="task-form">
+                                    {% csrf_token %}
+                                    <div class="input">
+                                    <input  class="form-control"  type="email" placeholder="Enter Your email here" name="email" id="inputId" required>
+                                </div>
+                                    <button class="btn" onclick="getInputValue();" type="submit">Sign up Now</button>
+                                </form> -->
 
 
                                 <form data-abide novalidate method="post">
@@ -635,7 +776,9 @@
                                     </div>
                                     <div class="input">
                                         <input type="email" id="inputId" placeholder="Enter your email addres"  name="email"  required>
-                                    
+                                        <!-- <span class="form-error">
+                                          I'm required!
+                                        </span> -->
                                     </div>
                                     <button class="button" onclick="getInputValue();" type="submit" value="Submit">Sign up Now</button>
                                 </form>
@@ -648,7 +791,12 @@
                                     <a class="secondary-button" href="https://instagram.com/schoen.mark?utm_medium=copy_link"><i class="fa fa-instagram"></i></a>
 
 
-                              
+                                    <!-- <a class="secondary-button" href="#"><i class="fa fa-google-plus"></i></a>                                   
+                                    <a class="secondary-button" href="#"><i class="fa fa-vimeo"></i></a>
+                                    <a class="secondary-button" href="#"><i class="fa fa-youtube"></i></a>
+                                    <a class="secondary-button" href="#"><i class="fa fa-flickr"></i></a> -->
+
+
 
                                 </div>
                             </div>
@@ -730,3 +878,87 @@ var csrftoken = getCookie('csrftoken');
 
 
 
+
+<div class="off-menu-close">
+
+    {% if request.user.is_anonymous %}   
+    <h3>Menu</h3>
+ <span data-toggle="offCanvas-responsive"><i class="fa fa-times"></i></span>
+    {% endif %}
+
+    {% if request.user.username %}
+        <div  class="res-circle">
+            <div  class="circle-txt"><a href="/myprofile/">{{request.user.username|slice:1}}</a></div>
+           <h3 class="circle-txt-right"> {{request.user.username}}</h3>
+          </div>
+
+    {% endif %}
+</div>
+<ul class="vertical menu off-menu" data-responsive-menu="drilldown">
+    <li class="has-submenu">
+        <a href="/"><i class="fa fa-home"></i>Home</a>
+        <!-- <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
+            <li><a href="/"><i class="fa fa-home"></i>Home page v1 </a></li>
+            <li><a href="home-v2.html"><i class="fa fa-home"></i>Home page v2</a></li>
+            <li><a href="home-v3.html"><i class="fa fa-home"></i>Home page v3</a></li>
+            <li><a href="home-v4.html"><i class="fa fa-home"></i>Home page v4</a></li>
+            <li><a href="home-v5.html"><i class="fa fa-home"></i>Home page v5</a></li>
+            <li><a href="home-v6.html"><i class="fa fa-home"></i>Home page v6</a></li>
+            <li><a href="home-v7.html"><i class="fa fa-home"></i>Home page v7</a></li>
+            <li><a href="home-v8.html"><i class="fa fa-home"></i>Home page v8</a></li>
+            <li><a href="home-v9.html"><i class="fa fa-home"></i>Home page v9</a></li>
+            <li><a href="home-v10.html"><i class="fa fa-home"></i>Home page v10</a></li>
+        </ul> -->
+    </li>
+    <!-- <li class="has-submenu" data-dropdown-menu="example1">
+        <a href="#"><i class="fa fa-film"></i>Videos</a>
+        <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
+            <li><a href="single-video-v1.html"><i class="fa fa-film"></i>single video v1</a></li>
+            <li><a href="single-video-v2.html"><i class="fa fa-film"></i>single video v2</a></li>
+            <li><a href="single-video-v3.html"><i class="fa fa-film"></i>single video v3</a></li>
+            <li><a href="submit-post.html"><i class="fa fa-film"></i>submit post</a></li>
+        </ul>
+    </li> -->
+    <!-- <li><a href="/categories"><i class="fa fa-th"></i>category</a></li> -->
+    <li>
+        <a href="#"><i class="fa fa-th"></i>category</a>
+        <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up"> 
+            {% for i in cat %}
+            <li><a href="{% url 'all_view' i.slug %}"><i class="fa fa-th"></i>{{i.category_name}}</a></li>
+            {% endfor %}
+           
+          
+        </ul>
+    </li>
+
+
+    <li>
+        <a href="/blog"><i class="fa fa-edit"></i>blog</a>
+        <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
+            <!-- <li><a href="/blog-single-post"><i class="fa fa-edit"></i>blog single post</a></li> -->
+        </ul>
+    </li>
+
+
+
+
+
+
+
+
+
+
+
+    <li><a href="{% url 'all_view' i.slug %}"><i class="fa fa-th"></i>{{i.category_name}}</a></li>
+
+
+
+
+
+    <li>
+        <a href="{% url 'all_view' i.slug %}"><i class="fa fa-magic"></i>{{i.category_name}}</a>
+        <ul class="submenu menu vertical" data-submenu data-animate="slide-in-down slide-out-up">
+            <li><a href="profile-page-v1.html"><i class="fa fa-magic"></i>profile v1</a></li>
+           
+        </ul>
+    </li>
