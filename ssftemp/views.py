@@ -661,21 +661,21 @@ def all_view(request,slug="0",sub_slug="0"):
     context.update({"count":count})
     if slug=="all":
         context.update({"subcat":subcat})
-        context.update({"all_video":all_video.filter(active=True).order_by('-modified_at')},)
+        context.update({"all_video":all_video.filter(active=True).order_by('country')},)
     elif slug=="populer":
         context.update({"subcat":subcat})
-        context.update({'all_video': all_video.filter(active=True).order_by('-hit_count_generic__hits')},)
+        context.update({'all_video': all_video.filter(active=True).order_by('country')},)
 
     elif slug=="category":
         sbid=VideoSubCategory.objects.get(slug=sub_slug).pk
-        context.update({"all_video":all_video.filter(active=True,sub_cat=sbid).order_by('-modified_at')},)
+        context.update({"all_video":all_video.filter(active=True,sub_cat=sbid).order_by("country")},)
 
     else:
         cid=VideoCategory.objects.get(slug=slug).pk
 
         context.update({"subcat":subcat.filter(sub_cat=cid)})
         
-        context.update({"all_video":all_video.filter(active=True,video_cat=cid).order_by('-modified_at')},)
+        context.update({"all_video":all_video.filter(active=True,video_cat=cid).order_by('country')},)
     
 
         if sub_slug!="0":
@@ -683,11 +683,11 @@ def all_view(request,slug="0",sub_slug="0"):
                 cid=VideoCategory.objects.get(slug=slug).pk
                 sbid=VideoSubCategory.objects.get(slug=sub_slug).pk
                 context.update({"subcat":subcat.filter(sub_cat=cid)})
-                context.update({"all_video":all_video.filter(active=True,video_cat=cid,sub_cat=sbid).order_by('-modified_at')},)
+                context.update({"all_video":all_video.filter(active=True,video_cat=cid,sub_cat=sbid).order_by('country')},)
             except:
-                # cid=VideoCategory.objects.filter(slug=slug).first()
+                # cid=VideoCategory.objects.filter(slug=slug).first() 
                 sbid=VideoSubCategory.objects.get(slug=sub_slug).pk
-                context.update({"all_video":all_video.filter(active=True,sub_cat=sbid).order_by('-modified_at')},)
+                context.update({"all_video":all_video.filter(active=True,sub_cat=sbid).order_by('country')},)
 
 
 

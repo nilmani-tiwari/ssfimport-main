@@ -142,8 +142,12 @@
                                         <div class="author-des clearfix">
                                             <div class="post-title">
                                                
-                                                <h4>{{video.title}}</h4>
-                                                
+                                                <h4>Title: {{video.title}}</h4>
+                                                <!-- <p style="font-size: ;20px"><b>Description: {{video.desc}}</b></p> -->
+                                                <h4>Country :{{video.country}}</h4>
+                                                <h4>Directed by :{{video.director}}</h4>
+                                                <h4>Produced by :{{video.producer}}</h4>
+                                                <h4>Record date : {{video.record_date}}</h4>
                                                 <p>
                                                     <!-- <span><i class="fa fa-clock-o"></i>{{video.record_date}}</span> -->
                                                     <span><i class="fa fa-eye"></i>{% get_hit_count for video %}K</span>
@@ -448,6 +452,8 @@
                         </div>
                     </section><!-- End single post stats -->
 
+                      
+
                     <!-- single post description -->
                     <section class="singlePostDescription">
                         <div class="row secBg">
@@ -461,33 +467,103 @@
                                     <p>{{video.desc | safe}}</p>
                                     {% endif %}
 
-                                    <!-- <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur</p> -->
-                                    <!-- <h6>Bullets List :</h6> -->
-                                    <!-- <ul>
-                                        <li>Sed ut perspiciatis unde omnis</li>
-                                        <li>But I must explain to you how</li>
-                                        <li>At vero eos et accusamus et iusto</li>
-                                        <li>On the other hand, we denounce</li>
-                                        <li>There are many variations of passages</li>
-                                    </ul> -->
-                                    <!-- <div class="categories">
-                                        <button><i class="fa fa-folder"></i>Categories</button>
-                                        <a href="#" class="inner-btn">entertainment</a>
-                                        <a href="#" class="inner-btn">comedy</a>
-                                    </div> -->
-                                    <!-- <div class="tags">
-                                        <button><i class="fa fa-tags"></i>Tags</button>
-                                        <a href="#" class="inner-btn">3D Videos</a>
-                                        <a href="#" class="inner-btn">Videos</a>
-                                        <a href="#" class="inner-btn">HD</a>
-                                        <a href="#" class="inner-btn">Movies</a>
-                                    </div> -->
+                                 
 
 
                                 </div>
                             </div>
                         </div>
                     </section><!-- End single post description -->
+
+
+
+                     <!-- Comments -->
+                     <section class="content comments">
+                        <div class="row secBg">
+                            <div class="large-12 columns">
+                                <div class="main-heading borderBottom">
+                                    <div class="row padding-14">
+                                        <div class="medium-12 small-12 columns">
+                                            <div class="head-title">
+                                                <i class="fa fa-comments"></i>
+                                                <h4>Comments <span>(<b id ="commentidd">{{comment}}</b>)</span></h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="comment-box thumb-border">
+                                    <div class="media-object stack-for-small">
+                                        <div class="media-object-section comment-img text-center">
+                                            <div class="comment-box-img">
+                                                {% if user_profile.image %}
+                                                <b id="imgchangeid"><img src= "{{user_profile.image.url}}" alt="comment"></b>
+                                                {% endif %}
+                                            </div>
+                                            <h6><a href="#">{{ request.user.username }} </a></h6>
+                                        </div>
+                                        <div class="media-object-section comment-textarea">
+                                              <!-- <form > -->
+                                                <textarea id="commentId"  placeholder="Add a comment here.." required></textarea>
+                                                <input type="submit" onclick="getcomment()" name="submit" value="send">
+                                                <!-- <button class="button" onclick="getcomment();" type="submit" value="Submit">send</button> -->
+                                            <!-- </form> -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="comment-sort text-right">
+                                    <span>Sort By : <a href="#">newest</a> | <a href="#">oldest</a></span>
+                                </div>
+
+                                <!-- main comment -->
+                                <div class="main-comment showmore_one">
+                                    <div class="media-object stack-for-small">
+                                        <div class="media-object-section comment-img text-center">
+                                            <!-- <div class="comment-box-img">
+                                                <img src= "http://placehold.it/80x80" alt="comment">
+                                            </div> -->
+                                        </div>
+                                        <div class="media-object-section comment-desc">
+                                             {% for cmt in comments %}
+                                            <div class="media-object stack-for-small reply-comment">
+                                                <div class="media-object-section comment-img text-center">
+                                                    <div class="comment-box-img">
+                                                        <img src= "{{cmt.subscriber.user.last_name}}" alt="comment">
+                                                    </div>
+                                                </div>
+                                                <div class="media-object-section comment-desc">
+                                                    <div class="comment-title">
+                                                        <span class="name"><a href="#"><b id="userchangeid">{{cmt.subscriber.user}}</b></a> Said:</span>
+                                                        <span class="time float-right"><i class="fa fa-clock-o"></i>{{cmt.created_at}}</span>
+                                                    </div>
+                                                    <div class="comment-text">
+                                                        <p id="changecmntid">{{cmt.comment}}</p>
+                                                    </div>
+                                                    <div class="comment-btns">
+                                                        <!-- <span><a href="#"><i class="fa fa-thumbs-o-up"></i></a> | <a href="#"><i class="fa fa-thumbs-o-down"></i></a></span> -->
+                                                        <!-- <span><a href="#"><i class="fa fa-share"></i>Reply</a></span> -->
+                                                        <span class='reply float-right hide-reply'></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            {% endfor%}
+
+                                            
+                                            
+                                            <!-- end sub comment -->
+
+                                        </div>
+                                    </div>
+
+                                  
+
+                                </div><!-- End main comment -->
+
+                            </div>
+                        </div>
+                    </section><!-- End Comments -->
 
                     <!-- related Posts -->
                     <section class="content content-with-sidebar related">
@@ -563,54 +639,6 @@
                                     {% endfor %}
 
 
-<!-- 
-                                    <div class="item large-4 columns end group-item-grid-default">
-                                        <div class="post thumb-border">
-                                            <div class="post-thumb">
-                                                <img src="http://placehold.it/370x220" alt="landing">
-                                                <a href="#" class="hover-posts">
-                                                    <span><i class="fa fa-play"></i>Watch Video</span>
-                                                </a>
-                                                <div class="video-stats clearfix">
-                                                    <div class="thumb-stats pull-left">
-                                                        <h6>HD</h6>
-                                                    </div>
-                                                    <div class="thumb-stats pull-left">
-                                                        <i class="fa fa-heart"></i>
-                                                        <span>506</span>
-                                                    </div>
-                                                    <div class="thumb-stats pull-right">
-                                                        <span>05:56</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="post-des">
-                                                <h6><a href="#">There are many variations of passage.</a></h6>
-                                                <div class="post-stats clearfix">
-                                                    <p class="pull-left">
-                                                        <i class="fa fa-user"></i>
-                                                        <span><a href="#">admin</a></span>
-                                                    </p>
-                                                    <p class="pull-left">
-                                                        <i class="fa fa-clock-o"></i>
-                                                        <span>5 January 16</span>
-                                                    </p>
-                                                    <p class="pull-left">
-                                                        <i class="fa fa-eye"></i>
-                                                        <span>1,862K</span>
-                                                    </p>
-                                                </div>
-                                                <div class="post-summary">
-                                                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
-                                                </div>
-                                                <div class="post-button">
-                                                    <a href="#" class="secondary-button"><i class="fa fa-play-circle"></i>watch video</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
-
-
 
 
 
@@ -621,212 +649,10 @@
 
 
 
-                    <!-- Comments -->
-                    <section class="content comments">
-                        <div class="row secBg">
-                            <div class="large-12 columns">
-                                <div class="main-heading borderBottom">
-                                    <div class="row padding-14">
-                                        <div class="medium-12 small-12 columns">
-                                            <div class="head-title">
-                                                <i class="fa fa-comments"></i>
-                                                <h4>Comments <span>(<b id ="commentidd">{{comment}}</b>)</span></h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="comment-box thumb-border">
-                                    <div class="media-object stack-for-small">
-                                        <div class="media-object-section comment-img text-center">
-                                            <div class="comment-box-img">
-                                                {% if user_profile.image %}
-                                                <b id="imgchangeid"><img src= "{{user_profile.image.url}}" alt="comment"></b>
-                                                {% endif %}
-                                            </div>
-                                            <h6><a href="#">{{ request.user.username }} </a></h6>
-                                        </div>
-                                        <div class="media-object-section comment-textarea">
-                                              <!-- <form > -->
-                                                <textarea id="commentId"  placeholder="Add a comment here.." required></textarea>
-                                                <input type="submit" onclick="getcomment()" name="submit" value="send">
-                                                <!-- <button class="button" onclick="getcomment();" type="submit" value="Submit">send</button> -->
-                                            <!-- </form> -->
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="comment-sort text-right">
-                                    <span>Sort By : <a href="#">newest</a> | <a href="#">oldest</a></span>
-                                </div>
-
-                                <!-- main comment -->
-                                <div class="main-comment showmore_one">
-                                    <div class="media-object stack-for-small">
-                                        <div class="media-object-section comment-img text-center">
-                                            <!-- <div class="comment-box-img">
-                                                <img src= "http://placehold.it/80x80" alt="comment">
-                                            </div> -->
-                                        </div>
-                                        <div class="media-object-section comment-desc">
+                 
 
 
 
-
-
-                                            <!-- <div class="comment-title">
-                                                <span class="name"><a href="#">Joseph John</a> Said:</span>
-                                                <span class="time float-right"><i class="fa fa-clock-o"></i>1 minute ago</span>
-                                            </div>
-                                            <div class="comment-text">
-                                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventoresunt explicabo.</p>
-                                            </div>
-                                            <div class="comment-btns">
-                                                <span><a href="#"><i class="fa fa-thumbs-o-up"></i></a> | <a href="#"><i class="fa fa-thumbs-o-down"></i></a></span>
-                                                <span><a href="#"><i class="fa fa-share"></i>Reply</a></span>
-                                                <span class='reply float-right hide-reply'></span>
-                                            </div> -->
-
-                                            <!--sub comment-->
-
-                                             {% for cmt in comments %}
-                                            <div class="media-object stack-for-small reply-comment">
-                                                <div class="media-object-section comment-img text-center">
-                                                    <div class="comment-box-img">
-                                                        <img src= "{{cmt.subscriber.user.last_name}}" alt="comment">
-                                                    </div>
-                                                </div>
-                                                <div class="media-object-section comment-desc">
-                                                    <div class="comment-title">
-                                                        <span class="name"><a href="#"><b id="userchangeid">{{cmt.subscriber.user}}</b></a> Said:</span>
-                                                        <span class="time float-right"><i class="fa fa-clock-o"></i>{{cmt.created_at}}</span>
-                                                    </div>
-                                                    <div class="comment-text">
-                                                        <p id="changecmntid">{{cmt.comment}}</p>
-                                                    </div>
-                                                    <div class="comment-btns">
-                                                        <!-- <span><a href="#"><i class="fa fa-thumbs-o-up"></i></a> | <a href="#"><i class="fa fa-thumbs-o-down"></i></a></span> -->
-                                                        <!-- <span><a href="#"><i class="fa fa-share"></i>Reply</a></span> -->
-                                                        <span class='reply float-right hide-reply'></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            {% endfor%}
-
-
-
-                                            
-
-
-                                            <!-- <div class="media-object stack-for-small reply-comment">
-                                                <div class="media-object-section comment-img text-center">
-                                                    <div class="comment-box-img">
-                                                        <img src= "http://placehold.it/80x80" alt="comment">
-                                                    </div>
-                                                </div>
-                                                <div class="media-object-section comment-desc">
-                                                    <div class="comment-title">
-                                                        <span class="name"><a href="#">Joseph John</a> Said:</span>
-                                                        <span class="time float-right"><i class="fa fa-clock-o"></i>1 minute ago</span>
-                                                    </div>
-                                                    <div class="comment-text">
-                                                        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventoresunt explicabo.</p>
-                                                    </div>
-                                                    <div class="comment-btns">
-                                                        <span><a href="#"><i class="fa fa-thumbs-o-up"></i></a> | <a href="#"><i class="fa fa-thumbs-o-down"></i></a></span>
-                                                        <span><a href="#"><i class="fa fa-share"></i>Reply</a></span>
-                                                        <span class='reply float-right hide-reply'></span>
-                                                    </div>
-                                                </div>
-                                            </div> -->
-                                            
-                                            <!-- end sub comment -->
-
-                                            <!--sub comment-->
-
-
-
-                                            
-
-                                            <!-- <div class="media-object stack-for-small reply-comment">
-                                                <div class="media-object-section comment-img text-center">
-                                                    <div class="comment-box-img">
-                                                        <img src= "http://placehold.it/80x80" alt="comment">
-                                                    </div>
-                                                </div>
-                                                <div class="media-object-section comment-desc">
-                                                    <div class="comment-title">
-                                                        <span class="name"><a href="#">Joseph John</a> Said:</span>
-                                                        <span class="time float-right"><i class="fa fa-clock-o"></i>1 minute ago</span>
-                                                    </div>
-                                                    <div class="comment-text">
-                                                        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventoresunt explicabo.</p>
-                                                    </div>
-                                                    <div class="comment-btns">
-                                                        <span><a href="#"><i class="fa fa-thumbs-o-up"></i></a> | <a href="#"><i class="fa fa-thumbs-o-down"></i></a></span>
-                                                        <span><a href="#"><i class="fa fa-share"></i>Reply</a></span>
-                                                        <span class='reply float-right hide-reply'></span>
-                                                    </div>
-
-                                                </div>
-                                            </div> -->
-                                            
-                                            
-                                            <!-- end sub comment -->
-
-                                        </div>
-                                    </div>
-
-                                    <!-- <div class="media-object stack-for-small">
-                                        <div class="media-object-section comment-img text-center">
-                                            <div class="comment-box-img">
-                                                <img src= "http://placehold.it/80x80" alt="comment">
-                                            </div>
-                                        </div>
-                                        <div class="media-object-section comment-desc">
-                                            <div class="comment-title">
-                                                <span class="name"><a href="#">Joseph John</a> Said:</span>
-                                                <span class="time float-right"><i class="fa fa-clock-o"></i>1 minute ago</span>
-                                            </div>
-                                            <div class="comment-text">
-                                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventoresunt explicabo.</p>
-                                            </div>
-                                            <div class="comment-btns">
-                                                <span><a href="#"><i class="fa fa-thumbs-o-up"></i></a> | <a href="#"><i class="fa fa-thumbs-o-down"></i></a></span>
-                                                <span><a href="#"><i class="fa fa-share"></i>Reply</a></span>
-                                                <span class='reply float-right hide-reply'></span>
-                                            </div>
-
-                                        </div>
-                                    </div> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                </div><!-- End main comment -->
-
-                            </div>
-                        </div>
-                    </section><!-- End Comments -->
                 </div><!-- end left side content area -->
 
 
@@ -885,12 +711,6 @@
 
 
                                          {% endfor %}
-
-                                     
-
-
-
-                                 
 
                                    
 
