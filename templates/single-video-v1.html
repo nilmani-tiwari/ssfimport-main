@@ -144,10 +144,18 @@
                                                
                                                 <h4>Title: {{video.title}}</h4>
                                                 <!-- <p style="font-size: ;20px"><b>Description: {{video.desc}}</b></p> -->
+                                                {% if video.country %}
                                                 <h4>Country :{{video.country}}</h4>
+                                                {% else %}
+                                                <h4>Country :</h4>
+                                                {% endif %}
                                                 <h4>Directed by :{{video.director}}</h4>
                                                 <h4>Produced by :{{video.producer}}</h4>
+                                                {% if video.record_date %}
                                                 <h4>Record date : {{video.record_date}}</h4>
+                                                {% else %}
+                                                <h4>Record date :</h4>
+                                                {% endif %}
                                                 <p>
                                                     <!-- <span><i class="fa fa-clock-o"></i>{{video.record_date}}</span> -->
                                                     <span><i class="fa fa-eye"></i>{% get_hit_count for video %}K</span>
