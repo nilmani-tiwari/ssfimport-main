@@ -1,3 +1,4 @@
+# from curses.ascii import isdigit
 from django.db import models
 from hitcount.models import HitCountMixin, HitCount
 from django.contrib.contenttypes.fields import GenericRelation
@@ -263,6 +264,10 @@ def get_video_path(instance, filename,upload_path='uploads/VideoUpload'):
     for i in input_string:
         if i.isupper():
             new_string+=i.upper()
+        if (i.isdigit()):
+            new_string+=i.upper()
+        if i=="_":
+            new_string+=i.upper()
         
         if i.islower():
             new_string+=i.upper()
@@ -283,7 +288,10 @@ def get_poster_path(instance, filename,upload_path='uploads/poster'):
     for i in input_string:
         if i.isupper():
             new_string+=i.upper()
-        
+        if (i.isdigit()):
+            new_string+=i.upper()
+        if i=="_":
+            new_string+=i.upper()
         if i.islower():
             new_string+=i.upper()
             
@@ -320,9 +328,11 @@ class VideoSubCategory(models.Model):  #Category
         verbose_name = "VideoSubCategory"
         verbose_name_plural = "2- Videos Sub Categories"
 
+#VideoUpload(user=user,ssf_id=ssf_id,title=title)
 class VideoUpload(models.Model):
     user = models.ForeignKey(User, related_name='user_uploded_video', on_delete=CASCADE,null=True, blank=True)
     video_id = models.AutoField(primary_key=True)
+    ssf_id = models.IntegerField(default=0,null=True, blank=True)  
     vendor_id = models.IntegerField(default=0,null=True, blank=True)                   
     title = models.CharField(max_length=500)
     video = models.FileField(upload_to=get_video_path,null=True,
@@ -336,6 +346,7 @@ class VideoUpload(models.Model):
     desc = models.TextField(null=True, blank=True)
     keywords = models.TextField(null=True, blank=True)
     duration = models.FloatField(default=0,null=True, blank=True)
+    duration_str=models.CharField(max_length=100,null=True, blank=True)
     record_date = models.CharField(max_length=100,null=True, blank=True)
     
     country = models.CharField(max_length=100, null=True, blank=True)
@@ -347,6 +358,9 @@ class VideoUpload(models.Model):
     director = models.TextField(null=True, blank=True)
     video_url = models.URLField(null=True, blank=True) 
     poster_url = models.URLField(null=True, blank=True) 
+
+    ssf_poster_url = models.URLField(null=True, blank=True) 
+    ssf_video_url = models.URLField(null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(blank=True, auto_now=True, null=True)
