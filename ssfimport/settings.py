@@ -146,7 +146,7 @@ WSGI_APPLICATION = 'ssfimport.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / '../newssf-db/db.sqlite3',
+        'NAME': BASE_DIR / '../ssf-db/db.sqlite3',
     }
 }
 
