@@ -53,8 +53,8 @@ def base_data():
     base_cbntent={ 'base_details':  project_details.objects.filter(active=True).values().first(),}
     all_videos=VideoUpload.objects.all()
     base_cbntent.update({"resent_upload":all_videos.filter(active=True,home_active=True).order_by('-modified_at')[0:3]},)
-    base_cbntent.update({"cat":VideoCategory.objects.all(),})
-    base_cbntent.update({"subcat":VideoSubCategory.objects.all(),})
+    base_cbntent.update({"cat":VideoCategory.objects.all().order_by("category_name"),})
+    base_cbntent.update({"subcat":VideoSubCategory.objects.all().order_by("subcategory_name"),})
     base_cbntent.update({
            
             'top_videos': all_videos.filter(active=True,home_active=True).order_by('-hit_count_generic__hits')[0:8],
